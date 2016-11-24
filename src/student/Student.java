@@ -35,8 +35,10 @@ public class Student {
 	 * @param studentNumber
 	 * @param uwNetID
 	 */
-	public Student(String firstName, String lastName, int studentNumber, String uwNetID) {
-		if (firstName == null || lastName == null || uwNetID == null) {
+	public Student(String firstName, String lastName, int studentNumber, String uwNetID) 
+	{
+		if (firstName == null || lastName == null || uwNetID == null) 
+		{
 			throw new NullPointerException("Value cannot be null.");
 		}
 		this.firstName = firstName;
@@ -55,7 +57,8 @@ public class Student {
 	 * @param studentNumber
 	 * @param uwNetID
 	 */
-	public Student(String firstName, String lastName, String email, int studentNumber, String uwNetID) {
+	public Student(String firstName, String lastName, String email, int studentNumber, String uwNetID) 
+	{
 		this(firstName, lastName, studentNumber, uwNetID);
 		setEmail(email);
 	}
@@ -70,7 +73,9 @@ public class Student {
 	 * @param uwNetID
 	 * @param degree
 	 */
-	public Student(String firstName, String lastName, int studentNumber, String uwNetID, StudentDegree degree) {
+	public Student(String firstName, String lastName, int studentNumber, String uwNetID, 
+			StudentDegree degree) 
+	{
 		this(firstName, lastName, studentNumber, uwNetID);
 		this.degree = degree;
 	}
@@ -87,7 +92,8 @@ public class Student {
 	 * @param degree
 	 */
 	public Student(String firstName, String lastName, String email, int studentNumber, String uwNetID,
-			StudentDegree degree) {
+			StudentDegree degree) 
+	{
 		this(firstName, lastName, email, studentNumber, uwNetID);
 		this.degree = degree;
 	}
@@ -97,7 +103,8 @@ public class Student {
 	 * 
 	 * @return degree
 	 */
-	public StudentDegree getDegree() {
+	public StudentDegree getDegree() 
+	{
 		return degree;
 	}
 
@@ -106,7 +113,8 @@ public class Student {
 	 * 
 	 * @param degree
 	 */
-	public void setDegree(StudentDegree degree) {
+	public void setDegree(StudentDegree degree) 
+	{
 		this.degree = degree;
 	}
 
@@ -115,7 +123,8 @@ public class Student {
 	 * 
 	 * @return
 	 */
-	public StudentEmployment getEmployment() {
+	public StudentEmployment getEmployment() 
+	{
 		return employment;
 	}
 
@@ -124,7 +133,8 @@ public class Student {
 	 * 
 	 * @param employment
 	 */
-	public void setEmployment(StudentEmployment employment) {
+	public void setEmployment(StudentEmployment employment) 
+	{
 		this.employment = employment;
 	}
 
@@ -134,26 +144,29 @@ public class Student {
 	 * 
 	 * @return intern
 	 */
-	/*
-	 * public StudentInternship getInternship() { return intern; }
-	 */
+	 /*public StudentInternship getInternship() 
+	 { 
+		 return intern; 
+	 }*/
 
 	/**
 	 * Sets the student's internship information.
 	 * 
 	 * @param intern
 	 */
-	/*
-	 * public void setInternship(StudentInternship intern) { this.intern =
-	 * intern; }
-	 */
+	
+	 /*public void setInternship(StudentInternship intern) 
+	 { 
+		 this.intern = intern; 
+	 }*/
 
 	/**
 	 * Returns student's email.
 	 * 
 	 * @return email
 	 */
-	public String getEmail() {
+	public String getEmail() 
+	{
 		return email;
 	}
 
@@ -162,8 +175,10 @@ public class Student {
 	 * 
 	 * @param email
 	 */
-	public void setEmail(String email) {
-		if (!email.contains("@") || !email.contains(".")) {
+	public void setEmail(String email) 
+	{
+		if (!email.contains("@") || !email.contains(".")) 
+		{
 			throw new IllegalArgumentException("Invalid e-mail address.");
 		}
 
@@ -175,7 +190,8 @@ public class Student {
 	 * 
 	 * @return firstName
 	 */
-	public String getFirstName() {
+	public String getFirstName() 
+	{
 		return firstName;
 	}
 
@@ -184,7 +200,8 @@ public class Student {
 	 * 
 	 * @param firstName
 	 */
-	public void setFirstName(String firstName) {
+	public void setFirstName(String firstName) 
+	{
 		this.firstName = firstName;
 	}
 
@@ -193,7 +210,8 @@ public class Student {
 	 * 
 	 * @return lastName
 	 */
-	public String getLastName() {
+	public String getLastName() 
+	{
 		return lastName;
 	}
 
@@ -202,7 +220,8 @@ public class Student {
 	 * 
 	 * @param lastName
 	 */
-	public void setLastName(String lastName) {
+	public void setLastName(String lastName) 
+	{
 		this.lastName = lastName;
 	}
 
@@ -211,12 +230,15 @@ public class Student {
 	 * 
 	 * @return studentNumber
 	 */
-	public int getStudentNumber() {
+	public int getStudentNumber() 
+	{
 		return studentNumber;
 	}
 
-	public void setStudentNumber(int studentNumber) {
-		if (Integer.toString(studentNumber).length() != STUDENT_NUM_MIN_LENGTH) {
+	public void setStudentNumber(int studentNumber) 
+	{
+		if (Integer.toString(studentNumber).length() != STUDENT_NUM_MIN_LENGTH) 
+		{
 			throw new IllegalArgumentException("Student ID numbers must be seven digits.");
 		}
 
@@ -228,7 +250,8 @@ public class Student {
 	 * 
 	 * @return uwNetID
 	 */
-	public String getUWNetID() {
+	public String getUWNetID() 
+	{
 		return uwNetID;
 	}
 
@@ -237,7 +260,8 @@ public class Student {
 	 * 
 	 * @param uwNetID
 	 */
-	public void setUWNetID(String uwNetID) {
+	public void setUWNetID(String uwNetID) 
+	{
 		this.uwNetID = uwNetID;
 	}
 }

@@ -14,6 +14,8 @@ import student.Student;
  * StudentDB represents the database of students.
  * @author Thomas Van Riper
  * November 21, 2016
+ * Last edited on November 23, 2016
+ * Added updateEmail(), 
  */
 public class StudentDB
 {
@@ -166,5 +168,31 @@ public class StudentDB
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Updates a student's e-mail address. No other fields should be updated in
+	 * Student.
+	 * @param student
+	 * @param email
+	 * @return True or false.
+	 */
+	public boolean updateEmail(Student student, String email)
+	{
+		int id = student.getStudentNumber();
+		String sql = "UPDATE Student SET email = '" + email + "' WHERE id = " + id;
+		PreparedStatement preparedStatement = null;
+		try
+		{
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.executeUpdate();
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
 	}
 }
