@@ -62,17 +62,7 @@ public class StudentCollection
 	 */
 	public static int countGraduation(int year)
 	{
-		int count = 0;
-		List<Student> studentList = getStudents();
-		for (Student student : studentList)
-		{
-			if (Integer.parseInt(student.getDegree().getGraduationYear(0)) == year)
-			{
-				count++;
-			}
-		}
-		
-		return count;
+		return getStudentsByGraduation(year).size();
 	}
 	
 	//TODO Remove parameter from getGraduationYear()
@@ -84,19 +74,8 @@ public class StudentCollection
 	 * @return An integer representing the number of students. 
 	 */
 	public static int countGraduation(int year, String term)
-	{
-		int count = 0;
-		List<Student> studentList = getStudents();
-		for (Student student : studentList)
-		{
-			if (Integer.parseInt(student.getDegree().getGraduationYear(0)) == year &&
-					student.getDegree().getGraduationTerm("").equals(term))
-			{
-				count++;
-			}
-		}
-		
-		return count;
+	{	
+		return getStudentsByGraduation(year, term).size();
 	}
 
 	/**
