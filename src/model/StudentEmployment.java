@@ -1,8 +1,7 @@
-package student;
+package model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
 
 /**
  * This class represents an employemnt information, employer, job position,
@@ -13,6 +12,8 @@ import java.util.List;
  * @version 11-19-2016
  */
 public class StudentEmployment {
+	
+	public static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	/** A StudentEmployment Id */
 	private String myId;
@@ -29,9 +30,6 @@ public class StudentEmployment {
 	/** A start date */
 	private LocalDate myStartDate;
 	
-	/** A list of skills */
-	private final List<String> mySkills;
-	
 	/** A comment */
 	private String myComment;
 	
@@ -39,7 +37,7 @@ public class StudentEmployment {
 	/* Constructors */
 	
 	/**
-	 * Construts a StudentEmployemnt with given employer, job position, salary, start date, and list of skills.
+	 * Construts a StudentEmployemnt with given employer, job position, salary, start date
 	 * It is used when employment information is available.
 	 * 
 	 * @param theEmployer
@@ -48,13 +46,11 @@ public class StudentEmployment {
 	 * @param theStartDate
 	 * @param theSkills
 	 */
-	public StudentEmployment(final String theEmployer, final String thePosition, final double theSalary, final LocalDate theStartDate, final List<String> theSkills) {
-		myEmployer = theEmployer;
-		myPosition = thePosition;
+	public StudentEmployment(final String theEmployer, final String thePosition, final double theSalary, final LocalDate theStartDate) {
+		setEmployer(theEmployer);
+		setPosition(thePosition);
 		setSalary(theSalary);
 		setStartDate(theStartDate);
-		mySkills = new ArrayList<String>();
-		setSkills(theSkills);
 	}
 	
 	/**
@@ -64,8 +60,7 @@ public class StudentEmployment {
 	 * @param comment
 	 */
 	public StudentEmployment(final String theComment) {
-		mySkills = new ArrayList<String>();
-		myComment = theComment;
+		setComment(theComment);
 	}
 
 	
@@ -114,16 +109,6 @@ public class StudentEmployment {
 	public LocalDate getStartDate() {
 		return myStartDate;
 	}
-
-
-	/**
-	 * Get a list of skills used at workplace.
-	 * @return the Skills
-	 */
-	public List<String> getSkills() {
-		return mySkills;
-	}
-
 
 	/**
 	 * Get a comment.
@@ -181,17 +166,7 @@ public class StudentEmployment {
 	public void setStartDate(final LocalDate theStartDate) {
 		this.myStartDate = theStartDate;
 	}
-	
-	
-	/**
-	 * Set a list of skill with given list.
-	 * @param theSkills the mySkills to set
-	 */
-	public void setSkills(final List<String> theSkills) {
-		for (String skill: theSkills) {
-			mySkills.add(skill);
-		}
-	}
+
 
 	/**
 	 * Set a comment with given.
@@ -200,13 +175,5 @@ public class StudentEmployment {
 	public void setComment(final String theComment) {
 		this.myComment = theComment;
 	}
-	
-	/**
-	 * Add a skill to the exsiting skill list.
-	 * @param theSkill
-	 */
-	public void addSkill(final String theSkill) {
-		mySkills.add(theSkill);
-	}
-	
+
 }

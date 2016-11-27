@@ -1,7 +1,7 @@
-package student;
+package model;
 
 /**
- * This class represents a degree information, graduation term and year, GPA, and transfer college, for a student.
+ * This class represents a graduation term and year, GPA, and transfer college, for a student.
  * The system allows add a degree.
  * 
  * @author Jieun Lee
@@ -16,9 +16,6 @@ public class StudentDegree {
 	/** A StudentDegree Id */
 	private String myId;
 	
-	/** A Degree */
-//	private Degree myDegree;	//TODO - after Louis adds Degree class
-	
 	/** A graduation term */
 	private String myTerm;
 	
@@ -31,22 +28,24 @@ public class StudentDegree {
 	/** A name of transfer college */
 	private String myTransfer;
 	
-	//TODO add Degree theDegree for first parameter
+
 	public StudentDegree(String theTerm, String theYear, double theGpa) {
-//		myDegree = theDegree;
 		setGraduationTerm(theTerm);
-		myYear = theYear;
-		myGpa = theGpa;
+		setGraduationYear(theYear);
+		setGPA(theGpa);
 	}
+	
+	public StudentDegree(String theTerm, String theYear, double theGpa, String theTransfer) {
+		setGraduationTerm(theTerm);
+		setGraduationYear(theYear);
+		setGPA(theGpa);
+		setTransferCollege(theTransfer);
+	}
+	
 	
 	public void setId(String theId) {
 		myId = theId;
 	}
-	
-	//TODO - after adding Degree class
-//	public void setDegree(Degree theDegree) {
-//		myDegree = theDegree;
-//	}
 	
 	public boolean setGraduationTerm(String theTerm) {
 		for (String term: TERMSET) {
@@ -59,7 +58,7 @@ public class StudentDegree {
 	}
 	
 	public void setGraduationYear(String theYear) {
-		if (theYear.length() != 4) {
+		if (theYear.length() != 4 || Integer.valueOf(theYear) < 1000 || Integer.valueOf(theYear) >9999) {
 			throw new IllegalArgumentException("Invalid year. Year shoud be between 1000 and 9999");
 		}
 		myYear = theYear;
@@ -75,30 +74,26 @@ public class StudentDegree {
 	public void setTransferCollege(String theCollegeName) {
 		myTransfer = theCollegeName;
 	}
-	
-	
-	public String getId(String theId) {
+
+
+	public String getId() {
 		return myId;
 	}
 	
-	//TODO - after adding Degree class
-//	public void setDegree(Degree theDegree) {
-//		myDegree = theDegree;
-//	}
-	
-	public String getGraduationTerm(String theTerm) {
-		return myTerm.toString();
+
+	public String getGraduationTerm() {
+		return myTerm;
 	}
 	
-	public String getGraduationYear(int theYear) {
+	public String getGraduationYear() {
 		return myYear;
 	}
 	
-	public double getGPA(double theGpa) {
+	public double getGPA() {
 		return myGpa;
 	}
 	
-	public String getTransferCollege(String theCollegeName) {
+	public String getTransferCollege() {
 		return myTransfer;
 	}
 	

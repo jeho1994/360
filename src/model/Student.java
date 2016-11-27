@@ -1,4 +1,4 @@
-package student;
+package model;
 
 /**
  * The Student class represents a unique University of Washington Tacoma

@@ -2,7 +2,7 @@ package test;
 
 import org.junit.Test;
 
-import student.Student;
+import model.Student;
 
 /**
  * Tests the Student class.

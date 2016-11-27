@@ -1,4 +1,4 @@
-package student;
+package model;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class StudentCollection {
 		int count = 0;
 		List<Student> studentList = getStudents();
 		for (Student student : studentList) {
-			if (student.getEmployment != null) {
+			if (student.getEmployment() != null) {
 				count++;
 			}
 		}
