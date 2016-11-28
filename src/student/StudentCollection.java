@@ -1,4 +1,4 @@
-package model;
+package student;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

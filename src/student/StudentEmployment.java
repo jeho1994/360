@@ -1,4 +1,4 @@
-package model;
+package student;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
