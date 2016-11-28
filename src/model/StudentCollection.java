@@ -1,4 +1,4 @@
-package student;
+package model;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -42,10 +42,15 @@ public class StudentCollection
 	{
 		int count = 0;
 		List<Student> studentList = getStudents();
+<<<<<<< HEAD:src/student/StudentCollection.java
 		for (Student student : studentList)
 		{
 			if (student.getEmployment() != null) 
 			{
+=======
+		for (Student student : studentList) {
+			if (student.getEmployment() != null) {
+>>>>>>> f8654a21cb8f28cd3a63f3d339417180f20f09e3:src/model/StudentCollection.java
 				count++;
 			}
 		}
