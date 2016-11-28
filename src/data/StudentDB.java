@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import student.Student;
+import model.Student;
 
 /**
  * StudentDB represents the database of students.

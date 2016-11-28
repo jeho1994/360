@@ -1,4 +1,4 @@
-package student;
+package model;
 
 /**
  * This class represents a degree information, graduation term and year, GPA, and transfer college, for a student.
