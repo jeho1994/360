@@ -42,15 +42,10 @@ public class StudentCollection
 	{
 		int count = 0;
 		List<Student> studentList = getStudents();
-<<<<<<< HEAD:src/student/StudentCollection.java
 		for (Student student : studentList)
 		{
 			if (student.getEmployment() != null) 
 			{
-=======
-		for (Student student : studentList) {
-			if (student.getEmployment() != null) {
->>>>>>> f8654a21cb8f28cd3a63f3d339417180f20f09e3:src/model/StudentCollection.java
 				count++;
 			}
 		}
@@ -58,7 +53,6 @@ public class StudentCollection
 		return count;
 	}
 	
-	//TODO Remove parameter from getGraduationYear()
 	/**
 	 * Counts the number of students that graduated in
 	 * the year given.
@@ -70,7 +64,6 @@ public class StudentCollection
 		return getStudentsByGraduation(year).size();
 	}
 	
-	//TODO Remove parameter from getGraduationYear()
 	/**
 	 * Counts the number of students that graduated in the year and
 	 * term given.
@@ -107,7 +100,6 @@ public class StudentCollection
 		return null;
 	}
 	
-	//TODO Remove parameter from getGraduationYear()
 	/**
 	 * Returns a list of students that graduate(d) in the given year.
 	 * @param year
@@ -118,7 +110,7 @@ public class StudentCollection
 		List<Student> studentList = getStudents();
 		for (Student student : studentList)
 		{
-			if (Integer.parseInt(student.getDegree().getGraduationYear(0)) != year)
+			if (Integer.parseInt(student.getDegree().getGraduationYear()) != year)
 			{
 				studentList.remove(student);
 			}
@@ -127,7 +119,6 @@ public class StudentCollection
 		return studentList;
 	}
 	
-	//TODO Remove parameter from getGraduationYear()
 		/**
 		 * Returns a list of students that graduate(d) in the given year
 		 * and term.
@@ -140,8 +131,8 @@ public class StudentCollection
 			List<Student> studentList = getStudents();
 			for (Student student : studentList)
 			{
-				if (Integer.parseInt(student.getDegree().getGraduationYear(0)) != year &&
-						!student.getDegree().getGraduationTerm("").equals(term))
+				if (Integer.parseInt(student.getDegree().getGraduationYear()) != year &&
+						!student.getDegree().getGraduationTerm().equals(term))
 				{
 					studentList.remove(student);
 				}
@@ -155,7 +146,7 @@ public class StudentCollection
 		 * @param skill
 		 * @return A list of students.
 		 */
-		public static List<Student> getStudentsBySkill(String skill)
+		/*public static List<Student> getStudentsBySkill(String skill)
 		{
 			List<Student> studentList = getStudents();
 			List<Student> filterList = new ArrayList<Student>();
@@ -171,7 +162,7 @@ public class StudentCollection
 			}
 			
 			return filterList;
-		}
+		}*/
 
 	/**
 	 * Returns a list of students that match the parameter.
