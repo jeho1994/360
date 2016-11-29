@@ -11,12 +11,12 @@ public class Student {
 	/** A minimum length */
 	private static final int STUDENT_NUM_MIN_LENGTH = 7;
 
-//	/** A student's degree */
-//	private StudentDegree degree;
-//	
-//	/** A student's employment */
-//	private StudentEmployment employment;
-//	
+	/** A student's degree */
+	private StudentDegree degree;
+	
+	/** A student's employment */
+	private StudentEmployment employment;
+	
 	/** A student's internship */
 	// private StudentInternship intern;
 
@@ -64,7 +64,6 @@ public class Student {
 		setEmail(email);
 	}
 
-<<<<<<< HEAD
 	/**
 	 * Constructs a new student with a first name, last name, student number, UW
 	 * Net ID, and degree information.
@@ -139,75 +138,6 @@ public class Student {
 	{
 		this.employment = employment;
 	}
-=======
-//	/**
-//	 * Constructs a new student with a first name, last name, student number, UW
-//	 * Net ID, and degree information.
-//	 * 
-//	 * @param firstName
-//	 * @param lastName
-//	 * @param studentNumber
-//	 * @param uwNetID
-//	 * @param degree
-//	 */
-//	public Student(String firstName, String lastName, int studentNumber, String uwNetID, StudentDegree degree) {
-//		this(firstName, lastName, studentNumber, uwNetID);
-//		this.degree = degree;
-//	}
-//
-//	/**
-//	 * Constructs a student with a first name, last name, student number, UW Net
-//	 * ID, e-mail, and degree information.
-//	 * 
-//	 * @param firstName
-//	 * @param lastName
-//	 * @param email
-//	 * @param studentNumber
-//	 * @param uwNetID
-//	 * @param degree
-//	 */
-//	public Student(String firstName, String lastName, String email, int studentNumber, String uwNetID,
-//			StudentDegree degree) {
-//		this(firstName, lastName, email, studentNumber, uwNetID);
-//		this.degree = degree;
-//	}
-//
-//	/**
-//	 * Returns the student's degree.
-//	 * 
-//	 * @return degree
-//	 */
-//	public StudentDegree getDegree() {
-//		return degree;
-//	}
-//
-//	/**
-//	 * Sets the student's degree information.
-//	 * 
-//	 * @param degree
-//	 */
-//	public void setDegree(StudentDegree degree) {
-//		this.degree = degree;
-//	}
-//
-//	/**
-//	 * Returns the student's employment information.
-//	 * 
-//	 * @return
-//	 */
-//	public StudentEmployment getEmployment() {
-//		return employment;
-//	}
-//
-//	/**
-//	 * Set's the student's employment information.
-//	 * 
-//	 * @param employment
-//	 */
-//	public void setEmployment(StudentEmployment employment) {
-//		this.employment = employment;
-//	}
->>>>>>> 8e1466068a823b2dc66d14ca29f529e3f1a0b1b0
 
 	/**
 	 * TODO - after getting StudentInternship class Returns the student's
@@ -225,7 +155,6 @@ public class Student {
 	 * 
 	 * @param intern
 	 */
-	
 	 /*public void setInternship(StudentInternship intern) 
 	 { 
 		 this.intern = intern; 
