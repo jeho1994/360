@@ -1,4 +1,4 @@
-package student;
+package model;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -53,7 +53,6 @@ public class StudentCollection
 		return count;
 	}
 	
-	//TODO Remove parameter from getGraduationYear()
 	/**
 	 * Counts the number of students that graduated in
 	 * the year given.
@@ -65,7 +64,6 @@ public class StudentCollection
 		return getStudentsByGraduation(year).size();
 	}
 	
-	//TODO Remove parameter from getGraduationYear()
 	/**
 	 * Counts the number of students that graduated in the year and
 	 * term given.
@@ -102,7 +100,6 @@ public class StudentCollection
 		return null;
 	}
 	
-	//TODO Remove parameter from getGraduationYear()
 	/**
 	 * Returns a list of students that graduate(d) in the given year.
 	 * @param year
@@ -113,7 +110,7 @@ public class StudentCollection
 		List<Student> studentList = getStudents();
 		for (Student student : studentList)
 		{
-			if (Integer.parseInt(student.getDegree().getGraduationYear(0)) != year)
+			if (Integer.parseInt(student.getDegree().getGraduationYear()) != year)
 			{
 				studentList.remove(student);
 			}
@@ -122,7 +119,6 @@ public class StudentCollection
 		return studentList;
 	}
 	
-	//TODO Remove parameter from getGraduationYear()
 		/**
 		 * Returns a list of students that graduate(d) in the given year
 		 * and term.
@@ -135,8 +131,8 @@ public class StudentCollection
 			List<Student> studentList = getStudents();
 			for (Student student : studentList)
 			{
-				if (Integer.parseInt(student.getDegree().getGraduationYear(0)) != year &&
-						!student.getDegree().getGraduationTerm("").equals(term))
+				if (Integer.parseInt(student.getDegree().getGraduationYear()) != year &&
+						!student.getDegree().getGraduationTerm().equals(term))
 				{
 					studentList.remove(student);
 				}
@@ -150,7 +146,7 @@ public class StudentCollection
 		 * @param skill
 		 * @return A list of students.
 		 */
-		public static List<Student> getStudentsBySkill(String skill)
+		/*public static List<Student> getStudentsBySkill(String skill)
 		{
 			List<Student> studentList = getStudents();
 			List<Student> filterList = new ArrayList<Student>();
@@ -166,7 +162,7 @@ public class StudentCollection
 			}
 			
 			return filterList;
-		}
+		}*/
 
 	/**
 	 * Returns a list of students that match the parameter.

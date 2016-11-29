@@ -1,4 +1,4 @@
-package student;
+package model;
 
 /**
  * The Student class represents a unique University of Washington Tacoma
@@ -22,6 +22,7 @@ public class Student {
 
 	private String email;
 	private String firstName;
+	private String middleName;	// TODO added middle name: add setter/getter & modify constructors
 	private String lastName;
 	private int studentNumber;
 	private String uwNetID;
@@ -154,7 +155,6 @@ public class Student {
 	 * 
 	 * @param intern
 	 */
-	
 	 /*public void setInternship(StudentInternship intern) 
 	 { 
 		 this.intern = intern; 
