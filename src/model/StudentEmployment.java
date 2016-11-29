@@ -18,8 +18,11 @@ public class StudentEmployment {
 	/** A StudentEmployment Id */
 	private String myId;
 	
-	/** A employer name */
-	private String myEmployer;
+	/** A student's UW net Id */
+	private String myUwnetId;
+	
+	/** An employment Id */
+	private String myEmploymentId;
 	
 	/** A job position */
 	private String myPosition;
@@ -33,33 +36,36 @@ public class StudentEmployment {
 	/** A comment */
 	private String myComment;
 	
-	
+
 	/* Constructors */
 	
 	/**
-	 * Construts a StudentEmployemnt with given employer, job position, salary, start date
+	 * Constructs a StudentEmployment with the given employment data.
 	 * It is used when employment information is available.
 	 * 
-	 * @param theEmployer
+	 * @param theUwnetId
+	 * @param theEmploymentId
 	 * @param thePosition
 	 * @param theSalary
 	 * @param theStartDate
-	 * @param theSkills
 	 */
-	public StudentEmployment(final String theEmployer, final String thePosition, final double theSalary, final LocalDate theStartDate) {
-		setEmployer(theEmployer);
+	public StudentEmployment(final String theUwnetId, final String theEmploymentId, final String thePosition, final double theSalary, final LocalDate theStartDate) {
+		setUwnetId(theUwnetId);
+		setEmploymentId(theEmploymentId);
 		setPosition(thePosition);
 		setSalary(theSalary);
 		setStartDate(theStartDate);
 	}
 	
+
+
 	/**
 	 * Constructs a StudentEmployment with the given comment.
 	 * It is used when no employment information is available.
 	 * 
 	 * @param comment
 	 */
-	public StudentEmployment(final String theComment) {
+	public StudentEmployment(final String theUwnetid, final String theComment) {
 		setComment(theComment);
 	}
 
@@ -74,14 +80,6 @@ public class StudentEmployment {
 		return myId;
 	}
 
-
-	/**
-	 * Get a name of employer.
-	 * @return the Employer
-	 */
-	public String getEmployer() {
-		return myEmployer;
-	}
 
 
 	/**
@@ -117,6 +115,23 @@ public class StudentEmployment {
 	public String getComment() {
 		return myComment;
 	}
+	
+	/**
+	 * @return the myUwnetId
+	 */
+	public String getUwnetId() {
+		return myUwnetId;
+	}
+
+	/**
+	 * @return the myEmploymentId
+	 */
+	public String getEmploymentId() {
+		return myEmploymentId;
+	}
+
+	
+	
 
 	/* Setter */
 
@@ -127,16 +142,6 @@ public class StudentEmployment {
 	public void setId(String theId) {
 		this.myId = theId;
 	}
-
-
-	/**
-	 * Set employer name with given name.
-	 * @param theEmployer the myEmployer to set
-	 */
-	public void setEmployer(final String theEmployer) {
-		this.myEmployer = theEmployer;
-	}
-
 
 	/**
 	 * Set job position with given.
@@ -175,5 +180,20 @@ public class StudentEmployment {
 	public void setComment(final String theComment) {
 		this.myComment = theComment;
 	}
+	
+	/**
+	 * @param theUwnetId the myUwnetId to set
+	 */
+	public void setUwnetId(String theUwnetId) {
+		this.myUwnetId = theUwnetId;
+	}
+
+	/**
+	 * @param theEmploymentId the myEmploymentId to set
+	 */
+	public void setEmploymentId(String theEmploymentId) {
+		this.myEmploymentId = theEmploymentId;
+	}
+
 
 }
