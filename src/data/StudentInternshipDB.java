@@ -164,8 +164,15 @@ public class StudentInternshipDB
 		return null;
 	}
 	
-	// edit student-degree
-	public String updateStudentDegree(StudentInternship internship, String columnName, Object data) {
+	/**
+	 * Updates the student internship information.
+	 * 
+	 * @param internship
+	 * @param columnName
+	 * @param data
+	 * @return
+	 */
+	public String updateStudentInternship(StudentInternship internship, String columnName, Object data) {
 
 		String id = internship.getId();
 		String sql = "UPDATE StudentInternship SET `" + columnName
