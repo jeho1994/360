@@ -10,7 +10,7 @@ public class DataConnection {
 	
 	private static String userName = "tvriper"; 
 	private static String password = "mytfags%2B!"; 
-	private static String serverName = "cssgate.insttech.washingotn.edu";
+	private static String serverName = "cssgate.insttech.washington.edu";
 	private static Connection sConnection;
 	
 	// Creates once instance of the connection to be reused in the different places in the
