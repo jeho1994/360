@@ -1,11 +1,13 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -14,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
+import component.HintTextField;
 import model.Student;
 import model.StudentCollection;
 
@@ -27,6 +30,9 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 	/* Fields */
 	private JPanel pnlContent, pnlButtons, pnlSearch, pnlAdd, pnlEdit;
 	private JButton btnSearch, btnAdd, btnEdit, btnSearchStudent, btnAddStudent, btnEditStudent;
+		
+	/**AddPanel text fields.*/
+	private HintTextField txfFirst, txfMiddle, txfLast, txfEmail, txfStudentNumber, txfUWNetID;
 	
 	/** A table for displaying Students */
 	private JTable table;
@@ -39,6 +45,9 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 	
 	/** A text field for Seach Item panel */
 	private JTextField txfSearch;
+	
+	/** A dropdown box for the different degree options.*/
+	private JComboBox<String> cmbDegree;
 	
 	private String[] myStudentColumnNames = { "uwnetid", "fName", "mName", "lName", "email"};
 	private List<Student> myList;
@@ -64,7 +73,9 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 	
 	private void createComponents() {
 		
-		add(createSearchPanel(), BorderLayout.CENTER);
+		pnlContent = new JPanel();
+		pnlContent.add(createSearchPanel());
+		add(pnlContent, BorderLayout.CENTER);
 		add(createButtonPanel(), BorderLayout.NORTH);	
 	}
 	
@@ -104,8 +115,45 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 	
 	private JPanel createAddPanel() {
 		pnlAdd = new JPanel();
+		pnlAdd.setLayout(new GridLayout(5, 0));
+		JPanel pnlName = new JPanel();
+		pnlName.setLayout(new GridLayout(1, 0));
+		txfFirst = new HintTextField("First Name");	
+		txfFirst.setColumns(8);
+		txfMiddle = new HintTextField("Middle Name");
+		txfMiddle.setColumns(8);
+		txfLast = new HintTextField("Last Name");
+		txfLast.setColumns(8);
+		pnlName.add(txfFirst);
+		pnlName.add(txfMiddle);
+		pnlName.add(txfLast);
 		
-		//TODO - Thomas adds "Add student" panel
+		txfEmail = new HintTextField("E-mail");
+		
+		JPanel pnlInfo = new JPanel();
+		pnlInfo.setLayout(new GridLayout(1, 0));
+		txfStudentNumber = new HintTextField("Student ID Number");
+		txfUWNetID = new HintTextField("UWNetID");
+		
+		pnlInfo.add(txfStudentNumber);
+		pnlInfo.add(txfUWNetID);
+		
+		JPanel pnlDegree = new JPanel();
+		pnlDegree.setLayout(new GridLayout(1, 0));
+		cmbDegree = new JComboBox<String>();
+		pnlDegree.add(new JLabel("Program"));
+		pnlDegree.add(cmbDegree);
+		
+		
+		JPanel pnlButton = new JPanel();
+		btnAddStudent = new JButton("Add");
+		pnlButton.add(btnAddStudent);
+		
+		pnlAdd.add(pnlName);
+		pnlAdd.add(txfEmail);
+		pnlAdd.add(pnlInfo);
+		pnlAdd.add(pnlDegree);
+		pnlAdd.add(pnlButton);
 		
 		return pnlAdd;
 	}
@@ -148,7 +196,10 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 			pnlContent.revalidate();
 			this.repaint();
 		} else if (e.getSource() == btnAdd) {
-			//TODO - Thomas
+			pnlContent.removeAll();
+			pnlContent.add(createAddPanel());
+			pnlContent.revalidate();
+			this.repaint();
 		} else if (e.getSource() == btnEdit) {
 			//TODO - Louis
 		} else if (e.getSource() == btnSearchStudent) {

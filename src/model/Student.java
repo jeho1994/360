@@ -28,74 +28,77 @@ public class Student {
 	private String uwNetID;
 
 	/**
-	 * Constructs a new student with first name, last name, student number, and
+	 * Constructs a new student with first name, middle name, last name, student number, and
 	 * a UW Net ID.
 	 * 
 	 * @param firstName
+	 * @param middleName
 	 * @param lastName
 	 * @param studentNumber
 	 * @param uwNetID
 	 */
-	public Student(String firstName, String lastName, int studentNumber, String uwNetID) 
+	public Student(String firstName, String middleName, String lastName, int studentNumber, 
+			String uwNetID) 
 	{
-		if (firstName == null || lastName == null || uwNetID == null) 
-		{
-			throw new NullPointerException("Value cannot be null.");
-		}
-		this.firstName = firstName;
-		this.lastName = lastName;
+		setFirstName(firstName);
+		setMiddleName(middleName);
+		setLastName(lastName);
 		setStudentNumber(studentNumber);
 		this.uwNetID = uwNetID;
 	}
 
 	/**
-	 * Constructs a new student with first name, last name, student number, and
+	 * Constructs a new student with first name, middle name, last name, student number, and
 	 * a UW Net ID, and an e-mail.
 	 * 
 	 * @param firstName
+	 * @param middleName
 	 * @param lastName
 	 * @param email
 	 * @param studentNumber
 	 * @param uwNetID
 	 */
-	public Student(String firstName, String lastName, String email, int studentNumber, String uwNetID) 
+	public Student(String firstName, String middleName, String lastName, String email, 
+			int studentNumber, String uwNetID) 
 	{
-		this(firstName, lastName, studentNumber, uwNetID);
+		this(firstName, middleName, lastName, studentNumber, uwNetID);
 		setEmail(email);
 	}
 
 	/**
-	 * Constructs a new student with a first name, last name, student number, UW
+	 * Constructs a new student with a first name, middle name, last name, student number, UW
 	 * Net ID, and degree information.
 	 * 
 	 * @param firstName
+	 * @param middleName
 	 * @param lastName
 	 * @param studentNumber
 	 * @param uwNetID
 	 * @param degree
 	 */
-	public Student(String firstName, String lastName, int studentNumber, String uwNetID, 
-			StudentDegree degree) 
+	public Student(String firstName, String middleName, String lastName, int studentNumber, 
+			String uwNetID, StudentDegree degree) 
 	{
-		this(firstName, lastName, studentNumber, uwNetID);
+		this(firstName, middleName, lastName, studentNumber, uwNetID);
 		this.degree = degree;
 	}
 
 	/**
-	 * Constructs a student with a first name, last name, student number, UW Net
+	 * Constructs a student with a first name, middle name, last name, student number, UW Net
 	 * ID, e-mail, and degree information.
 	 * 
 	 * @param firstName
+	 * @param middleName
 	 * @param lastName
 	 * @param email
 	 * @param studentNumber
 	 * @param uwNetID
 	 * @param degree
 	 */
-	public Student(String firstName, String lastName, String email, int studentNumber, String uwNetID,
-			StudentDegree degree) 
+	public Student(String firstName, String middleName, String lastName, String email, 
+			int studentNumber, String uwNetID,StudentDegree degree) 
 	{
-		this(firstName, lastName, email, studentNumber, uwNetID);
+		this(firstName, middleName, lastName, email, studentNumber, uwNetID);
 		this.degree = degree;
 	}
 
@@ -202,7 +205,27 @@ public class Student {
 	 */
 	public void setFirstName(String firstName) 
 	{
+		validateParameters(firstName);
 		this.firstName = firstName;
+	}
+	
+	/**
+	 * Returns student's middle name.
+	 * @return
+	 */
+	public String getMiddleName()
+	{
+		return middleName;
+	}
+	
+	/**
+	 * Sets the student's middle name.
+	 * @param middleName
+	 */
+	public void setMiddleName(String middleName)
+	{
+		validateParameters(middleName);
+		this.middleName = middleName;
 	}
 
 	/**
@@ -222,6 +245,7 @@ public class Student {
 	 */
 	public void setLastName(String lastName) 
 	{
+		validateParameters(lastName);
 		this.lastName = lastName;
 	}
 
@@ -263,5 +287,31 @@ public class Student {
 	public void setUWNetID(String uwNetID) 
 	{
 		this.uwNetID = uwNetID;
+	}
+	
+	private void validateParameters(String parameter)
+	{
+		if (parameter == null || parameter.equals(""))
+		{
+			throw new NullPointerException("Value cannot be null.");
+		}
+		else if (parameter.length() < 2)
+		{
+			throw new IllegalArgumentException("Value cannot be less than two characters.");
+		}
+		boolean paramIsBlank = true;
+		for (int i = 0; i < parameter.length(); i++)
+		{
+			//Check to make sure every character isn't a blank space.
+			if (parameter.charAt(i) != 32)
+			{
+				paramIsBlank = false;
+			}
+		}
+		
+		if (paramIsBlank)
+		{
+			throw new IllegalArgumentException("Value cannot be blank.");
+		}
 	}
 }

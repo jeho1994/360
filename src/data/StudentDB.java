@@ -86,13 +86,14 @@ public class StudentDB
 			{
 				int studentNumber = rs.getInt("id");
 				String firstName = rs.getString("first");
+				String middleName = rs.getString("middle");
 				String lastName = rs.getString("last");
 				String uwNetID = rs.getString("uwNetID");
 				String email = rs.getString("email");
 				Student student = null;
 				if (email != null)
 				{
-					student = new Student(firstName, lastName, studentNumber,
+					student = new Student(firstName, middleName, lastName, studentNumber,
 							uwNetID);
 				}
 				else
