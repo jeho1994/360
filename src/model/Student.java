@@ -22,7 +22,7 @@ public class Student {
 
 	private String email;
 	private String firstName;
-	private String middleName;	// TODO added middle name: add setter/getter & modify constructors
+	private String middleName;
 	private String lastName;
 	private int studentNumber;
 	private String uwNetID;
@@ -40,6 +40,10 @@ public class Student {
 	public Student(String firstName, String middleName, String lastName, int studentNumber, 
 			String uwNetID) 
 	{
+		if (firstName == null || lastName == null || uwNetID == null)
+		{
+			throw new NullPointerException("Value cannot be null.");
+		}
 		setFirstName(firstName);
 		setMiddleName(middleName);
 		setLastName(lastName);
@@ -185,7 +189,7 @@ public class Student {
 			throw new IllegalArgumentException("Invalid e-mail address.");
 		}
 
-		this.email = email;
+		this.email = email.trim();
 	}
 
 	/**
@@ -205,6 +209,7 @@ public class Student {
 	 */
 	public void setFirstName(String firstName) 
 	{
+		firstName = firstName.trim();
 		validateParameters(firstName);
 		this.firstName = firstName;
 	}
@@ -224,8 +229,16 @@ public class Student {
 	 */
 	public void setMiddleName(String middleName)
 	{
-		validateParameters(middleName);
-		this.middleName = middleName;
+		middleName = middleName.trim();
+		if (middleName.isEmpty())
+		{
+			this.middleName = middleName;
+		}
+		else
+		{
+			validateParameters(middleName);
+			this.middleName = middleName;
+		}
 	}
 
 	/**
@@ -245,6 +258,7 @@ public class Student {
 	 */
 	public void setLastName(String lastName) 
 	{
+		lastName = lastName.trim();
 		validateParameters(lastName);
 		this.lastName = lastName;
 	}
@@ -286,32 +300,16 @@ public class Student {
 	 */
 	public void setUWNetID(String uwNetID) 
 	{
+		uwNetID = uwNetID.trim();
+		validateParameters(uwNetID);
 		this.uwNetID = uwNetID;
 	}
 	
 	private void validateParameters(String parameter)
 	{
-		if (parameter == null || parameter.equals(""))
+		if (parameter.length() < 2)
 		{
-			throw new NullPointerException("Value cannot be null.");
-		}
-		else if (parameter.length() < 2)
-		{
-			throw new IllegalArgumentException("Value cannot be less than two characters.");
-		}
-		boolean paramIsBlank = true;
-		for (int i = 0; i < parameter.length(); i++)
-		{
-			//Check to make sure every character isn't a blank space.
-			if (parameter.charAt(i) != 32)
-			{
-				paramIsBlank = false;
-			}
-		}
-		
-		if (paramIsBlank)
-		{
-			throw new IllegalArgumentException("Value cannot be blank.");
+			throw new IllegalArgumentException("Invalid value.");
 		}
 	}
 }
