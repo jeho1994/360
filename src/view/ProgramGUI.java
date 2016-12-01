@@ -50,7 +50,7 @@ public class ProgramGUI extends JPanel implements ActionListener, TableModelList
 	
 	public ProgramGUI() {
 		setLayout(new BorderLayout());
-//		myList = getData(null); // TODO after conncting DB
+		
 		createComponents();
 		setVisible(true);
 		setSize(500, 700);
