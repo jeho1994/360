@@ -43,12 +43,12 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 	private JScrollPane scrollPane;
 	
 	/** A label for Search Item panel */
-	private JLabel lblSearch;;
+	private JLabel lblSearch;
 	
 	/** A text field for Search Item panel */
 	private JTextField txfSearch;
 	
-	/** A dropdown box for the different degree options.*/
+	/** A drop down box for the different degree options.*/
 	private JComboBox<String> cmbDegree;
 	
 	/**A warning for different invalid inputs for the add student panel.*/
@@ -244,7 +244,7 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		if (first.length() < 2 || last.length() < 2 || !validFirst || !validLast)
 		{
 			lblWarning.setText("Please enter a valid student first and last name. " +
-					"First and last namme cannot be blank, must be at least two characters, " +
+					"First and last name cannot be blank, must be at least two characters, " +
 					"and can only contain letters.");
 			return;
 		}

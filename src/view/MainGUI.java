@@ -121,9 +121,9 @@ public class MainGUI extends JFrame {
 		if (type.equalsIgnoreCase("Student")) {
 			panel.add(new StudentGUI());
 		}
-//		 else if (type.equalsIgnoreCase("Program")) { TODO - after adding panels
-//			panel.add(new DegreeGUI());
-//		} else if (type.equalsIgnoreCase("Skill")) {
+		 else if (type.equalsIgnoreCase("Program")) { 
+			panel.add(new ProgramGUI());
+		}// else if (type.equalsIgnoreCase("Skill")) {
 //			panel.add(new SkillGUI());
 //		} else {
 //			panel.add(new EmploymentGUL());
