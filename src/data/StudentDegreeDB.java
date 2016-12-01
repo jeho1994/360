@@ -145,10 +145,13 @@ public class StudentDegreeDB {
 		PreparedStatement preparedStatement = null;
 		try {
 			preparedStatement = myConnection.prepareStatement(sql);
-			if (data instanceof String)
-				preparedStatement.setString(1, (String) data); 
-			else if (data instanceof Double)
+			if (data instanceof String) {
+				preparedStatement.setString(1, (String) data);
+			} else if (data instanceof Double) {
 				preparedStatement.setDouble(1, (Double) data);
+			} else {
+				System.out.println(data.getClass().getName() + "");
+			}
 			preparedStatement.setString(2, id);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {

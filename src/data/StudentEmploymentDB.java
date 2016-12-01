@@ -32,7 +32,7 @@ public class StudentEmploymentDB {
 			while (rs.next()) {
 				String id = rs.getString("studentEmployId");
 				String uwnetId = rs.getString("uwnetid");
-				String employmentId = rs.getString("employId");
+				String employmentId = rs.getString("employId"); //TODO - employer instead of Id
 				String position = rs.getString("position");
 				double salary = rs.getDouble("salary");
 				String date_str = rs.getString("dateFrom");
