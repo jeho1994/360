@@ -15,7 +15,7 @@ public class StudentInternship {
 	/** Student's uwnetid */
 	private String myUWId ;
 	/** Employer Id */
-	private String myEmpId;
+	private String myEmpId;  //TODO - employer instead of Id
 	
 	
 	/**

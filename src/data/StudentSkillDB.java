@@ -28,9 +28,9 @@ public class StudentSkillDB {
 			stmt = myConnection.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) {
-				String id = rs.getString("studentDegreeId");
+				String id = rs.getString("studentSkillId");
 				String uwId = rs.getString("uwnetId");
-				String skillId = rs.getString("degreeId");
+				String skillId = rs.getString("skillId");
 
 				StudentSkill studentSkill = new StudentSkill(uwId, skillId);
 				studentSkill.setId(id);
@@ -62,9 +62,10 @@ public class StudentSkillDB {
 			stmt = myConnection.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) {
-				String id = rs.getString("studentDegreeId");
+				String id = rs.getString("studentSkillId");
 				String uwId = rs.getString("uwnetId");
-				String skillId = rs.getString("degreeId");
+				String skillId = rs.getString("skillId");
+
 
 				StudentSkill studentSkill = new StudentSkill(uwId, skillId);
 				studentSkill.setId(id);

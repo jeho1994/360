@@ -20,6 +20,10 @@ public class MainGUI extends JFrame {
 	
 	
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5345670291679491949L;
 	public static final Color UW_PURPLE = new Color(51, 0, 111);
 	public static final Color UW_GOLD = new Color(232, 211, 162);
 	public static final Color UW_METALIC_GOLD = new Color(145, 123, 76);
