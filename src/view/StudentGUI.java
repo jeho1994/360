@@ -80,7 +80,7 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 	
 	public StudentGUI() {
 		setLayout(new BorderLayout());
-//		myList = getData(null); // TODO after conncting DB
+		myList = getData(null); // TODO after conncting DB
 		createComponents();
 		setVisible(true);
 		setSize(500, 700);
