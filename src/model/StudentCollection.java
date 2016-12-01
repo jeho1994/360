@@ -54,6 +54,26 @@ public class StudentCollection
 	}
 	
 	/**
+	 * Returns the number of students currently employed who 
+	 * completed an internship.
+	 * @return The number of employed students who completed an internship.
+	 */
+	public static int countEmployedWithInternship()
+	{
+		int count = 0;
+		List<Student> studentList = getStudents();
+		for (Student student : studentList)
+		{
+			if (student.getEmployment() != null && student.getInternship() != null)
+			{
+				count++;
+			}
+		}
+		
+		return count;
+	}
+	
+	/**
 	 * Counts the number of students that graduated in
 	 * the year given.
 	 * @param year

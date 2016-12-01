@@ -4,17 +4,23 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 import component.HintTextField;
+import data.DegreeDB;
+import model.Degree;
 
-public class ProgramGUI extends JPanel implements ActionListener {
-	
-	
+public class ProgramGUI extends JPanel implements ActionListener, TableModelListener {
 	/**
 	 * An auto generated serial version UID.
 	 */
@@ -36,6 +42,12 @@ public class ProgramGUI extends JPanel implements ActionListener {
 	/**JPanel fields.*/
 	private JPanel pnlAdd, pnlButtons, pnlContent, pnlList;
 	
+	/**A scroll pane to list the programs.*/
+	private JScrollPane scrollPane;
+	
+	/**A table to list the programs offered.*/
+	private JTable tblList;
+	
 	public ProgramGUI() {
 		setLayout(new BorderLayout());
 //		myList = getData(null); // TODO after conncting DB
@@ -46,6 +58,7 @@ public class ProgramGUI extends JPanel implements ActionListener {
 	
 	private void createComponents() {
 		pnlContent = new JPanel();
+		pnlContent.add(createListPanel());
 		
 		add(createButtonPanel(), BorderLayout.NORTH);
 		add(pnlContent, BorderLayout.CENTER);
@@ -104,18 +117,58 @@ public class ProgramGUI extends JPanel implements ActionListener {
 	private JPanel createListPanel() {
 		pnlList = new JPanel();
 		
+		String[] columnNames = {"Program", "Degree"};
+		tblList = new JTable(getData(), columnNames);
+		tblList.getModel().addTableModelListener(this);
+		scrollPane = new JScrollPane(tblList);
+		pnlList.add(scrollPane);
+		
 		return pnlList;
+	}
+	
+	/**
+	 * 
+	 */
+	private Object[][] getData() {
+		DegreeDB database = new DegreeDB();
+		List<Degree> degrees = null;
+		try {
+			degrees = database.geDegrees();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		Object[][] data = new Object[degrees.size()][2];
+		if (degrees != null) {
+			for (int i = 0; i < degrees.size(); i++) {
+				data[i][0] = degrees.get(i).getProgram();
+				data[i][1] = degrees.get(i).getLevel();
+			}
+		}
+		
+		return data;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e)
-	{
+	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnAdd) {
 			pnlContent.removeAll();
 			pnlContent.add(createAddPanel());
 			pnlContent.revalidate();
 			this.repaint();
+		} else if (e.getSource() == btnList) {
+			pnlContent.removeAll();
+			pnlContent.add(createListPanel());
+			pnlContent.revalidate();
+			this.repaint();
 		}
 		
+	}
+
+	@Override
+	public void tableChanged(TableModelEvent e) {
+		//The programs are not editable, so refresh if anyone tries to
+		//edit the list. Don't give them false hope.
+		btnList.doClick();
 	}
 }

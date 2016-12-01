@@ -14,7 +14,7 @@ public class Student {
 	private StudentEmployment employment;
 	
 	/** A student's internship */
-	// private StudentInternship intern;
+	private StudentInternship intern;
 
 	private String email;
 	private String firstName;
@@ -135,25 +135,25 @@ public class Student {
 	}
 
 	/**
-	 * TODO - after getting StudentInternship class Returns the student's
+	 * StudentInternship class Returns the student's
 	 * internship information.
 	 * 
 	 * @return intern
 	 */
-	 /*public StudentInternship getInternship() 
+	 public StudentInternship getInternship() 
 	 { 
 		 return intern; 
-	 }*/
+	 }
 
 	/**
 	 * Sets the student's internship information.
 	 * 
 	 * @param intern
 	 */
-	 /*public void setInternship(StudentInternship intern) 
+	 public void setInternship(StudentInternship intern) 
 	 { 
 		 this.intern = intern; 
-	 }*/
+	 }
 
 	/**
 	 * Returns student's email.
