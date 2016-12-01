@@ -29,8 +29,8 @@ public class StudentDB
 	 */
 	public boolean add(Student student)
 	{
-		String sql = "INSERT INTO Student(id, first, middle, last, uwNetID, email)" + 
-				" VALUES(?, ?, ?, ?, ?, ?);";
+		String sql = "INSERT INTO Student(first, middle, last, uwNetID, email)" + 
+				" VALUES(?, ?, ?, ?, ?);";
 		if (connection == null)
 		{
 			try
@@ -47,12 +47,11 @@ public class StudentDB
 		try
 		{
 			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setInt(1, student.getStudentNumber());
-			preparedStatement.setString(2, student.getFirstName());
-			preparedStatement.setString(3, student.getMiddleName());
-			preparedStatement.setString(4, student.getLastName());
-			preparedStatement.setString(5, student.getUWNetID());
-			preparedStatement.setString(6, student.getEmail());
+			preparedStatement.setString(1, student.getFirstName());
+			preparedStatement.setString(2, student.getMiddleName());
+			preparedStatement.setString(3, student.getLastName());
+			preparedStatement.setString(4, student.getUWNetID());
+			preparedStatement.setString(5, student.getEmail());
 			preparedStatement.executeUpdate();
 		}
 		catch (SQLException e)
@@ -85,7 +84,6 @@ public class StudentDB
 			ResultSet rs = statement.executeQuery(query);
 			while (rs.next())
 			{
-				int studentNumber = rs.getInt("id");
 				String firstName = rs.getString("first");
 				String middleName = rs.getString("middle");
 				String lastName = rs.getString("last");
@@ -94,13 +92,11 @@ public class StudentDB
 				Student student = null;
 				if (email != null)
 				{
-					student = new Student(firstName, middleName, lastName, studentNumber,
-							uwNetID);
+					student = new Student(firstName, middleName, lastName, uwNetID);
 				}
 				else
 				{
-					student = new Student(firstName, lastName, email, studentNumber,
-							uwNetID);
+					student = new Student(firstName, lastName, email, uwNetID);
 				}
 				studentList.add(student);
 			}
@@ -126,7 +122,7 @@ public class StudentDB
 	 * @return A list of students.
 	 * @throws SQLException
 	 */
-	public List<Student> getStudents(String name) throws SQLException
+	public List<Student> getStudents(String searchString) throws SQLException
 	{
 		List<Student> filterList = new ArrayList<Student>();
 		if (studentList == null)
@@ -134,42 +130,25 @@ public class StudentDB
 			getStudents();
 		}
 		
-		name = name.toLowerCase();
+		searchString = searchString.toLowerCase();
 		for (Student student : studentList)
 		{
-			if (name.contains(student.getFirstName().toLowerCase()) ||
-					name.contains(student.getLastName().toLowerCase()))
+			if (searchString.contains(student.getFirstName().toLowerCase()) ||
+					searchString.contains(student.getLastName().toLowerCase()))
+			{
+				filterList.add(student);
+			}
+		}
+		
+		for (Student student : studentList)
+		{
+			if (searchString.contains(student.getUWNetID()))
 			{
 				filterList.add(student);
 			}
 		}
 		
 		return filterList;
-	}
-	
-	
-	/**
-	 * Returns a student that matches the parameter.
-	 * @param id
-	 * @return A student.
-	 * @throws SQLException
-	 */
-	public Student getStudentByID(int id) throws SQLException
-	{
-		if (studentList == null)
-		{
-			getStudents();
-		}
-		
-		for (Student student : studentList)
-		{
-			if (student.getStudentNumber() == id)
-			{
-				return student;
-			}
-		}
-		
-		return null;
 	}
 	
 	/**
@@ -181,8 +160,8 @@ public class StudentDB
 	 */
 	public boolean updateEmail(Student student, String email)
 	{
-		int id = student.getStudentNumber();
-		String sql = "UPDATE Student SET email = '" + email + "' WHERE id = " + id;
+		String id = student.getUWNetID();
+		String sql = "UPDATE Student SET email = '" + email + "' WHERE  = uwNetID" + id;
 		PreparedStatement preparedStatement = null;
 		try
 		{

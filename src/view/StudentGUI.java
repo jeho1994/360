@@ -23,6 +23,7 @@ import javax.swing.event.TableModelListener;
 
 import component.HintTextField;
 import data.DegreeDB;
+import data.StudentDB;
 import model.Degree;
 import model.Student;
 import model.StudentCollection;
@@ -152,14 +153,7 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		pnlName.add(txfLast);
 		
 		txfEmail = new HintTextField("E-mail");
-		
-		JPanel pnlInfo = new JPanel();
-		pnlInfo.setLayout(new GridLayout(1, 0));
-		txfStudentNumber = new HintTextField("Student ID Number");
 		txfUWNetID = new HintTextField("UWNetID");
-		
-		pnlInfo.add(txfStudentNumber);
-		pnlInfo.add(txfUWNetID);
 		
 		JPanel pnlDegree = new JPanel();
 		pnlDegree.setLayout(new GridLayout(1, 0));
@@ -204,7 +198,7 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 				
 		pnlAdd.add(pnlName);
 		pnlAdd.add(txfEmail);
-		pnlAdd.add(pnlInfo);
+		pnlAdd.add(txfUWNetID);
 		pnlAdd.add(pnlDegree);
 		pnlAdd.add(pnlGPA);
 		pnlAdd.add(pnlGraduation);
@@ -279,10 +273,8 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		String middle = txfMiddle.getText().trim();
 		String last = txfLast.getText().trim();
 		String email = txfEmail.getText().trim();
-		String studentNumber = txfStudentNumber.getText();
 		String uwNetID = txfUWNetID.getText().trim();
 		String gpa = txfGPA.getText().trim();
-		int intStudentNumber = -1;
 		double dblGPA = 0.0;
 		
 		boolean validFirst = first.matches("^[\\p{L} .'-]+$");
@@ -306,22 +298,25 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 			return;
 		}
 		
-		try {
-			intStudentNumber = Integer.parseInt(studentNumber);
-		} catch (NumberFormatException e) {
-			lblWarning.setText("Please enter a valid student ID number. Student ID numbers must be " +
-					"seven digits long and contain only numbers.");
-			return;
-		}
-		
-		if (studentNumber.length() != 7 || intStudentNumber < 0) {
-			lblWarning.setText("Please enter a valid student ID number. Student ID numbers must be " +
-					"seven digits long and contain only numbers.");
-			return;
-		}
-		
 		if (uwNetID.isEmpty()) {
 			lblWarning.setText("Please enter a valid UWNetID.");
+			return;
+		}
+		
+		boolean uwNetIDIsTaken = false;
+		List<Student> studentList = StudentCollection.getStudents();
+		for (Student student : studentList)
+		{
+			if (uwNetID.equals(student.getUWNetID()))
+			{
+				uwNetIDIsTaken = true;
+				break;
+			}
+		}
+		
+		if (uwNetIDIsTaken)
+		{
+			lblWarning.setText("That UW NetID is taken. Please enter a valid UW NetID.");
 			return;
 		}
 		
@@ -346,8 +341,7 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 				dblGPA);
 		
 		lblWarning.setText("");
-		Student student = new Student(first, middle, last, email, intStudentNumber,
-				uwNetID, studentDegree);
+		Student student = new Student(first, middle, last, email, uwNetID, studentDegree);
 		StudentCollection.add(student);
 		btnSearch.doClick();
 	}

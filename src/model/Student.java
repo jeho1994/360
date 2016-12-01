@@ -7,10 +7,6 @@ package model;
  * @author Thomas Van Riper November 19, 2016
  */
 public class Student {
-	
-	/** A minimum length */
-	private static final int STUDENT_NUM_MIN_LENGTH = 7;
-
 	/** A student's degree */
 	private StudentDegree degree;
 	
@@ -24,21 +20,18 @@ public class Student {
 	private String firstName;
 	private String middleName;
 	private String lastName;
-	private int studentNumber;
 	private String uwNetID;
 
 	/**
-	 * Constructs a new student with first name, middle name, last name, student number, and
+	 * Constructs a new student with first name, middle name, last name, and
 	 * a UW Net ID.
 	 * 
 	 * @param firstName
 	 * @param middleName
 	 * @param lastName
-	 * @param studentNumber
 	 * @param uwNetID
 	 */
-	public Student(String firstName, String middleName, String lastName, int studentNumber, 
-			String uwNetID) 
+	public Student(String firstName, String middleName, String lastName, String uwNetID) 
 	{
 		if (firstName == null || lastName == null || uwNetID == null)
 		{
@@ -47,62 +40,57 @@ public class Student {
 		setFirstName(firstName);
 		setMiddleName(middleName);
 		setLastName(lastName);
-		setStudentNumber(studentNumber);
 		this.uwNetID = uwNetID;
 	}
 
 	/**
-	 * Constructs a new student with first name, middle name, last name, student number, and
+	 * Constructs a new student with first name, middle name, last name, and
 	 * a UW Net ID, and an e-mail.
 	 * 
 	 * @param firstName
 	 * @param middleName
 	 * @param lastName
 	 * @param email
-	 * @param studentNumber
 	 * @param uwNetID
 	 */
-	public Student(String firstName, String middleName, String lastName, String email, 
-			int studentNumber, String uwNetID) 
+	public Student(String firstName, String middleName, String lastName, String email, String uwNetID) 
 	{
-		this(firstName, middleName, lastName, studentNumber, uwNetID);
+		this(firstName, middleName, lastName, uwNetID);
 		setEmail(email);
 	}
 
 	/**
-	 * Constructs a new student with a first name, middle name, last name, student number, UW
-	 * Net ID, and degree information.
+	 * Constructs a new student with a first name, middle name, last name,
+	 * UW NetID, and degree information.
 	 * 
 	 * @param firstName
 	 * @param middleName
 	 * @param lastName
-	 * @param studentNumber
 	 * @param uwNetID
 	 * @param degree
 	 */
 	public Student(String firstName, String middleName, String lastName, int studentNumber, 
 			String uwNetID, StudentDegree degree) 
 	{
-		this(firstName, middleName, lastName, studentNumber, uwNetID);
+		this(firstName, middleName, lastName, uwNetID);
 		this.degree = degree;
 	}
 
 	/**
-	 * Constructs a student with a first name, middle name, last name, student number, UW Net
-	 * ID, e-mail, and degree information.
+	 * Constructs a student with a first name, middle name, last name, UW
+	 * NetID, e-mail, and degree information.
 	 * 
 	 * @param firstName
 	 * @param middleName
 	 * @param lastName
 	 * @param email
-	 * @param studentNumber
 	 * @param uwNetID
 	 * @param degree
 	 */
 	public Student(String firstName, String middleName, String lastName, String email, 
-			int studentNumber, String uwNetID, StudentDegree degree) 
+			String uwNetID, StudentDegree degree) 
 	{
-		this(firstName, middleName, lastName, email, studentNumber, uwNetID);
+		this(firstName, middleName, lastName, email, uwNetID);
 		this.degree = degree;
 	}
 
@@ -261,26 +249,6 @@ public class Student {
 		lastName = lastName.trim();
 		validateParameters(lastName);
 		this.lastName = lastName;
-	}
-
-	/**
-	 * Returns the student's student ID number.
-	 * 
-	 * @return studentNumber
-	 */
-	public int getStudentNumber() 
-	{
-		return studentNumber;
-	}
-
-	public void setStudentNumber(int studentNumber) 
-	{
-		if (Integer.toString(studentNumber).length() != STUDENT_NUM_MIN_LENGTH) 
-		{
-			throw new IllegalArgumentException("Student ID numbers must be seven digits.");
-		}
-
-		this.studentNumber = studentNumber;
 	}
 
 	/**

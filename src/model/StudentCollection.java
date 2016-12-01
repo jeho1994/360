@@ -189,31 +189,6 @@ public class StudentCollection
 
 		return studentList;
 	}
-
-	/**
-	 * Returns a student that matches the parameter.
-	 * 
-	 * @param id
-	 * @return A student.
-	 */
-	public static Student search(int id) 
-	{
-		if (STUDENT_DB == null) 
-		{
-			STUDENT_DB = new StudentDB();
-		}
-
-		try 
-		{
-			return STUDENT_DB.getStudentByID(id);
-		}
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-		}
-
-		return null;
-	}
 	
 	/**
 	 * Updates a student's e-mail address. No other fields should be updated 
