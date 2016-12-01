@@ -79,4 +79,9 @@ public class Degree {
 	public String getId () {
 		return myId;
 	}
+	
+	@Override
+	public String toString() {
+		return myProgram + ", " + myLevel;
+	}
 }

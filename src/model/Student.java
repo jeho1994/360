@@ -100,7 +100,7 @@ public class Student {
 	 * @param degree
 	 */
 	public Student(String firstName, String middleName, String lastName, String email, 
-			int studentNumber, String uwNetID,StudentDegree degree) 
+			int studentNumber, String uwNetID, StudentDegree degree) 
 	{
 		this(firstName, middleName, lastName, email, studentNumber, uwNetID);
 		this.degree = degree;

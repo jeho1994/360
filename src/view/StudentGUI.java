@@ -6,6 +6,9 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -19,8 +22,11 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
 import component.HintTextField;
+import data.DegreeDB;
+import model.Degree;
 import model.Student;
 import model.StudentCollection;
+import model.StudentDegree;
 
 public class StudentGUI extends JPanel implements ActionListener, TableModelListener  {
 	
@@ -29,12 +35,17 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 	 */
 	private static final long serialVersionUID = 3475519788254348975L;
 	
+	/**
+	 * The various quarters a student can graduate.
+	 */
+	private static final String[] TERMS = {"Summer", "Fall", "Winter", "Spring"};
+	
 	/* Fields */
 	private JPanel pnlContent, pnlButtons, pnlSearch, pnlAdd, pnlEdit;
 	private JButton btnSearch, btnAdd, btnEdit, btnSearchStudent, btnAddStudent, btnEditStudent;
 		
 	/**AddPanel text fields.*/
-	private HintTextField txfFirst, txfMiddle, txfLast, txfEmail, txfStudentNumber, txfUWNetID;
+	private HintTextField txfFirst, txfGPA, txfMiddle, txfLast, txfEmail, txfStudentNumber, txfUWNetID;
 	
 	/** A table for displaying Students */
 	private JTable table;
@@ -49,7 +60,10 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 	private JTextField txfSearch;
 	
 	/** A drop down box for the different degree options.*/
-	private JComboBox<String> cmbDegree;
+	private JComboBox<Object> cmbDegree;
+	
+	/**A drop down box for the graduation term and year.*/
+	private JComboBox<Object> cmbTerm, cmbYear;
 	
 	/**A warning for different invalid inputs for the add student panel.*/
 	private JLabel lblWarning;
@@ -124,7 +138,7 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 	
 	private JPanel createAddPanel() {
 		pnlAdd = new JPanel();
-		pnlAdd.setLayout(new GridLayout(5, 0));
+		pnlAdd.setLayout(new GridLayout(7, 0));
 		JPanel pnlName = new JPanel();
 		pnlName.setLayout(new GridLayout(1, 0));
 		txfFirst = new HintTextField("First Name");	
@@ -149,10 +163,39 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		
 		JPanel pnlDegree = new JPanel();
 		pnlDegree.setLayout(new GridLayout(1, 0));
-		cmbDegree = new JComboBox<String>();
+		DegreeDB degree = new DegreeDB();
+		List<Degree> degrees = null;
+		try {
+			degrees = degree.geDegrees();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if (degrees != null) {
+			cmbDegree = new JComboBox<Object>(degrees.toArray());
+		}
 		pnlDegree.add(new JLabel("Program"));
 		pnlDegree.add(cmbDegree);
 		
+		JPanel pnlGPA = new JPanel();
+		txfGPA = new HintTextField("GPA");
+		txfGPA.setColumns(5);
+		pnlGPA.add(new JLabel("Grade Point Average"));
+		pnlGPA.add(txfGPA);
+		
+		JPanel pnlGraduation = new JPanel();
+		pnlGraduation.add(new JLabel("Anticipated Graduation"));
+		cmbTerm = new JComboBox<Object>(TERMS);
+		Date theDate = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+		Integer[] years = new Integer[10];
+		years[0] = Integer.parseInt(formatter.format(theDate));
+		for (int i = 1; i < 10; i++) {
+			years[i] = years[0] + i;
+		}
+		cmbYear = new JComboBox<Object>(years);
+		pnlGraduation.add(cmbTerm);
+		pnlGraduation.add(cmbYear);
 		
 		JPanel pnlButton = new JPanel();
 		btnAddStudent = new JButton("Add");
@@ -163,6 +206,8 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		pnlAdd.add(txfEmail);
 		pnlAdd.add(pnlInfo);
 		pnlAdd.add(pnlDegree);
+		pnlAdd.add(pnlGPA);
+		pnlAdd.add(pnlGraduation);
 		pnlAdd.add(pnlButton);
 		
 		return pnlAdd;
@@ -236,57 +281,73 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		String email = txfEmail.getText().trim();
 		String studentNumber = txfStudentNumber.getText();
 		String uwNetID = txfUWNetID.getText().trim();
+		String gpa = txfGPA.getText().trim();
 		int intStudentNumber = -1;
+		double dblGPA = 0.0;
 		
 		boolean validFirst = first.matches("^[\\p{L} .'-]+$");
 		boolean validLast = last.matches("^[\\p{L} .'-]+$");
 		
-		if (first.length() < 2 || last.length() < 2 || !validFirst || !validLast)
-		{
+		if (first.length() < 2 || last.length() < 2 || !validFirst || !validLast) {
 			lblWarning.setText("Please enter a valid student first and last name. " +
 					"First and last name cannot be blank, must be at least two characters, " +
 					"and can only contain letters.");
 			return;
 		}
 		
-		if (!middle.isEmpty() && !middle.matches("^[\\p{L} .'-]+$") || middle.length() < 2)
-		{
+		if (!middle.isEmpty() && !middle.matches("^[\\p{L} .'-]+$") || middle.length() < 2) {
 			lblWarning.setText("Please enter a valid student middle name. Middle name "
 					+ "can only contain letters and must be at least two characters.");
 			return;
 		}
 		
-		if (!email.contains("@") || !email.contains("."))
-		{
+		if (!email.contains("@") || !email.contains(".")) {
 			lblWarning.setText("Please enter a valid e-mail address.");
 			return;
 		}
 		
-		try
-		{
+		try {
 			intStudentNumber = Integer.parseInt(studentNumber);
-		}
-		catch (NumberFormatException e)
-		{
-			lblWarning.setText("Please enter a valid student ID number. Student ID numbers must be " +
-					"seven digits long and contain only numbers.");
-			return;
-		}
-		if (studentNumber.length() != 7 || intStudentNumber < 0)
-		{
+		} catch (NumberFormatException e) {
 			lblWarning.setText("Please enter a valid student ID number. Student ID numbers must be " +
 					"seven digits long and contain only numbers.");
 			return;
 		}
 		
-		if (uwNetID.isEmpty())
-		{
+		if (studentNumber.length() != 7 || intStudentNumber < 0) {
+			lblWarning.setText("Please enter a valid student ID number. Student ID numbers must be " +
+					"seven digits long and contain only numbers.");
+			return;
+		}
+		
+		if (uwNetID.isEmpty()) {
 			lblWarning.setText("Please enter a valid UWNetID.");
 			return;
 		}
 		
+		try {
+			dblGPA = Double.parseDouble(gpa);
+		} catch (NumberFormatException e) {
+			lblWarning.setText("Please enter a valid GPA. GPA should be entered as a non "
+					+ "negative decimal.");
+			return;
+		}
+		
+		if (dblGPA < 0 || dblGPA > 4.0) {
+			lblWarning.setText("Please enter a valid GPA. GPA should be entered as a non "
+					+ "negative decimal and cannot exceed 4.0.");
+			return;
+		}
+		
+		Degree degree = (Degree) cmbDegree.getSelectedItem();
+		String term = (String) cmbTerm.getSelectedItem();
+		String year = Integer.toString((int)cmbYear.getSelectedItem());
+		StudentDegree studentDegree = new StudentDegree(uwNetID, degree.getId(), term, year,
+				dblGPA);
+		
+		lblWarning.setText("");
 		Student student = new Student(first, middle, last, email, intStudentNumber,
-				uwNetID);
+				uwNetID, studentDegree);
 		StudentCollection.add(student);
 		btnSearch.doClick();
 	}
