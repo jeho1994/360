@@ -29,8 +29,8 @@ public class StudentDB
 	 */
 	public boolean add(Student student)
 	{
-		String sql = "INSERT INTO Student(id, first, last, uwNetID, email)" + 
-				" VALUES(?, ?, ?, ?, ?);";
+		String sql = "INSERT INTO Student(id, first, middle, last, uwNetID, email)" + 
+				" VALUES(?, ?, ?, ?, ?, ?);";
 		if (connection == null)
 		{
 			try
@@ -49,9 +49,10 @@ public class StudentDB
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setInt(1, student.getStudentNumber());
 			preparedStatement.setString(2, student.getFirstName());
-			preparedStatement.setString(3, student.getLastName());
-			preparedStatement.setString(4, student.getUWNetID());
-			preparedStatement.setString(5, student.getEmail());
+			preparedStatement.setString(3, student.getMiddleName());
+			preparedStatement.setString(4, student.getLastName());
+			preparedStatement.setString(5, student.getUWNetID());
+			preparedStatement.setString(6, student.getEmail());
 			preparedStatement.executeUpdate();
 		}
 		catch (SQLException e)
@@ -86,13 +87,14 @@ public class StudentDB
 			{
 				int studentNumber = rs.getInt("id");
 				String firstName = rs.getString("first");
+				String middleName = rs.getString("middle");
 				String lastName = rs.getString("last");
 				String uwNetID = rs.getString("uwNetID");
 				String email = rs.getString("email");
 				Student student = null;
 				if (email != null)
 				{
-					student = new Student(firstName, lastName, studentNumber,
+					student = new Student(firstName, middleName, lastName, studentNumber,
 							uwNetID);
 				}
 				else
