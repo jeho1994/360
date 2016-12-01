@@ -30,7 +30,7 @@ public class StudentInternshipDB
 	 */
 	public boolean add(StudentInternship internship)
 	{
-		String sql = "INSERT INTO StudentInternId(dateFrom, dateTo"
+		String sql = "INSERT INTO StudentInternship(dateFrom, dateTo"
 				+ ", position, uwnetid, employId)" + 
 				" VALUES(?, ?, ?, ?, ?);";
 		if (connection == null)
@@ -183,8 +183,8 @@ public class StudentInternshipDB
 			preparedStatement = connection.prepareStatement(sql);
 			if (data instanceof String)
 				preparedStatement.setString(1, (String) data); 
-			else if (data instanceof Double)
-				preparedStatement.setDouble(1, (Double) data);
+			else if (data instanceof Date)
+				preparedStatement.setDate(1, (Date) data);
 			preparedStatement.setString(2, id);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {

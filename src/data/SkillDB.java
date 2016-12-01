@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import data.DataConnection;
 import model.Skill;
 
 /**
@@ -62,7 +61,7 @@ public class SkillDB
 	 * @return A list of skills.
 	 * @throws SQLException
 	 */
-	public List<Skill> getInternships() throws SQLException
+	public List<Skill> getSkills() throws SQLException
 	{
 		if (connection == null)
 		{
@@ -112,7 +111,7 @@ public class SkillDB
 		List<Skill> filterList = new ArrayList<Skill>();
 		if (skillList == null)
 		{
-			getInternships();
+			getSkills();
 		}
 		
 		name = name.toLowerCase();
@@ -137,7 +136,7 @@ public class SkillDB
 	{
 		if (skillList == null)
 		{
-			getInternships();
+			getSkills();
 		}
 		
 		for (Skill skill : skillList)

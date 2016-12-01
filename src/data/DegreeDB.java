@@ -80,7 +80,7 @@ public class DegreeDB {
 	
 	// add
 	public String addDegree(Degree degree) {
-		String stmt = "insert into StudentEmployment(programName, level) values "
+		String stmt = "insert into Degree(programName, level) values "
 				+ "(?, ?); ";
 
 		if (myConnection == null) {
