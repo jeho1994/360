@@ -69,7 +69,7 @@ public class Student {
 	 * @param uwNetID
 	 * @param degree
 	 */
-	public Student(String firstName, String middleName, String lastName, int studentNumber, 
+	public Student(String firstName, String middleName, String lastName, 
 			String uwNetID, StudentDegree degree) 
 	{
 		this(firstName, middleName, lastName, uwNetID);

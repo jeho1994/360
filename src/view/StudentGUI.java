@@ -344,7 +344,15 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 				dblGPA);
 		
 		lblWarning.setText("");
-		Student student = new Student(first, middle, last, email, uwNetID, studentDegree);
+		Student student = null;
+		if (email.isEmpty())
+		{
+			student = new Student(first, middle, last, uwNetID, studentDegree);
+		}
+		else
+		{
+			student = new Student(first, middle, last, email, uwNetID, studentDegree);
+		}
 		StudentCollection.add(student);
 		btnSearch.doClick();
 	}
