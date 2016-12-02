@@ -239,18 +239,21 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnSearch) {
+			lblWarning.setText("");
 			pnlSearch = createSearchPanel();
 			pnlContent.removeAll();
 			pnlContent.add(pnlSearch);
 			pnlContent.revalidate();
 			this.repaint();
 		} else if (e.getSource() == btnAdd) {
+			lblWarning.setText("");
 			pnlContent.removeAll();
 			pnlContent.add(createAddPanel());
 			pnlContent.revalidate();
 			this.repaint();
 		} else if (e.getSource() == btnEdit) {
 			//TODO - Louis
+			lblWarning.setText("");
 		} else if (e.getSource() == btnSearchStudent) {
 			performSearchStudent();
 		} else if (e.getSource() == btnAddStudent) {
@@ -287,13 +290,13 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 			return;
 		}
 		
-		if (!middle.isEmpty() && !middle.matches("^[\\p{L} .'-]+$") || middle.length() < 2) {
+		if (!middle.isEmpty() && (!middle.matches("^[\\p{L} .'-]+$") || middle.length() < 2)) {
 			lblWarning.setText("Please enter a valid student middle name. Middle name "
 					+ "can only contain letters and must be at least two characters.");
 			return;
 		}
 		
-		if (!email.contains("@") || !email.contains(".")) {
+		if (!email.isEmpty() && (!email.contains("@") || !email.contains("."))) {
 			lblWarning.setText("Please enter a valid e-mail address.");
 			return;
 		}
