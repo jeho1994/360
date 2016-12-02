@@ -7,154 +7,103 @@ package model;
  * @author Thomas Van Riper November 19, 2016
  */
 public class Student {
-	/** A student's degree */
-	private StudentDegree degree;
+	private StudentDegree myDegree;
+	private StudentEmployment myEmployment;
+	private StudentInternship myInternship;
 	
-	/** A student's employment */
-	private StudentEmployment employment;
+	private String myEmail;
+	private String myFirstName;
+	private String myMiddleName;
+	private String myLastName;
+	private String myUWNetID;
+
+	/**
+	 * Constructs a new student with first name, last name, and a UW NetID.
+	 * @param theFirstName
+	 * @param theLastName
+	 * @param theUWNetID
+	 */
+	public Student(String theFirstName, String theLastName, String theUWNetID)
+	{
+		if (theFirstName == null || theLastName == null || theUWNetID == null)
+		{
+			throw new NullPointerException("Value cannot be null.");
+		}
+		
+		setFirstName(theFirstName);
+		setLastName(theLastName);
+		myUWNetID = theUWNetID;
+	}
 	
-	/** A student's internship */
-	private StudentInternship intern;
-
-	private String email;
-	private String firstName;
-	private String middleName;
-	private String lastName;
-	private String uwNetID;
-
 	/**
 	 * Constructs a new student with first name, middle name, last name, and
 	 * a UW Net ID.
 	 * 
-	 * @param firstName
-	 * @param middleName
-	 * @param lastName
-	 * @param uwNetID
+	 * @param myFirstName
+	 * @param myMiddleName
+	 * @param myLastName
+	 * @param myUWNetID
 	 */
-	public Student(String firstName, String middleName, String lastName, String uwNetID) 
+	public Student(String theFirstName, String theMiddleName, String theLastName, String theUWNetID) 
 	{
-		if (firstName == null || lastName == null || uwNetID == null)
-		{
-			throw new NullPointerException("Value cannot be null.");
-		}
-		setFirstName(firstName);
-		setMiddleName(middleName);
-		setLastName(lastName);
-		this.uwNetID = uwNetID;
-	}
-
-	/**
-	 * Constructs a new student with first name, middle name, last name, and
-	 * a UW Net ID, and an e-mail.
-	 * 
-	 * @param firstName
-	 * @param middleName
-	 * @param lastName
-	 * @param email
-	 * @param uwNetID
-	 */
-	public Student(String firstName, String middleName, String lastName, String email, String uwNetID) 
-	{
-		this(firstName, middleName, lastName, uwNetID);
-		setEmail(email);
-	}
-
-	/**
-	 * Constructs a new student with a first name, middle name, last name,
-	 * UW NetID, and degree information.
-	 * 
-	 * @param firstName
-	 * @param middleName
-	 * @param lastName
-	 * @param uwNetID
-	 * @param degree
-	 */
-	public Student(String firstName, String middleName, String lastName, 
-			String uwNetID, StudentDegree degree) 
-	{
-		this(firstName, middleName, lastName, uwNetID);
-		this.degree = degree;
-	}
-
-	/**
-	 * Constructs a student with a first name, middle name, last name, UW
-	 * NetID, e-mail, and degree information.
-	 * 
-	 * @param firstName
-	 * @param middleName
-	 * @param lastName
-	 * @param email
-	 * @param uwNetID
-	 * @param degree
-	 */
-	public Student(String firstName, String middleName, String lastName, String email, 
-			String uwNetID, StudentDegree degree) 
-	{
-		this(firstName, middleName, lastName, email, uwNetID);
-		this.degree = degree;
+		this(theFirstName, theLastName, theUWNetID);
+		setMiddleName(theMiddleName);
 	}
 
 	/**
 	 * Returns the student's degree.
-	 * 
-	 * @return degree
+	 * @return myDegree
 	 */
-	public StudentDegree getDegree() 
+	public StudentDegree getDegree()
 	{
-		return degree;
+		return myDegree;
 	}
-
+	
 	/**
-	 * Sets the student's degree information.
-	 * 
-	 * @param degree
+	 * Sets the student's degree.
+	 * @param theDegree
 	 */
-	public void setDegree(StudentDegree degree) 
+	public void setDegree(StudentDegree theDegree)
 	{
-		this.degree = degree;
+		myDegree = theDegree;
 	}
-
+	
 	/**
-	 * Returns the student's employment information.
-	 * 
+	 * Returns the student's employment.
+	 * @return myEmployment
+	 */
+	public StudentEmployment getEmployment()
+	{
+		return myEmployment;
+	}
+	
+	/**
+	 * Sets the student's employment.
+	 * @param theEmployment
+	 */
+	public void setEmployment(StudentEmployment theEmployment)
+	{
+		myEmployment = theEmployment;
+	}
+	
+	/**
+	 * Returns the student's internship.
 	 * @return
 	 */
-	public StudentEmployment getEmployment() 
+	public StudentInternship getInternship()
 	{
-		return employment;
+		return myInternship;
 	}
-
+	
 	/**
-	 * Set's the student's employment information.
-	 * 
-	 * @param employment
+	 * Sets the student's internship.
+	 * @param theInternship
 	 */
-	public void setEmployment(StudentEmployment employment) 
+	public void setInternship(StudentInternship theInternship)
 	{
-		this.employment = employment;
+		myInternship = theInternship;
 	}
-
-	/**
-	 * StudentInternship class Returns the student's
-	 * internship information.
-	 * 
-	 * @return intern
-	 */
-	 public StudentInternship getInternship() 
-	 { 
-		 return intern; 
-	 }
-
-	/**
-	 * Sets the student's internship information.
-	 * 
-	 * @param intern
-	 */
-	 public void setInternship(StudentInternship intern) 
-	 { 
-		 this.intern = intern; 
-	 }
-
+	
 	/**
 	 * Returns student's email.
 	 * 
@@ -162,120 +111,124 @@ public class Student {
 	 */
 	public String getEmail() 
 	{
-		return email;
+		return myEmail;
 	}
 
 	/**
 	 * Sets the student's e-mail.
 	 * 
-	 * @param email
+	 * @param theEmail
 	 */
-	public void setEmail(String email) 
+	public void setEmail(String theEmail) 
 	{
-		if (!email.contains("@") || !email.contains(".")) 
+		if (!theEmail.contains("@") || !theEmail.contains(".")) 
 		{
 			throw new IllegalArgumentException("Invalid e-mail address.");
 		}
 
-		this.email = email.trim();
+		this.myEmail = theEmail.trim();
 	}
 
 	/**
 	 * Returns student's first name.
 	 * 
-	 * @return firstName
+	 * @return myFirstName
 	 */
 	public String getFirstName() 
 	{
-		return firstName;
+		return myFirstName;
 	}
 
 	/**
 	 * Sets the student's first name.
 	 * 
-	 * @param firstName
+	 * @param theFirstName
 	 */
-	public void setFirstName(String firstName) 
+	public void setFirstName(String theFirstName) 
 	{
-		firstName = firstName.trim();
-		validateParameters(firstName);
-		this.firstName = firstName;
+		theFirstName = theFirstName.trim();
+		validateParameters(theFirstName);
+		this.myFirstName = theFirstName;
 	}
 	
 	/**
 	 * Returns student's middle name.
-	 * @return
+	 * @return myMiddleName
 	 */
 	public String getMiddleName()
 	{
-		return middleName;
+		return myMiddleName;
 	}
 	
 	/**
 	 * Sets the student's middle name.
-	 * @param middleName
+	 * @param theMiddleName
 	 */
-	public void setMiddleName(String middleName)
+	public void setMiddleName(String theMiddleName)
 	{
-		middleName = middleName.trim();
-		if (middleName.isEmpty())
+		theMiddleName = theMiddleName.trim();
+		if (theMiddleName.isEmpty())
 		{
-			this.middleName = middleName;
+			this.myMiddleName = theMiddleName;
 		}
 		else
 		{
-			validateParameters(middleName);
-			this.middleName = middleName;
+			validateParameters(theMiddleName);
+			this.myMiddleName = theMiddleName;
 		}
 	}
 
 	/**
 	 * Returns student's last name.
 	 * 
-	 * @return lastName
+	 * @return myLastName
 	 */
 	public String getLastName() 
 	{
-		return lastName;
+		return myLastName;
 	}
 
 	/**
 	 * Sets the student's last name.
 	 * 
-	 * @param lastName
+	 * @param theLastName
 	 */
-	public void setLastName(String lastName) 
+	public void setLastName(String theLastName) 
 	{
-		lastName = lastName.trim();
-		validateParameters(lastName);
-		this.lastName = lastName;
+		theLastName = theLastName.trim();
+		validateParameters(theLastName);
+		this.myLastName = theLastName;
 	}
 
 	/**
 	 * Returns student's UW Net ID.
 	 * 
-	 * @return uwNetID
+	 * @return myUWNetID
 	 */
 	public String getUWNetID() 
 	{
-		return uwNetID;
+		return myUWNetID;
 	}
 
 	/**
 	 * Sets the student's UW Net ID.
 	 * 
-	 * @param uwNetID
+	 * @param theUWNetID
 	 */
-	public void setUWNetID(String uwNetID) 
+	public void setUWNetID(String theUWNetID) 
 	{
-		uwNetID = uwNetID.trim();
-		validateParameters(uwNetID);
-		this.uwNetID = uwNetID;
+		theUWNetID = theUWNetID.trim();
+		validateParameters(theUWNetID);
+		this.myUWNetID = theUWNetID;
 	}
 	
-	private void validateParameters(String parameter)
+	/**
+	 * Checks if parameter values are less than two characters long.
+	 * @param theParameter
+	 */
+	private void validateParameters(String theParameter)
 	{
-		if (parameter.length() < 2)
+		if (theParameter.length() < 2)
 		{
 			throw new IllegalArgumentException("Invalid value.");
 		}

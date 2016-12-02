@@ -12,7 +12,6 @@ import data.StudentDB;
  * 
  * @author Thomas Van Riper November 21, 2016
  * Last edited on November 23, 2016
- * Added countGraduation(), getStudentsByGraduation(), and updateEmail()
  */
 public class StudentCollection 
 {
@@ -20,36 +19,32 @@ public class StudentCollection
 
 	/**
 	 * Updates the collection with a new student.
-	 * @param student
+	 * @param theStudent
 	 * @return True if the student is added, false otherwise.
 	 */
-	public static boolean add(Student student) 
+	public static boolean add(Student theStudent) 
 	{
 		if (STUDENT_DB == null) 
 		{
 			STUDENT_DB = new StudentDB();
 		}
 
-		boolean result = STUDENT_DB.add(student);
+		boolean result = STUDENT_DB.add(theStudent);
 		return result;
 	}
-
-	/**
-	 * Returns the number of students currently employed.
-	 * @return The number of employed students.
-	 */
-	public static int countEmployed() 
+	
+	public static int countEmployed()
 	{
 		int count = 0;
 		List<Student> studentList = getStudents();
 		for (Student student : studentList)
 		{
-			if (student.getEmployment() != null) 
+			if (student.getEmployment() != null)
 			{
 				count++;
 			}
 		}
-
+		
 		return count;
 	}
 	

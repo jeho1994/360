@@ -17,12 +17,6 @@ public class StudentTest
 		new Student(null, "Michael", "Doe", "jdoe");
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
-	public void testConstructorWithEmail()
-	{
-		new Student("John", "Michael", "Doe", "jdoe2uw.net", "jdoe");
-	}
-	
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testSetFirstName()

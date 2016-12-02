@@ -74,8 +74,8 @@ public class MainGUI extends JFrame {
 		JComponent skill = makeTextPanel("Skill");
 		tabbedPane.addTab("Skill", skill);
 		
-		JComponent employment = makeTextPanel("Employment");
-		tabbedPane.addTab("Employment", employment);
+		JComponent reporting = makeTextPanel("Reporting");
+		tabbedPane.addTab("Reporting", reporting);
 
 		tabbedPane.setSize(500, 1350);
 		
@@ -130,7 +130,7 @@ public class MainGUI extends JFrame {
 		}// else if (type.equalsIgnoreCase("Skill")) {
 //			panel.add(new SkillGUI());
 //		} else {
-//			panel.add(new EmploymentGUL());
+//			panel.add(new ReportingGUI());
 //		}
 		
 		return panel;

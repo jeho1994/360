@@ -23,7 +23,7 @@ import javax.swing.event.TableModelListener;
 
 import component.HintTextField;
 import data.DegreeDB;
-import data.StudentDB;
+import data.StudentDegreeDB;
 import model.Degree;
 import model.Student;
 import model.StudentCollection;
@@ -46,7 +46,7 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 	private JButton btnSearch, btnAdd, btnEdit, btnSearchStudent, btnAddStudent, btnEditStudent;
 		
 	/**AddPanel text fields.*/
-	private HintTextField txfFirst, txfGPA, txfMiddle, txfLast, txfEmail, txfStudentNumber, txfUWNetID;
+	private HintTextField txfFirst, txfGPA, txfMiddle, txfLast, txfEmail, txfUWNetID;
 	
 	/** A table for displaying Students */
 	private JTable table;
@@ -80,7 +80,7 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 	
 	public StudentGUI() {
 		setLayout(new BorderLayout());
-		myList = getData(null); // TODO after conncting DB
+		//myList = getData(null); // TODO after conncting DB
 		createComponents();
 		setVisible(true);
 		setSize(500, 700);
@@ -230,7 +230,11 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 				myData[i][1] = myList.get(i).getFirstName();
 				myData[i][2] = myList.get(i).getMiddleName();
 				myData[i][3] = myList.get(i).getLastName();
-				myData[i][4] = myList.get(i).getEmail();
+				if (myList.get(i).getEmail() != null) {
+					myData[i][4] = myList.get(i).getEmail();
+				} else {
+					myData[i][4] = "";
+				}
 			}
 		}
 		return myList;
@@ -345,14 +349,23 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		
 		lblWarning.setText("");
 		Student student = null;
-		if (email.isEmpty())
+		if (middle.isEmpty())
 		{
-			student = new Student(first, middle, last, uwNetID, studentDegree);
+			student = new Student(first, last, uwNetID);
 		}
 		else
 		{
-			student = new Student(first, middle, last, email, uwNetID, studentDegree);
+			student = new Student(first, middle, last, uwNetID);
 		}
+		
+		if (!email.isEmpty())
+		{
+			student.setEmail(email);
+		}
+		
+		student.setDegree(studentDegree);
+		StudentDegreeDB database = new StudentDegreeDB();
+		database.addStudentDegree(studentDegree);
 		StudentCollection.add(student);
 		btnSearch.doClick();
 	}
