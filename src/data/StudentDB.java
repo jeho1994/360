@@ -102,14 +102,20 @@ public class StudentDB
 				String uwNetID = rs.getString("uwNetID");
 				String email = rs.getString("email");
 				Student student = null;
-				if (email != null)
+				if (middleName != null)
 				{
 					student = new Student(firstName, middleName, lastName, uwNetID);
 				}
 				else
 				{
-					student = new Student(firstName, lastName, email, uwNetID);
+					student = new Student(firstName, lastName, uwNetID);
 				}
+				
+				if (email != null)
+				{
+					student.setEmail(email);
+				}				
+								
 				studentList.add(student);
 			}
 		}

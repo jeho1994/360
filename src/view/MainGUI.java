@@ -129,9 +129,10 @@ public class MainGUI extends JFrame {
 			panel.add(new ProgramGUI());
 		}// else if (type.equalsIgnoreCase("Skill")) {
 //			panel.add(new SkillGUI());
-//		} else {
-//			panel.add(new ReportingGUI());
-//		}
+//		} 
+		else {
+			panel.add(new ReportingGUI());
+		}
 		
 		return panel;
 
