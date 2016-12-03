@@ -3,6 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 public class MainGUI extends JFrame {
 	
@@ -29,6 +31,7 @@ public class MainGUI extends JFrame {
 	public static final Color UW_METALIC_GOLD = new Color(145, 123, 76);
 	public static final Color UW_LIGHT_GRAY = new Color(216, 217, 218);
 	public static final Color UW_DART_GRAY = new Color(153, 153, 153);
+	public static final Font UW_TITLE_FONT = new Font("Lucida Grande", Font.BOLD, 12);
 	
     /**
      * A ToolKit.
@@ -61,7 +64,9 @@ public class MainGUI extends JFrame {
 
 	private void crateComponents() {
 		JTabbedPane tabbedPane = new JTabbedPane();
-		tabbedPane.setBackground(Color.WHITE);
+//		tabbedPane.setBackground(UW_PURPLE);
+//		tabbedPane.setForeground(Color.WHITE);
+//		tabbedPane.setFont(UW_TITLE_FONT);
 
 
 
@@ -84,11 +89,11 @@ public class MainGUI extends JFrame {
 //			   @Override
 //			   protected void installDefaults() {
 //			       super.installDefaults();
-//			       highlight = Color.pink;
-//			       lightHighlight = Color.WHITE;
-//			       shadow = Color.red;
-//			       darkShadow = Color.cyan;
-//			       focus = Color.yellow;
+//			       highlight = UW_GOLD;
+//			       lightHighlight = UW_GOLD;
+//			       shadow = UW_LIGHT_GRAY;
+//			       darkShadow = UW_DART_GRAY;
+//			       focus = UW_METALIC_GOLD;
 //			   }
 //			}));
 		

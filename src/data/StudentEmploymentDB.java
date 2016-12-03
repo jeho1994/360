@@ -32,7 +32,7 @@ public class StudentEmploymentDB {
 			while (rs.next()) {
 				String id = rs.getString("studentEmployId");
 				String uwnetId = rs.getString("uwnetid");
-				String employmentId = rs.getString("employer"); //TODO - employer instead of Id
+				String employmentId = rs.getString("employer");
 				String position = rs.getString("position");
 				double salary = rs.getDouble("salary");
 				String date_str = rs.getString("dateFrom");
@@ -61,6 +61,47 @@ public class StudentEmploymentDB {
 		return myStudentEmploymentList;
 	}
 	
+	public static List<StudentEmployment> getStudentEmploymentsOfUWNetID(final String theUwnetId) throws SQLException {
+		if (myConnection == null) {
+			myConnection = DataConnection.getConnection();
+		}
+		Statement stmt = null;
+		String query = "SELECT * " + "FROM StudentEmployment WHERE uwnetId = '" + theUwnetId + "'";
+		List<StudentEmployment> filteredList = new ArrayList<StudentEmployment>();
+		try {
+			stmt = myConnection.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				String id = rs.getString("studentEmployId");
+				String uwnetId = rs.getString("uwnetid");
+				String employmentId = rs.getString("employer");
+				String position = rs.getString("position");
+				double salary = rs.getDouble("salary");
+				String date_str = rs.getString("dateFrom");
+				LocalDate date = LocalDate.parse(date_str, StudentEmployment.DATE_FORMAT);
+				String comment = rs.getString("comment");
+
+				StudentEmployment studentEmployment = null;
+				
+				if (employmentId == null) {
+					studentEmployment = new StudentEmployment(uwnetId, comment);
+					studentEmployment.setId(id);
+				} else {
+					studentEmployment = new StudentEmployment(uwnetId, employmentId,  position, salary, date);
+					studentEmployment.setId(id);
+				}
+				filteredList.add(studentEmployment);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e);
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return filteredList;
+	}
 	
 	
 	// get stu-emp(stuemp id)
