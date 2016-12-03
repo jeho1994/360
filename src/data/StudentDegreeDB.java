@@ -12,11 +12,11 @@ import model.StudentDegree;
 
 public class StudentDegreeDB {
 	
-	private Connection myConnection;
-	private List<StudentDegree> myStudentDegreeList;
+	private static Connection myConnection;
+	private static List<StudentDegree> myStudentDegreeList;
 	
 	// get all student-degree
-	public List<StudentDegree> getStudentDegrees() throws SQLException {
+	public static List<StudentDegree> getStudentDegrees() throws SQLException {
 		if (myConnection == null) {
 			myConnection = DataConnection.getConnection();
 		}
@@ -60,12 +60,12 @@ public class StudentDegreeDB {
 	
 	
 	// get student-degree
-	public StudentDegree getStudentDegree(String theId) throws SQLException {
+	public static StudentDegree getStudentDegree(String theId) throws SQLException {
 		if (myConnection == null) {
 			myConnection = DataConnection.getConnection();
 		}
 		Statement stmt = null;
-		String query = "SELECT * " + "FROM StudentDegree WHERE studentDegreeId = " + theId + ";";
+		String query = "SELECT * " + "FROM StudentDegree WHERE studentDegreeId '" + theId + "'";
 
 		try {
 			stmt = myConnection.createStatement();
@@ -101,9 +101,19 @@ public class StudentDegreeDB {
 		return null;
 	}
 	
+	public static List<StudentDegree> getStudentDegreeOfUWNetID(String theId) throws SQLException {
+		List<StudentDegree> filteredList = new ArrayList<StudentDegree>();
+		for (StudentDegree sd : myStudentDegreeList) {
+			if (theId.equalsIgnoreCase(sd.getUwnetId())) {
+				filteredList.add(sd);
+			}
+		}
+		return filteredList;
+	}
+	
 	
 	// add student-degree
-	public String addStudentDegree(StudentDegree theDegree) {
+	public static String addStudentDegree(StudentDegree theDegree) {
 		String sql = "insert into StudentDegree(studentDegreeId, uwnetId, degreeId, graduation_term, graduation_year, gpa, transferCollege) values "
 				+ "(?, ?, ?, ?, ?, ?, ?); ";
 
@@ -119,12 +129,12 @@ public class StudentDegreeDB {
 		try {
 			preparedStatement = myConnection.prepareStatement(sql);
 			preparedStatement.setString(1, theDegree.getId());
-			preparedStatement.setString(1, theDegree.getUwnetId());
-			preparedStatement.setString(1, theDegree.getDegreeId());
-			preparedStatement.setString(2, theDegree.getGraduationTerm());
-			preparedStatement.setString(3, theDegree.getGraduationYear());
-			preparedStatement.setDouble(4, theDegree.getGPA());
-			preparedStatement.setString(5, theDegree.getTransferCollege());
+			preparedStatement.setString(2, theDegree.getUwnetId());
+			preparedStatement.setString(3, theDegree.getDegreeId());
+			preparedStatement.setString(4, theDegree.getGraduationTerm());
+			preparedStatement.setString(5, theDegree.getGraduationYear());
+			preparedStatement.setDouble(6, theDegree.getGPA());
+			preparedStatement.setString(7, theDegree.getTransferCollege());
 	
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
@@ -136,7 +146,7 @@ public class StudentDegreeDB {
 	
 	
 	// edit student-degree
-	public String updateStudentDegree(StudentDegree theDegree, String columnName, Object data) {
+	public static String updateStudentDegree(StudentDegree theDegree, String columnName, Object data) {
 		
 		String id = theDegree.getId();
 		String sql = "UPDATE StudentDegree SET `" + columnName

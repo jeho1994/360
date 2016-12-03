@@ -17,15 +17,15 @@ import model.Skill;
  */
 public class SkillDB
 {
-	private Connection connection;
-	private List<Skill> skillList;
+	private static Connection connection;
+	private static List<Skill> skillList;
 	
 	/**
 	 * Updates the database with a new internship.
 	 * @param StudentInternship
 	 * @return True if the student is added, false otherwise.
 	 */
-	public boolean addSkill(Skill skill)
+	public static boolean addSkill(Skill skill)
 	{
 		String sql = "INSERT INTO Skill(skillname)" + " VALUES(?);";
 		if (connection == null)
@@ -61,7 +61,7 @@ public class SkillDB
 	 * @return A list of skills.
 	 * @throws SQLException
 	 */
-	public List<Skill> getSkills() throws SQLException
+	public static List<Skill> getSkills() throws SQLException
 	{
 		if (connection == null)
 		{
@@ -106,7 +106,7 @@ public class SkillDB
 	 * @return A list of skills.
 	 * @throws SQLException
 	 */
-	public List<Skill> getSkill(String name) throws SQLException
+	public static List<Skill> getSkill(String name) throws SQLException
 	{
 		List<Skill> filterList = new ArrayList<Skill>();
 		if (skillList == null)
@@ -132,7 +132,7 @@ public class SkillDB
 	 * @return A skill.
 	 * @throws SQLException
 	 */
-	public Skill getSkillByID(String id) throws SQLException
+	public static Skill getSkillByID(String id) throws SQLException
 	{
 		if (skillList == null)
 		{
@@ -158,7 +158,7 @@ public class SkillDB
 	 * @param data
 	 * @return
 	 */
-	public String updateSkills(Skill skill, String columnName, Object data) {
+	public static String updateSkills(Skill skill, String columnName, Object data) {
 
 		String id = skill.getId();
 		String sql = "UPDATE Skill SET `" + columnName

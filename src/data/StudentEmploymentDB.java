@@ -14,11 +14,11 @@ import model.StudentEmployment;
 
 public class StudentEmploymentDB {
 	
-	private Connection myConnection;
-	private List<StudentEmployment> myStudentEmploymentList;
+	private static Connection myConnection;
+	private static List<StudentEmployment> myStudentEmploymentList;
 	
 	// get all student-employments
-	public List<StudentEmployment> getStudentEmployments() throws SQLException {
+	public static List<StudentEmployment> getStudentEmployments() throws SQLException {
 		if (myConnection == null) {
 			myConnection = DataConnection.getConnection();
 		}
@@ -32,7 +32,7 @@ public class StudentEmploymentDB {
 			while (rs.next()) {
 				String id = rs.getString("studentEmployId");
 				String uwnetId = rs.getString("uwnetid");
-				String employmentId = rs.getString("employId"); //TODO - employer instead of Id
+				String employmentId = rs.getString("employer"); //TODO - employer instead of Id
 				String position = rs.getString("position");
 				double salary = rs.getDouble("salary");
 				String date_str = rs.getString("dateFrom");
@@ -64,7 +64,7 @@ public class StudentEmploymentDB {
 	
 	
 	// get stu-emp(stuemp id)
-	public StudentEmployment getStudentEmployment(String theId) throws SQLException {
+	public static StudentEmployment getStudentEmployment(String theId) throws SQLException {
 		if (myConnection == null) {
 			myConnection = DataConnection.getConnection();
 		}
@@ -77,7 +77,7 @@ public class StudentEmploymentDB {
 			while (rs.next()) {
 				String id = rs.getString("studentEmployId");
 				String uwnetId = rs.getString("uwnetid");
-				String employmentId = rs.getString("employId");
+				String employmentId = rs.getString("employer");
 				String position = rs.getString("position");
 				double salary = rs.getDouble("salary");
 				String date_str = rs.getString("dateFrom");
@@ -110,8 +110,8 @@ public class StudentEmploymentDB {
 	
 	
 	// add
-	public String addStudentEmployment(StudentEmployment theEmployemnt) {
-		String allsql = "insert into StudentEmployment(studentEmployId, uwnetid, employId, position, salary, dateFrom) values "
+	public static String addStudentEmployment(StudentEmployment theEmployemnt) {
+		String allsql = "insert into StudentEmployment(studentEmployId, uwnetid, employer, position, salary, dateFrom) values "
 				+ "(?, ?, ?, ?, ?, ?); ";
 		String commentsql = "insert into StudentEmployment(studentEmployId, uwnetid, comment) values "
 				+ "(?, ?, ?); ";
@@ -127,11 +127,11 @@ public class StudentEmploymentDB {
 		PreparedStatement preparedStatement = null;
 		try {
 			
-			if (theEmployemnt.getEmploymentId() != null) {
+			if (theEmployemnt.getEmployer() != null) {
 				preparedStatement = myConnection.prepareStatement(allsql);
 				preparedStatement.setString(1, theEmployemnt.getId());
 				preparedStatement.setString(2, theEmployemnt.getUwnetId());
-				preparedStatement.setString(3, theEmployemnt.getEmploymentId());
+				preparedStatement.setString(3, theEmployemnt.getEmployer());
 				preparedStatement.setString(4, theEmployemnt.getPosition());
 				preparedStatement.setDouble(5, theEmployemnt.getSalary());
 				preparedStatement.setString(6, theEmployemnt.getStartDate().format(StudentEmployment.DATE_FORMAT));
@@ -153,7 +153,7 @@ public class StudentEmploymentDB {
 	}
 	
 	// edit
-	public String updateStudentEmployment(StudentEmployment theEmployment, String columnName, Object data) {
+	public static String updateStudentEmployment(StudentEmployment theEmployment, String columnName, Object data) {
 		
 		String id = theEmployment.getId();
 		String sql = "UPDATE StudentEmployment SET `" + columnName

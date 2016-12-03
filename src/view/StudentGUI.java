@@ -23,11 +23,16 @@ import javax.swing.event.TableModelListener;
 
 import component.HintTextField;
 import data.DegreeDB;
+import data.SkillDB;
 import data.StudentDegreeDB;
+import data.StudentEmploymentDB;
+import data.StudentInternshipDB;
+import data.StudentSkillDB;
 import model.Degree;
 import model.Student;
 import model.StudentCollection;
 import model.StudentDegree;
+import model.StudentInternship;
 
 public class StudentGUI extends JPanel implements ActionListener, TableModelListener  {
 	
@@ -42,17 +47,17 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 	private static final String[] TERMS = {"Summer", "Fall", "Winter", "Spring"};
 	
 	/* Fields */
-	private JPanel pnlContent, pnlButtons, pnlSearch, pnlAdd, pnlEdit;
-	private JButton btnSearch, btnAdd, btnEdit, btnSearchStudent, btnAddStudent, btnEditStudent;
+	private JPanel pnlContent, pnlButtons, pnlSearch, pnlAdd, pnlView;
+	private JButton btnSearch, btnAdd, btnView, btnSearchStudent, btnAddStudent, btnViewStudent, btnEditEmail, btnAddDegree, btnAddSkill, btnAddIntern, btnAddEmploy;
 		
 	/**AddPanel text fields.*/
-	private HintTextField txfFirst, txfGPA, txfMiddle, txfLast, txfEmail, txfUWNetID;
+	private HintTextField txfFirst, txfGPA, txfMiddle, txfLast, txfEmail, txfUWNetID, txtfViewUWID;
 	
 	/** A table for displaying Students */
-	private JTable table;
+	private JTable table, stuDegreeTable, stuSkillTable, stuEmployTemble, stuInternTable;
 	
 	/** A scroll pane */
-	private JScrollPane scrollPane;
+	private JScrollPane scrollPane, viewSPane, stuDegreeSPane, stuSkillSPane, stuEmploySPane, stuInternSPane;
 	
 	/** A label for Search Item panel */
 	private JLabel lblSearch;
@@ -80,7 +85,7 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 	
 	public StudentGUI() {
 		setLayout(new BorderLayout());
-		//myList = getData(null); // TODO after conncting DB
+		myList = getData(null);
 		createComponents();
 		setVisible(true);
 		setSize(500, 700);
@@ -114,13 +119,13 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 
 		btnAdd = new JButton("Add Student");
 		btnAdd.addActionListener(this);
-		
-		btnEdit = new JButton("Edit Student");
-		btnEdit.addActionListener(this);
+
+		btnView = new JButton("View/Update Student");
+		btnView.addActionListener(this);
 
 		pnlButtons.add(btnSearch);
 		pnlButtons.add(btnAdd);
-		pnlButtons.add(btnEdit);
+		pnlButtons.add(btnView);
 		
 		return pnlButtons;
 	}
@@ -157,10 +162,10 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		
 		JPanel pnlDegree = new JPanel();
 		pnlDegree.setLayout(new GridLayout(1, 0));
-		DegreeDB degree = new DegreeDB();
+//		DegreeDB degree = new DegreeDB();
 		List<Degree> degrees = null;
 		try {
-			degrees = degree.geDegrees();
+			degrees = DegreeDB.getDegrees();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -207,15 +212,162 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		return pnlAdd;
 	}
 	
-	private JPanel createEditPanel() {
-		pnlEdit = new JPanel();
+	private JPanel createViewPanel() {
+		pnlView = new JPanel();
+		txtfViewUWID = new HintTextField("UWnetID");
+		txtfViewUWID.setColumns(10);
+		btnViewStudent = new JButton("View");
+		btnViewStudent.addActionListener(this);
+		pnlView.add(txtfViewUWID);
+		pnlView.add(btnViewStudent);
 		
-		//TODO - Louis adds "Edit student" panel
-		
-		return pnlEdit;
+		return pnlView;
 	}
 	
 	
+	private JPanel createStudentViewPanel(final String theId) {
+		JPanel panel  = new JPanel(new BorderLayout());
+		Student student = StudentCollection.getStudentById(theId);
+		
+		// student personal info
+		JPanel upperPanel = new JPanel(new BorderLayout());
+		JPanel basicPanel  = new JPanel(new GridLayout(3, 3));
+
+		basicPanel.add(new JLabel("UWnetID: "));
+		basicPanel.add(new JLabel(student.getUWNetID()));
+		basicPanel.add(new JLabel(""));
+		
+		String fname = student.getFirstName();
+		String mname = student.getMiddleName();
+		String lname = student.getLastName();
+		
+		basicPanel.add(new JLabel("Name: "));
+		if (mname != null) {
+			basicPanel.add(new JLabel(lname.toUpperCase() + ", " + fname + " " + mname));
+		} else {
+			basicPanel.add(new JLabel(lname.toUpperCase() + ", " + fname));
+		}
+		basicPanel.add(new JLabel(""));
+		
+		basicPanel.add(new JLabel("E-mail: "));
+		basicPanel.add(new JLabel(student.getEmail()));
+
+		btnEditEmail = new JButton("Update E-mail");
+		btnEditEmail.addActionListener(this);
+		basicPanel.add(btnEditEmail);
+		
+		upperPanel.add(basicPanel, BorderLayout.CENTER);
+
+		// tables panel
+		JPanel tablePanel = new JPanel(new GridLayout(5,0));
+		
+		// student degree table
+		JPanel degreePanel = new JPanel(new BorderLayout());
+		String[] degreeColumn = {"Degree Level", "Program Name", "GPA", "Graudation Term", "Graduation Year", "Transfer From"};
+		int countDegrees = 0;
+		Object[][] degrees = null;
+		try {
+			countDegrees = StudentDegreeDB.getStudentDegreeOfUWNetID(student.getUWNetID()).size();
+			degrees = new Object[countDegrees][degreeColumn.length];
+			for (int i = 0; i < countDegrees; i++) {
+				StudentDegree sd = StudentDegreeDB.getStudentDegreeOfUWNetID(student.getUWNetID()).get(i);
+				degrees[i][0] = DegreeDB.getDegree(sd.getDegreeId()).getLevel();
+				degrees[i][1] = DegreeDB.getDegree(sd.getDegreeId()).getProgram();
+				degrees[i][2] = sd.getGPA();
+				degrees[i][3] = sd.getGraduationTerm();
+				degrees[i][4] = sd.getGraduationYear();
+				if (sd.getTransferCollege() != null) {
+					degrees[i][5] = sd.getTransferCollege();
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		stuDegreeTable = new JTable(degrees, degreeColumn);
+		stuDegreeSPane = new JScrollPane(stuDegreeTable);
+		btnAddDegree = new JButton("Add Degree");
+		btnAddDegree.addActionListener(this);
+		degreePanel.add(stuDegreeSPane, BorderLayout.CENTER);
+		degreePanel.add(btnAddDegree, BorderLayout.EAST);
+		
+		
+		// student skill table
+		JPanel skillPanel = new JPanel(new BorderLayout());
+		String[] skillColumn = {"Skill"};
+		int countSkills = 0;
+		Object[][] skills = null;
+		
+		try {
+			countSkills = StudentSkillDB.getStudentSkills().size();
+			skills = new Object[countSkills][skillColumn.length];
+			for (int i = 0; i < countSkills; i++) {
+				String skillId = StudentSkillDB.getStudentSkills().get(i).getSkillId();
+				skills[i][0] = SkillDB.getSkillByID(skillId);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		stuSkillTable = new JTable(skills, skillColumn);
+		stuSkillSPane = new JScrollPane(stuSkillTable);
+		btnAddSkill = new JButton("Add Skill");
+		btnAddSkill.addActionListener(this);
+		skillPanel.add(stuSkillSPane, BorderLayout.CENTER);
+		skillPanel.add(btnAddSkill, BorderLayout.EAST);
+		
+		// student internship table
+		JPanel internPanel = new JPanel(new BorderLayout());
+		String[] internColumn = {"Employer", "Position", "Date From", "Date To"};
+		int countinterns = 0;
+		Object[][] interns = null;
+		try {
+			countinterns = StudentInternshipDB.getInternships().size();
+			interns = new Object[countinterns][internColumn.length];
+			for (int i = 0; i < countinterns; i++) {
+				StudentInternship si = StudentInternshipDB.getInternships().get(i);
+				interns[i][0] = si.getEmployer();
+				interns[i][1] = si.getPosition();
+				interns[i][2] = si.getStartDate();
+				interns[i][3] = si.getEndDate();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		stuInternTable = new JTable(interns, internColumn);
+		stuInternSPane = new JScrollPane(stuInternTable);
+		btnAddIntern = new JButton("Add Internship");
+		btnAddIntern.addActionListener(this);
+		internPanel.add(stuInternSPane, BorderLayout.CENTER);
+		internPanel.add(btnAddIntern, BorderLayout.EAST);
+		
+		// student employment table
+		JPanel employPanel = new JPanel(new BorderLayout());
+		String[] employColumn = {"Employer", "Position", "Salary", "Date From", "Comment"};
+		int countemploys = 0;
+		Object[][] employs = null;
+		try {
+			countinterns = StudentEmploymentDB.getStudentEmployments().size();
+			interns = new Object[countinterns][internColumn.length];
+			for (int i = 0; i < countinterns; i++) {
+				//TODO
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		stuInternTable = new JTable(interns, internColumn);
+		stuInternSPane = new JScrollPane(stuInternTable);
+		btnAddIntern = new JButton("Add Internship");
+		btnAddIntern.addActionListener(this);
+		internPanel.add(stuInternSPane, BorderLayout.CENTER);
+		internPanel.add(btnAddIntern, BorderLayout.EAST);
+		
+
+		// add all tables in vieSpne
+		
+		viewSPane = new JScrollPane(tablePanel);
+		panel.add(upperPanel, BorderLayout.NORTH);
+		panel.add(viewSPane, BorderLayout.CENTER);
+		return panel;
+	}
 	
 	private List<Student> getData(final String theSearchKey) {
 		if (theSearchKey != null)
@@ -255,22 +407,48 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 			pnlContent.add(createAddPanel());
 			pnlContent.revalidate();
 			this.repaint();
-		} else if (e.getSource() == btnEdit) {
-			//TODO - Louis
+		} else if (e.getSource() == btnView) {
 			lblWarning.setText("");
+			pnlContent.removeAll();
+			pnlContent.add(createViewPanel());
+			pnlContent.revalidate();
+			this.repaint();
+			
 		} else if (e.getSource() == btnSearchStudent) {
 			performSearchStudent();
 		} else if (e.getSource() == btnAddStudent) {
 			performAddStudent();
-		} else if (e.getSource() == btnEditStudent) {
-			performEditStudent();
+		} else if (e.getSource() == btnViewStudent) {
+			performViewStudent();
+		} else if (e.getSource() == btnEditEmail) {
+			performEditEmail();
+		} else if (e.getSource() == btnAddDegree) {
+			//TODO
+		} else if (e.getSource() == btnAddSkill) {
+			//TODO
+		} else if (e.getSource() == btnAddIntern) {
+			//TODO
+		} else if (e.getSource() == btnAddEmploy) {
+			//TODO
 		}
+	}
+	
+	private void performEditEmail() {
 		
 	}
 
 
-	private void performEditStudent() {
-		// TODO - Louis adds 
+	private void performViewStudent() {
+		// get textfield
+		String id = txtfViewUWID.getText();
+		System.out.println(id);
+		if (id.length() > 0) { 
+			myList = getData(id);
+			pnlContent.removeAll();
+			pnlContent.add(createStudentViewPanel(id));
+			pnlContent.revalidate();
+			this.repaint();
+		}
 		
 	}
 
@@ -364,8 +542,7 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		}
 		
 		student.setDegree(studentDegree);
-		StudentDegreeDB database = new StudentDegreeDB();
-		database.addStudentDegree(studentDegree);
+		StudentDegreeDB.addStudentDegree(studentDegree);
 		StudentCollection.add(student);
 		btnSearch.doClick();
 	}

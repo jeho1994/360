@@ -133,7 +133,7 @@ public class ProgramGUI extends JPanel implements ActionListener, TableModelList
 		DegreeDB database = new DegreeDB();
 		List<Degree> degrees = null;
 		try {
-			degrees = database.geDegrees();
+			degrees = database.getDegrees();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

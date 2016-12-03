@@ -12,11 +12,11 @@ import model.Degree;
 
 public class DegreeDB {
 	
-	private Connection myConnection;
-	private List<Degree> myDegreeList;
+	private static Connection myConnection;
+	private static List<Degree> myDegreeList;
 	
 	// get all student-employments
-	public List<Degree> geDegrees() throws SQLException {
+	public static List<Degree> getDegrees() throws SQLException {
 		if (myConnection == null) {
 			myConnection = DataConnection.getConnection();
 		}
@@ -46,7 +46,7 @@ public class DegreeDB {
 		return myDegreeList;
 	}
 	
-	public Degree getDegree(String theId) throws SQLException {
+	public static Degree getDegree(String theId) throws SQLException {
 		if (myConnection == null) {
 			myConnection = DataConnection.getConnection();
 		}
@@ -79,7 +79,7 @@ public class DegreeDB {
 	
 	
 	// add
-	public String addDegree(Degree degree) {
+	public static String addDegree(Degree degree) {
 		String stmt = "insert into Degree(programName, level) values "
 				+ "(?, ?); ";
 
@@ -105,7 +105,7 @@ public class DegreeDB {
 	}
 	
 	// edit
-	public String updateStudentEmployment(Degree theEmployment, String columnName, Object data) {
+	public static String updateStudentEmployment(Degree theEmployment, String columnName, Object data) {
 		
 		String id = theEmployment.getId();
 		String sql = "UPDATE Degree SET `" + columnName
