@@ -29,17 +29,10 @@ public class StudentDB
 	 */
 	public boolean add(Student student)
 	{
-		String sql = null;
-		if (student.getEmail() != null)
-		{
-			sql = "INSERT INTO Student(first, middle, last, uwNetID, email)" + 
-				" VALUES(?, ?, ?, ?, ?);";
-		}
-		else
-		{
-			sql = "INSERT INTO Student(first, middle, last, uwNetID)" + 
-					" VALUES(?, ?, ?, ?)";
-		}
+		String sql = "INSERT INTO Student(first, middle, last, uwNetID, email)" + " VALUES(?, ?, ?, ?, ?);";
+
+		String noMiddlesql = "INSERT INTO Student(first, last, uwNetID, email)" + " VALUES(?, ?, ?, ?)";
+
 		if (connection == null)
 		{
 			try
@@ -55,14 +48,19 @@ public class StudentDB
 		PreparedStatement preparedStatement = null;
 		try
 		{
-			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setString(1, student.getFirstName());
-			preparedStatement.setString(2, student.getMiddleName());
-			preparedStatement.setString(3, student.getLastName());
-			preparedStatement.setString(4, student.getUWNetID());
-			if (student.getEmail() != null)
-			{
+			if (student.getMiddleName() == null) {
+				preparedStatement = connection.prepareStatement(sql);
+				preparedStatement.setString(1, student.getFirstName());
+				preparedStatement.setString(2, student.getMiddleName());
+				preparedStatement.setString(3, student.getLastName());
+				preparedStatement.setString(4, student.getUWNetID());
 				preparedStatement.setString(5, student.getEmail());
+			} else {
+				preparedStatement = connection.prepareStatement(noMiddlesql);
+				preparedStatement.setString(1, student.getFirstName());
+				preparedStatement.setString(2, student.getLastName());
+				preparedStatement.setString(3, student.getUWNetID());
+				preparedStatement.setString(4, student.getEmail());
 			}
 			preparedStatement.executeUpdate();
 		}
@@ -116,6 +114,7 @@ public class StudentDB
 					student.setEmail(email);
 				}				
 								
+				student.setEmail(email);
 				studentList.add(student);
 			}
 		}
@@ -169,6 +168,46 @@ public class StudentDB
 		return filterList;
 	}
 	
+	public Student getSudentById(final String theUWNetID) throws SQLException {
+		if (connection == null) {
+			connection = DataConnection.getConnection();
+		}
+		
+		Statement statement = null;
+		String query = "SELECT * FROM Student WHERE uwNetID = '" + theUWNetID + "'";
+		studentList = new ArrayList<Student>();
+		try {
+			statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(query);
+			while (rs.next())
+			{
+				String firstName = rs.getString("first");
+				String middleName = rs.getString("middle");
+				String lastName = rs.getString("last");
+				String uwNetID = rs.getString("uwNetID");
+				String email = rs.getString("email");
+				Student student = null;
+				if (middleName != null) {
+					student = new Student(firstName, middleName, lastName, uwNetID);
+				} else {
+					student = new Student(firstName, lastName, uwNetID);
+				}
+				student.setEmail(email);
+				
+				return student;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (statement != null) {
+				statement.close();
+			}
+		}
+		return null;
+	}
+	
+	
+	
 	/**
 	 * Updates a student's e-mail address. No other fields should be updated in
 	 * Student.
@@ -179,7 +218,7 @@ public class StudentDB
 	public boolean updateEmail(Student student, String email)
 	{
 		String id = student.getUWNetID();
-		String sql = "UPDATE Student SET email = '" + email + "' WHERE  = uwNetID" + id;
+		String sql = "UPDATE Student SET email = '" + email + "' WHERE uwNetID = '" + id + "'";
 		PreparedStatement preparedStatement = null;
 		try
 		{

@@ -157,6 +157,24 @@ public class StudentCollection
 		}
 		
 		/**
+		 * Returns a student whose UWnetid is given.
+		 * @param theUWNetID
+		 * @return a student.
+		 */
+		public static Student getStudentById(final String theUWNetID) {
+			if (STUDENT_DB == null) {
+				STUDENT_DB = new StudentDB();
+			}
+			try {
+				return STUDENT_DB.getSudentById(theUWNetID);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+		
+		/**
 		 * Returns a list of students who possess the given skill.
 		 * @param skill
 		 * @return A list of students.

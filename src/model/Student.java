@@ -166,16 +166,22 @@ public class Student {
 	 */
 	public void setMiddleName(String theMiddleName)
 	{
-		theMiddleName = theMiddleName.trim();
-		if (theMiddleName.isEmpty())
-		{
-			this.myMiddleName = theMiddleName;
+		
+		if (theMiddleName == null || theMiddleName.length() < 1) {
+			throw new IllegalArgumentException();
 		}
-		else
-		{
-			validateParameters(theMiddleName);
-			this.myMiddleName = theMiddleName;
-		}
+		
+		this.myMiddleName = theMiddleName;
+//		theMiddleName = theMiddleName.trim();
+//		if (theMiddleName.isEmpty())
+//		{
+//			this.myMiddleName = theMiddleName;
+//		}
+//		else
+//		{
+//			validateParameters(theMiddleName);
+//			this.myMiddleName = theMiddleName;
+//		}
 	}
 
 	/**

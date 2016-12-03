@@ -15,7 +15,7 @@ public class StudentInternship {
 	/** Student's uwnetid */
 	private String myUWId ;
 	/** Employer Id */
-	private String myEmpId;  //TODO - employer instead of Id
+	private String myEmployer;  
 	
 	
 	/**
@@ -29,12 +29,12 @@ public class StudentInternship {
 	 * @param theEmpId
 	 */
 	public StudentInternship(Date theStartDate, Date theEndDate, String thePosition,
-			String theUwId, String theEmpId) {
+			String theUwId, String theEmployer) {
 		myStartDate = theStartDate;
 		myEndDate = theEndDate;
 		myPosition = thePosition;
 		myUWId = theUwId;
-		myEmpId = theEmpId;
+		myEmployer = theEmployer;
 	}
 	
 	/**
@@ -114,8 +114,8 @@ public class StudentInternship {
 	 * 
 	 * @return myEmpId
 	 */
-	public String getEmpId() {
-		return myEmpId;
+	public String getEmployer() {
+		return myEmployer;
 	}
 	
 	/**
@@ -123,8 +123,8 @@ public class StudentInternship {
 	 * 
 	 * @param id
 	 */
-	public void setEmpId(String id) {
-		myEmpId = id;
+	public void setEmployer(String employer) {
+		myEmployer = employer;
 	}
 	
 	/**

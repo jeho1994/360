@@ -12,11 +12,11 @@ import model.StudentSkill;
 
 public class StudentSkillDB {
 
-	private Connection myConnection;
-	private List<StudentSkill> myStudentSkillList;
+	private static Connection myConnection;
+	private static List<StudentSkill> myStudentSkillList;
 	
 	// getskills
-	public List<StudentSkill> getStudentSkills() throws SQLException {
+	public static List<StudentSkill> getStudentSkills() throws SQLException {
 		if (myConnection == null) {
 			myConnection = DataConnection.getConnection();
 		}
@@ -50,7 +50,7 @@ public class StudentSkillDB {
 	
 	
 	// get skill by stu-skill id
-	public StudentSkill getStudentSkills(final String theId) throws SQLException {
+	public static StudentSkill getStudentSkills(final String theId) throws SQLException {
 		if (myConnection == null) {
 			myConnection = DataConnection.getConnection();
 		}
@@ -86,7 +86,7 @@ public class StudentSkillDB {
 	
 	
 	// add skill
-	public String addStudentSkill(StudentSkill theSkill) {
+	public static String addStudentSkill(StudentSkill theSkill) {
 		String sql = "insert into StudentSkill(studentSkillId, uwnetId, skillId) values "
 				+ "(?, ?, ?); ";
 

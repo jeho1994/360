@@ -22,7 +22,7 @@ public class StudentEmployment {
 	private String myUwnetId;
 	
 	/** An employment Id */
-	private String myEmploymentId;
+	private String myEmployer;
 	
 	/** A job position */
 	private String myPosition;
@@ -44,14 +44,14 @@ public class StudentEmployment {
 	 * It is used when employment information is available.
 	 * 
 	 * @param theUwnetId
-	 * @param theEmploymentId
+	 * @param theEmployer
 	 * @param thePosition
 	 * @param theSalary
 	 * @param theStartDate
 	 */
-	public StudentEmployment(final String theUwnetId, final String theEmploymentId, final String thePosition, final double theSalary, final LocalDate theStartDate) {
+	public StudentEmployment(final String theUwnetId, final String theEmployer, final String thePosition, final double theSalary, final LocalDate theStartDate) {
 		setUwnetId(theUwnetId);
-		setEmploymentId(theEmploymentId);
+		setEmployer(theEmployer);
 		setPosition(thePosition);
 		setSalary(theSalary);
 		setStartDate(theStartDate);
@@ -124,10 +124,10 @@ public class StudentEmployment {
 	}
 
 	/**
-	 * @return the myEmploymentId
+	 * @return the myEmployer
 	 */
-	public String getEmploymentId() {
-		return myEmploymentId;
+	public String getEmployer() {
+		return myEmployer;
 	}
 
 	
@@ -191,8 +191,8 @@ public class StudentEmployment {
 	/**
 	 * @param theEmploymentId the myEmploymentId to set
 	 */
-	public void setEmploymentId(String theEmploymentId) {
-		this.myEmploymentId = theEmploymentId;
+	public void setEmployer(String theEmployer) {
+		this.myEmployer = theEmployer;
 	}
 
 

@@ -20,18 +20,18 @@ import model.StudentInternship;
  */
 public class StudentInternshipDB
 {
-	private Connection connection;
-	private List<StudentInternship> internshipList;
+	private static Connection connection;
+	private static List<StudentInternship> internshipList;
 	
 	/**
 	 * Updates the database with a new internship.
 	 * @param StudentInternship
 	 * @return True if the student is added, false otherwise.
 	 */
-	public boolean add(StudentInternship internship)
+	public static boolean add(StudentInternship internship)
 	{
 		String sql = "INSERT INTO StudentInternship(dateFrom, dateTo"
-				+ ", position, uwnetid, employId)" + 
+				+ ", position, uwnetid, employer)" + 
 				" VALUES(?, ?, ?, ?, ?);";
 		if (connection == null)
 		{
@@ -53,7 +53,7 @@ public class StudentInternshipDB
 			preparedStatement.setDate(2, internship.getEndDate());
 			preparedStatement.setString(3, internship.getPosition());
 			preparedStatement.setString(4, internship.getUWId());
-			preparedStatement.setString(5, internship.getEmpId());
+			preparedStatement.setString(5, internship.getEmployer());
 			preparedStatement.executeUpdate();
 		}
 		catch (SQLException e)
@@ -70,7 +70,7 @@ public class StudentInternshipDB
 	 * @return A list of internships.
 	 * @throws SQLException
 	 */
-	public List<StudentInternship> getInternships() throws SQLException
+	public static List<StudentInternship> getInternships() throws SQLException
 	{
 		if (connection == null)
 		{
@@ -91,10 +91,10 @@ public class StudentInternshipDB
 				Date endDate = rs.getDate("dateTo");
 				String position = rs.getString("position");
 				String uwnetid = rs.getString("uwnetid");
-				String employId = rs.getString("employId");
+				String employer = rs.getString("employer");
 				
 				StudentInternship internship = new StudentInternship(startDate, endDate, position, 
-							uwnetid, employId);
+							uwnetid, employer);
 				internship.setId(Integer.toString(internshipId));
 				internshipList.add(internship);
 			}
@@ -120,7 +120,7 @@ public class StudentInternshipDB
 	 * @return A list of internships.
 	 * @throws SQLException
 	 */
-	public List<StudentInternship> getInternship(String name) throws SQLException
+	public static List<StudentInternship> getInternship(String name) throws SQLException
 	{
 		List<StudentInternship> filterList = new ArrayList<StudentInternship>();
 		if (internshipList == null)
@@ -146,7 +146,7 @@ public class StudentInternshipDB
 	 * @return An internship.
 	 * @throws SQLException
 	 */
-	public StudentInternship getStudentByID(String id) throws SQLException
+	public static StudentInternship getStudentByID(String id) throws SQLException
 	{
 		if (internshipList == null)
 		{
@@ -172,7 +172,7 @@ public class StudentInternshipDB
 	 * @param data
 	 * @return
 	 */
-	public String updateStudentInternship(StudentInternship internship, String columnName, Object data) {
+	public static String updateStudentInternship(StudentInternship internship, String columnName, Object data) {
 
 		String id = internship.getId();
 		String sql = "UPDATE StudentInternship SET `" + columnName
