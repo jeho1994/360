@@ -1,5 +1,7 @@
 package model;
 
+import java.util.List;
+
 /**
  * The Student class represents a unique University of Washington Tacoma
  * Institute of Technology student.
@@ -7,9 +9,10 @@ package model;
  * @author Thomas Van Riper November 19, 2016
  */
 public class Student {
-	private StudentDegree myDegree;
-	private StudentEmployment myEmployment;
-	private StudentInternship myInternship;
+	private List<StudentDegree> myDegree;
+	private List<StudentEmployment> myEmployment;
+	private List<StudentInternship> myInternship;
+	private List<StudentSkill> mySkills;
 	
 	private String myEmail;
 	private String myFirstName;
@@ -54,7 +57,7 @@ public class Student {
 	 * Returns the student's degree.
 	 * @return myDegree
 	 */
-	public StudentDegree getDegree()
+	public List<StudentDegree> getDegree()
 	{
 		return myDegree;
 	}
@@ -63,7 +66,7 @@ public class Student {
 	 * Sets the student's degree.
 	 * @param theDegree
 	 */
-	public void setDegree(StudentDegree theDegree)
+	public void setDegree(List<StudentDegree> theDegree)
 	{
 		myDegree = theDegree;
 	}
@@ -72,7 +75,7 @@ public class Student {
 	 * Returns the student's employment.
 	 * @return myEmployment
 	 */
-	public StudentEmployment getEmployment()
+	public List<StudentEmployment> getEmployment()
 	{
 		return myEmployment;
 	}
@@ -81,16 +84,16 @@ public class Student {
 	 * Sets the student's employment.
 	 * @param theEmployment
 	 */
-	public void setEmployment(StudentEmployment theEmployment)
+	public void setEmployment(List<StudentEmployment> theEmployment)
 	{
 		myEmployment = theEmployment;
 	}
 	
 	/**
 	 * Returns the student's internship.
-	 * @return
+	 * @return myInternship
 	 */
-	public StudentInternship getInternship()
+	public List<StudentInternship> getInternship()
 	{
 		return myInternship;
 	}
@@ -99,9 +102,27 @@ public class Student {
 	 * Sets the student's internship.
 	 * @param theInternship
 	 */
-	public void setInternship(StudentInternship theInternship)
+	public void setInternship(List<StudentInternship> theInternship)
 	{
 		myInternship = theInternship;
+	}
+	
+	/**
+	 * Returns the student's skills.
+	 * @return mySkills
+	 */
+	public List<StudentSkill> getSkills()
+	{
+		return mySkills;
+	}
+	
+	/**
+	 * Sets the student's skills.
+	 * @param theSkills
+	 */
+	public void setSkills(List<StudentSkill> theSkills)
+	{
+		mySkills = theSkills;
 	}
 	
 	/**
@@ -166,22 +187,12 @@ public class Student {
 	 */
 	public void setMiddleName(String theMiddleName)
 	{
-		
-		if (theMiddleName == null || theMiddleName.length() < 1) {
+		if (theMiddleName == null || theMiddleName.length() < 1) 
+		{
 			throw new IllegalArgumentException();
 		}
 		
 		this.myMiddleName = theMiddleName;
-//		theMiddleName = theMiddleName.trim();
-//		if (theMiddleName.isEmpty())
-//		{
-//			this.myMiddleName = theMiddleName;
-//		}
-//		else
-//		{
-//			validateParameters(theMiddleName);
-//			this.myMiddleName = theMiddleName;
-//		}
 	}
 
 	/**

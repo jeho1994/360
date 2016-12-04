@@ -125,9 +125,12 @@ public class StudentCollection
 		List<Student> studentList = getStudents();
 		for (Student student : studentList)
 		{
-			if (Integer.parseInt(student.getDegree().getGraduationYear()) != year)
+			for (StudentDegree degree : student.getDegree())
 			{
-				studentList.remove(student);
+				if (Integer.parseInt(degree.getGraduationYear()) != year)
+				{
+					studentList.remove(student);
+				}
 			}
 		}
 		
@@ -146,10 +149,13 @@ public class StudentCollection
 			List<Student> studentList = getStudents();
 			for (Student student : studentList)
 			{
-				if (Integer.parseInt(student.getDegree().getGraduationYear()) != year &&
-						!student.getDegree().getGraduationTerm().equals(term))
+				for (StudentDegree degree: student.getDegree())
 				{
-					studentList.remove(student);
+					if (Integer.parseInt(degree.getGraduationYear()) != year &&
+							!degree.getGraduationTerm().equals(term))
+					{
+						studentList.remove(student);
+					}
 				}
 			}
 			

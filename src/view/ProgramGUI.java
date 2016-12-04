@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,15 +22,21 @@ import component.HintTextField;
 import data.DegreeDB;
 import model.Degree;
 
+/**
+ * ProgramGUI lists the available Institute of Technology programs and
+ * allows users to add new programs.
+ * @author Thomas Van Riper
+ * December 3rd, 2016
+ *
+ */
 public class ProgramGUI extends JPanel implements ActionListener, TableModelListener {
 	/**
 	 * An auto generated serial version UID.
 	 */
 	private static final long serialVersionUID = 8529565249406455688L;
 	
+	/**The range of degrees.*/
 	private static final String[] DEGREES = {"BA", "BS", "MA", "MS", "PhD"}; 
-
-	private String[] myProgramColumnNames = {"Skill ID", "Skill Name"};
 	
 	/**HintTextField fields.*/
 	private HintTextField txfProgramName;
@@ -39,6 +47,9 @@ public class ProgramGUI extends JPanel implements ActionListener, TableModelList
 	/**JComboBox fields.*/
 	private JComboBox<String> cmbLevel;
 	
+	/**JLabel fields.*/
+	private JLabel lblWarning;
+	
 	/**JPanel fields.*/
 	private JPanel pnlAdd, pnlButtons, pnlContent, pnlList;
 	
@@ -48,6 +59,10 @@ public class ProgramGUI extends JPanel implements ActionListener, TableModelList
 	/**A table to list the programs offered.*/
 	private JTable tblList;
 	
+	/**
+	 * Constructs the program GUI by calling methods to create
+	 * components.
+	 */
 	public ProgramGUI() {
 		setLayout(new BorderLayout());
 		
@@ -56,12 +71,36 @@ public class ProgramGUI extends JPanel implements ActionListener, TableModelList
 		setSize(500, 700);
 	}
 	
+	/**
+	 * Adds a new program to the list of available degree offerings.
+	 */
+	private void addProgram() {
+		String name = txfProgramName.getText().trim();
+		if (name.isEmpty()) {
+			lblWarning.setText("Please enter a program name.");
+			return;
+		}
+		
+		Degree degree = new Degree(name, cmbLevel.getSelectedItem().toString());
+		DegreeDB.addDegree(degree);
+		lblWarning.setText("");
+		btnList.doClick();
+	}
+	
+	/**
+	 * Creates the GUI components.
+	 */
 	private void createComponents() {
 		pnlContent = new JPanel();
 		pnlContent.add(createListPanel());
 		
+		lblWarning = new JLabel();
+		lblWarning.setForeground(Color.RED);
+		lblWarning.setFont(new Font("Arial", Font.ITALIC, 12));
+		
 		add(createButtonPanel(), BorderLayout.NORTH);
 		add(pnlContent, BorderLayout.CENTER);
+		add(lblWarning, BorderLayout.SOUTH);
 	}
 	
 	/**
@@ -71,7 +110,7 @@ public class ProgramGUI extends JPanel implements ActionListener, TableModelList
 	private JPanel createAddPanel() {
 		pnlAdd = new JPanel();
 		pnlAdd.setLayout(new GridLayout(2, 0));
-		
+				
 		JPanel pnlInfo = new JPanel();
 		txfProgramName = new HintTextField("Program Name");
 		txfProgramName.setColumns(20);
@@ -127,7 +166,7 @@ public class ProgramGUI extends JPanel implements ActionListener, TableModelList
 	}
 	
 	/**
-	 * 
+	 * Retrieves the program data from the Degree database.
 	 */
 	private Object[][] getData() {
 		List<Degree> degrees = null;
@@ -151,15 +190,19 @@ public class ProgramGUI extends JPanel implements ActionListener, TableModelList
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnAdd) {
+			lblWarning.setText("");
 			pnlContent.removeAll();
 			pnlContent.add(createAddPanel());
 			pnlContent.revalidate();
 			this.repaint();
 		} else if (e.getSource() == btnList) {
+			lblWarning.setText("");
 			pnlContent.removeAll();
 			pnlContent.add(createListPanel());
 			pnlContent.revalidate();
 			this.repaint();
+		} else if (e.getSource() == btnAddProgram) {
+			addProgram();
 		}
 		
 	}

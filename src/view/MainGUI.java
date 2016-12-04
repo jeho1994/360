@@ -132,9 +132,9 @@ public class MainGUI extends JFrame {
 		}
 		 else if (type.equalsIgnoreCase("Program")) { 
 			panel.add(new ProgramGUI());
-		}// else if (type.equalsIgnoreCase("Skill")) {
-//			panel.add(new SkillGUI());
-//		} 
+		} else if (type.equalsIgnoreCase("Skill")) {
+			panel.add(new SkillGUI());
+		} 
 		else {
 			panel.add(new ReportingGUI());
 		}

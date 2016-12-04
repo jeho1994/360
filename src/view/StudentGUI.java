@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +20,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -164,23 +162,27 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		return pnlSearch;
 	}
 	
+	/**
+	 * Creates a panel with the related GUI fields to add a new student.
+	 * @return pnlAdd
+	 */
 	private JPanel createAddPanel() {
 		pnlAdd = new JPanel();
 		pnlAdd.setLayout(new GridLayout(7, 0));
 		JPanel pnlName = new JPanel();
 		pnlName.setLayout(new GridLayout(1, 0));
-		txfFirst = new HintTextField("First Name");	
+		txfFirst = new HintTextField("* First Name");	
 		txfFirst.setColumns(8);
 		txfMiddle = new HintTextField("Middle Name");
 		txfMiddle.setColumns(8);
-		txfLast = new HintTextField("Last Name");
+		txfLast = new HintTextField("* Last Name");
 		txfLast.setColumns(8);
 		pnlName.add(txfFirst);
 		pnlName.add(txfMiddle);
 		pnlName.add(txfLast);
 		
 		txfEmail = new HintTextField("E-mail");
-		txfUWNetID = new HintTextField("UWNetID");
+		txfUWNetID = new HintTextField("* UWNetID");
 		
 		JPanel pnlDegree = new JPanel();
 		pnlDegree.setLayout(new GridLayout(1, 0));
@@ -199,7 +201,7 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		pnlDegree.add(cmbDegree);
 		
 		JPanel pnlGPA = new JPanel();
-		txfGPA = new HintTextField("GPA");
+		txfGPA = new HintTextField("* GPA");
 		txfGPA.setColumns(5);
 		pnlGPA.add(new JLabel("Grade Point Average"));
 		pnlGPA.add(txfGPA);
@@ -287,7 +289,7 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		
 		// student degree table
 		JPanel degreePanel = new JPanel(new BorderLayout());
-		String[] degreeColumn = {"Degree Level", "Program Name", "GPA", "Graudation Term", "Graduation Year", "Transfer From"};
+		String[] degreeColumn = {"Degree Level", "Program Name", "GPA", "Gradation Term", "Graduation Year", "Transfer From"};
 		int countDegrees = 0;
 		Object[][] degrees = null;
 		try {
@@ -413,7 +415,7 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 				StudentEmployment se = myStudentEmployemnt.get(i);
 				employs[i][0] = se.getEmployer();
 				employs[i][1] = se.getPosition();
-				if (se.getComment().length() > 0) {
+				if (se.getComment() != null) {
 					employs[i][2] = "";
 					employs[i][3] = "";
 				} else {
@@ -963,6 +965,9 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		}
 	}
 	
+	/**
+	 * Adds a new student to the StudentCollection.
+	 */
 	private void performAddStudent() {
 		String first = txfFirst.getText().trim();
 		String middle = txfMiddle.getText().trim();
@@ -1051,7 +1056,9 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 			student.setEmail(email);
 		}
 		
-		student.setDegree(studentDegree);
+		List<StudentDegree> degreeList = new ArrayList<StudentDegree>();
+		degreeList.add(studentDegree);
+		student.setDegree(degreeList);
 		StudentDegreeDB.addStudentDegree(studentDegree);
 		StudentCollection.add(student);
 		btnSearch.doClick();
