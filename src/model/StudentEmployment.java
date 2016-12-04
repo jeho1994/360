@@ -1,6 +1,6 @@
 package model;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -12,8 +12,7 @@ import java.time.format.DateTimeFormatter;
  * @version 11-19-2016
  */
 public class StudentEmployment {
-	
-	public static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 
 	/** A StudentEmployment Id */
 	private String myId;
@@ -31,13 +30,22 @@ public class StudentEmployment {
 	private double mySalary;
 	
 	/** A start date */
-	private LocalDate myStartDate;
+	private Date myStartDate;
 	
 	/** A comment */
 	private String myComment;
 	
 
 	/* Constructors */
+	
+	public StudentEmployment(final String theUwnetId, final String theEmployer, final String thePosition,
+			final double theSalary, final Date theStartDate) {
+		setUwnetId(theUwnetId);
+		setEmployer(theEmployer);
+		setPosition(thePosition);
+		setSalary(theSalary);
+		setStartDate(theStartDate);
+	}
 	
 	/**
 	 * Constructs a StudentEmployment with the given employment data.
@@ -49,12 +57,14 @@ public class StudentEmployment {
 	 * @param theSalary
 	 * @param theStartDate
 	 */
-	public StudentEmployment(final String theUwnetId, final String theEmployer, final String thePosition, final double theSalary, final LocalDate theStartDate) {
+	public StudentEmployment(final String theUwnetId, final String theEmployer, final String thePosition,
+			final double theSalary, final Date theStartDate, final String theComment) {
 		setUwnetId(theUwnetId);
 		setEmployer(theEmployer);
 		setPosition(thePosition);
 		setSalary(theSalary);
 		setStartDate(theStartDate);
+		setComment(theComment);
 	}
 	
 
@@ -67,6 +77,10 @@ public class StudentEmployment {
 	 */
 	public StudentEmployment(final String theUwnetid, final String theComment) {
 		setComment(theComment);
+		myEmployer = null;
+		mySalary = 0;
+		myStartDate = null;
+		myPosition = null;
 	}
 
 	
@@ -104,7 +118,7 @@ public class StudentEmployment {
 	 * Get a start date. (Format: 'yyyy-mm-dd')
 	 * @return the StartDate
 	 */
-	public LocalDate getStartDate() {
+	public Date getStartDate() {
 		return myStartDate;
 	}
 
@@ -168,7 +182,7 @@ public class StudentEmployment {
 	 * Set start date with given date.
 	 * @param theStartDate the myStartDate to set
 	 */
-	public void setStartDate(final LocalDate theStartDate) {
+	public void setStartDate(final Date theStartDate) {
 		this.myStartDate = theStartDate;
 	}
 

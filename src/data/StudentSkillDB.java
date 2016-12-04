@@ -55,7 +55,7 @@ public class StudentSkillDB {
 			myConnection = DataConnection.getConnection();
 		}
 		Statement stmt = null;
-		String query = "SELECT * " + "FROM StudentSkill WHERE studentSkillId = " + theId + ";";
+		String query = "SELECT * " + "FROM StudentSkill WHERE studentSkillId = '" + theId + "'";
 
 		myStudentSkillList = new ArrayList<StudentSkill>();
 		try {
@@ -81,6 +81,38 @@ public class StudentSkillDB {
 			}
 		}
 		return null;
+	}
+	
+	public static List<StudentSkill> getStudentSKillsOfUWNetID(final String theUwnetId) throws SQLException {
+		if (myConnection == null) {
+			myConnection = DataConnection.getConnection();
+		}
+		Statement stmt = null;
+		String query = "SELECT * " + "FROM StudentSkill WHERE uwnetId = '" + theUwnetId + "'";
+
+		List<StudentSkill> filteredList = new ArrayList<StudentSkill>();
+		try {
+			stmt = myConnection.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				String id = rs.getString("studentSkillId");
+				String uwId = rs.getString("uwnetId");
+				String skillId = rs.getString("skillId");
+
+				StudentSkill studentSkill = new StudentSkill(uwId, skillId);
+				studentSkill.setId(id);
+				
+				filteredList.add(studentSkill);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e);
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return filteredList;
 	}
 	
 	
@@ -112,6 +144,7 @@ public class StudentSkillDB {
 		}
 		return "Added StudentSkill Successfully";
 	}
+	
 	
 	
 	

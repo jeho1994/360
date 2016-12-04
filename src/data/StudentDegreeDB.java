@@ -36,15 +36,8 @@ public class StudentDegreeDB {
 				double gpa = rs.getDouble("gpa");
 				String transfer = rs.getString("transferCollege");
 
-				StudentDegree studentDegree = null;
-				
-				if (transfer == null) {
-					studentDegree = new StudentDegree(uwId, degreeId, term, year, gpa);
-					studentDegree.setId(id);
-				} else {
-					studentDegree = new StudentDegree(uwId, degreeId, term, year, gpa, transfer);
-					studentDegree.setId(id);
-				}
+				StudentDegree studentDegree = new StudentDegree(uwId, degreeId, term, year, gpa, transfer);
+				studentDegree.setId(id);
 				myStudentDegreeList.add(studentDegree);
 			}
 		} catch (SQLException e) {
@@ -79,15 +72,8 @@ public class StudentDegreeDB {
 				double gpa = rs.getDouble("gpa");
 				String transfer = rs.getString("transferCollege");
 
-				StudentDegree studentDegree = null;
-				
-				if (transfer == null) {
-					studentDegree = new StudentDegree(uwId, degreeId, term, year, gpa);
-					studentDegree.setId(id);
-				} else {
-					studentDegree = new StudentDegree(uwId, degreeId, term, year, gpa, transfer);
-					studentDegree.setId(id);
-				}
+				StudentDegree studentDegree = new StudentDegree(uwId, degreeId, term, year, gpa, transfer);
+				studentDegree.setId(id);
 				return studentDegree;
 			}
 		} catch (SQLException e) {
@@ -101,11 +87,37 @@ public class StudentDegreeDB {
 		return null;
 	}
 	
-	public static List<StudentDegree> getStudentDegreeOfUWNetID(String theId) throws SQLException {
+	public static List<StudentDegree> getStudentDegreeOfUWNetID(String theUwnetId) throws SQLException {
+		if (myConnection == null) {
+			myConnection = DataConnection.getConnection();
+		}
+		Statement stmt = null;
+		String query = "SELECT * " + "FROM StudentDegree WHERE uwnetid = '" + theUwnetId + "'";
+
 		List<StudentDegree> filteredList = new ArrayList<StudentDegree>();
-		for (StudentDegree sd : myStudentDegreeList) {
-			if (theId.equalsIgnoreCase(sd.getUwnetId())) {
-				filteredList.add(sd);
+		try {
+			stmt = myConnection.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				String id = rs.getString("studentDegreeId");
+				String uwId = rs.getString("uwnetId");
+				String degreeId = rs.getString("degreeId");
+				String term = rs.getString("graduation_term");
+				String year = rs.getString("graduation_year");
+				double gpa = rs.getDouble("gpa");
+				String transfer = rs.getString("transferCollege");
+				StudentDegree studentDegree = new StudentDegree(uwId, degreeId, term, year, gpa, transfer);
+				studentDegree.setId(id);
+				
+				System.out.println("ID: " + id);
+				filteredList.add(studentDegree);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e);
+		} finally {
+			if (stmt != null) {
+				stmt.close();
 			}
 		}
 		return filteredList;
@@ -113,9 +125,10 @@ public class StudentDegreeDB {
 	
 	
 	// add student-degree
-	public static String addStudentDegree(StudentDegree theDegree) {
-		String sql = "insert into StudentDegree(studentDegreeId, uwnetId, degreeId, graduation_term, graduation_year, gpa, transferCollege) values "
-				+ "(?, ?, ?, ?, ?, ?, ?); ";
+	public static boolean addStudentDegree(StudentDegree theDegree) {
+
+		String sql = "insert into StudentDegree(uwnetId, degreeId, graduation_term, graduation_year, gpa, transferCollege) values "
+				+ "(?, ?, ?, ?, ?, ?); ";
 
 		if (myConnection == null) {
 			try {
@@ -128,20 +141,18 @@ public class StudentDegreeDB {
 		PreparedStatement preparedStatement = null;
 		try {
 			preparedStatement = myConnection.prepareStatement(sql);
-			preparedStatement.setString(1, theDegree.getId());
-			preparedStatement.setString(2, theDegree.getUwnetId());
-			preparedStatement.setString(3, theDegree.getDegreeId());
-			preparedStatement.setString(4, theDegree.getGraduationTerm());
-			preparedStatement.setString(5, theDegree.getGraduationYear());
-			preparedStatement.setDouble(6, theDegree.getGPA());
-			preparedStatement.setString(7, theDegree.getTransferCollege());
-	
+			preparedStatement.setString(1, theDegree.getUwnetId());
+			preparedStatement.setString(2, theDegree.getDegreeId());
+			preparedStatement.setString(3, theDegree.getGraduationTerm());
+			preparedStatement.setString(4, theDegree.getGraduationYear());
+			preparedStatement.setDouble(5, theDegree.getGPA());
+			preparedStatement.setString(6, theDegree.getTransferCollege());
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return "Error adding StudentDegree: " + e.getMessage();
+			return false;
 		}
-		return "Added StudentDegree Successfully";
+		return true;
 	}
 	
 	

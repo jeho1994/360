@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.DataConnection;
-import model.StudentDegree;
 import model.StudentInternship;
+
 
 /**
  * StudentDB represents the database of student Internships.
@@ -113,6 +113,50 @@ public class StudentInternshipDB
 		
 		return internshipList;
 	}
+	
+	public static List<StudentInternship> getInternshipsOfUWNetID(final String theUwnetId) throws SQLException {
+		if (connection == null)
+		{
+			connection = DataConnection.getConnection();
+		}
+		
+		Statement statement = null;
+		String query = "SELECT * FROM StudentInternship WHERE uwnetid = '" +theUwnetId + "'";
+		List<StudentInternship> filteredList  = new ArrayList<StudentInternship>();
+		try
+		{
+			statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(query);
+			while (rs.next())
+			{
+				int internshipId = rs.getInt("StudentInternId");
+				Date startDate = rs.getDate("dateFrom");
+				Date endDate = rs.getDate("dateTo");
+				String position = rs.getString("position");
+				String uwnetid = rs.getString("uwnetid");
+				String employer = rs.getString("employer");
+				
+				StudentInternship internship = new StudentInternship(startDate, endDate, position, 
+							uwnetid, employer);
+				internship.setId(Integer.toString(internshipId));
+				filteredList.add(internship);
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if (statement != null)
+			{
+				statement.close();
+			}
+		}
+		
+		return filteredList;
+	}
+	
 	
 	/**
 	 * Returns a list of internships that match the parameter.

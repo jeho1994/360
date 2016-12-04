@@ -49,6 +49,8 @@ public class StudentDegree {
 	 * @param theGpa
 	 */
 	public StudentDegree(final String theUwnetId, final String theDegreeId, String theTerm, String theYear, double theGpa) {
+		setUwnetId(theUwnetId);
+		setDegreeId(theDegreeId);
 		setGraduationTerm(theTerm);
 		setGraduationYear(theYear);
 		setGPA(theGpa);
@@ -65,6 +67,8 @@ public class StudentDegree {
 	 * @param theTransfer
 	 */
 	public StudentDegree(final String theUwnetId, final String theDegreeId, String theTerm, String theYear, double theGpa, String theTransfer) {
+		setUwnetId(theUwnetId);
+		setDegreeId(theDegreeId);
 		setGraduationTerm(theTerm);
 		setGraduationYear(theYear);
 		setGPA(theGpa);
@@ -85,12 +89,7 @@ public class StudentDegree {
 	}
 	
 	public boolean setGraduationTerm(String theTerm) {
-		for (String term: TERMSET) {
-			if (term.equalsIgnoreCase(theTerm)) {
-				myTerm = term;
-				return true;
-			}
-		}
+		myTerm = theTerm;
 		return false;
 	}
 	

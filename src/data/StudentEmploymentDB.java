@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,22 +31,15 @@ public class StudentEmploymentDB {
 			while (rs.next()) {
 				String id = rs.getString("studentEmployId");
 				String uwnetId = rs.getString("uwnetid");
-				String employmentId = rs.getString("employer"); //TODO - employer instead of Id
+				String employer = rs.getString("employer");
 				String position = rs.getString("position");
 				double salary = rs.getDouble("salary");
-				String date_str = rs.getString("dateFrom");
-				LocalDate date = LocalDate.parse(date_str, StudentEmployment.DATE_FORMAT);
+				Date date = rs.getDate("dateFrom");
 				String comment = rs.getString("comment");
 
-				StudentEmployment studentEmployment = null;
-				
-				if (employmentId == null) {
-					studentEmployment = new StudentEmployment(uwnetId, comment);
-					studentEmployment.setId(id);
-				} else {
-					studentEmployment = new StudentEmployment(uwnetId, employmentId,  position, salary, date);
-					studentEmployment.setId(id);
-				}
+				StudentEmployment studentEmployment = new StudentEmployment(uwnetId, employer,  position, salary, date, comment);
+
+				studentEmployment.setId(id);
 				myStudentEmploymentList.add(studentEmployment);
 			}
 		} catch (SQLException e) {
@@ -61,6 +53,40 @@ public class StudentEmploymentDB {
 		return myStudentEmploymentList;
 	}
 	
+	public static List<StudentEmployment> getStudentEmploymentsOfUWNetID(final String theUwnetId) throws SQLException {
+		if (myConnection == null) {
+			myConnection = DataConnection.getConnection();
+		}
+		Statement stmt = null;
+		String query = "SELECT * " + "FROM StudentEmployment WHERE uwnetId = '" + theUwnetId + "'";
+		List<StudentEmployment> filteredList = new ArrayList<StudentEmployment>();
+		try {
+			stmt = myConnection.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				String id = rs.getString("studentEmployId");
+				String uwnetId = rs.getString("uwnetid");
+				String employer = rs.getString("employer");
+				String position = rs.getString("position");
+				double salary = rs.getDouble("salary");
+				Date date = rs.getDate("dateFrom");
+				String comment = rs.getString("comment");
+
+				StudentEmployment studentEmployment = new StudentEmployment(uwnetId, employer,  position, salary, date, comment);
+
+				studentEmployment.setId(id);
+				filteredList.add(studentEmployment);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e);
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return filteredList;
+	}
 	
 	
 	// get stu-emp(stuemp id)
@@ -77,22 +103,15 @@ public class StudentEmploymentDB {
 			while (rs.next()) {
 				String id = rs.getString("studentEmployId");
 				String uwnetId = rs.getString("uwnetid");
-				String employmentId = rs.getString("employer");
+				String employer = rs.getString("employer");
 				String position = rs.getString("position");
 				double salary = rs.getDouble("salary");
-				String date_str = rs.getString("dateFrom");
-				LocalDate date = LocalDate.parse(date_str, StudentEmployment.DATE_FORMAT);
+				Date date = rs.getDate("dateFrom");
 				String comment = rs.getString("comment");
 
-				StudentEmployment studentEmployment = null;
-				
-				if (employmentId == null) {
-					studentEmployment = new StudentEmployment(uwnetId, comment);
-					studentEmployment.setId(id);
-				} else {
-					studentEmployment = new StudentEmployment(uwnetId, employmentId,  position, salary, date);
-					studentEmployment.setId(id);
-				}
+				StudentEmployment studentEmployment = new StudentEmployment(uwnetId, employer,  position, salary, date, comment);
+
+				studentEmployment.setId(id);
 				return studentEmployment;
 			}
 		} catch (SQLException e) {
@@ -110,11 +129,9 @@ public class StudentEmploymentDB {
 	
 	
 	// add
-	public static String addStudentEmployment(StudentEmployment theEmployemnt) {
-		String allsql = "insert into StudentEmployment(studentEmployId, uwnetid, employer, position, salary, dateFrom) values "
+	public static boolean add(StudentEmployment theEmployemnt) {
+		String sql = "insert into StudentEmployment(uwnetid, employer, position, salary, dateFrom, comment) values "
 				+ "(?, ?, ?, ?, ?, ?); ";
-		String commentsql = "insert into StudentEmployment(studentEmployId, uwnetid, comment) values "
-				+ "(?, ?, ?); ";
 
 		if (myConnection == null) {
 			try {
@@ -126,34 +143,24 @@ public class StudentEmploymentDB {
 
 		PreparedStatement preparedStatement = null;
 		try {
-			
-			if (theEmployemnt.getEmployer() != null) {
-				preparedStatement = myConnection.prepareStatement(allsql);
-				preparedStatement.setString(1, theEmployemnt.getId());
-				preparedStatement.setString(2, theEmployemnt.getUwnetId());
-				preparedStatement.setString(3, theEmployemnt.getEmployer());
-				preparedStatement.setString(4, theEmployemnt.getPosition());
-				preparedStatement.setDouble(5, theEmployemnt.getSalary());
-				preparedStatement.setString(6, theEmployemnt.getStartDate().format(StudentEmployment.DATE_FORMAT));
-				
-			} else {
-				preparedStatement = myConnection.prepareStatement(commentsql);
-				preparedStatement.setString(1, theEmployemnt.getId());
-				preparedStatement.setString(2, theEmployemnt.getUwnetId());
-				preparedStatement.setString(3, theEmployemnt.getComment());
-			}
+			preparedStatement = myConnection.prepareStatement(sql);
+			preparedStatement.setString(1, theEmployemnt.getUwnetId());
+			preparedStatement.setString(2, theEmployemnt.getEmployer());
+			preparedStatement.setString(3, theEmployemnt.getPosition());
+			preparedStatement.setDouble(4, theEmployemnt.getSalary());
+			preparedStatement.setDate(5, theEmployemnt.getStartDate());
+			preparedStatement.setString(6, theEmployemnt.getComment());
 
-	
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return "Error adding StudentEmployment: " + e.getMessage();
+			return false;
 		}
-		return "Added StudentEmployment Successfully";
+		return true;
 	}
 	
 	// edit
-	public static String updateStudentEmployment(StudentEmployment theEmployment, String columnName, Object data) {
+	public static String update(StudentEmployment theEmployment, String columnName, Object data) {
 		
 		String id = theEmployment.getId();
 		String sql = "UPDATE StudentEmployment SET `" + columnName
@@ -166,8 +173,8 @@ public class StudentEmploymentDB {
 				preparedStatement.setString(1, (String) data);
 			} else if (data instanceof Double) {
 				preparedStatement.setDouble(1, (Double) data);
-			} else if (data instanceof LocalDate) { // for Date type
-				preparedStatement.setDate(1, Date.valueOf((LocalDate) data));
+			} else if (data instanceof Date) { // for Date type
+				preparedStatement.setDate(1, (Date) data);
 			} else {
 				System.out.println(data.getClass().getName() + "");
 			}
