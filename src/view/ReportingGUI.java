@@ -150,7 +150,7 @@ public class ReportingGUI extends JPanel implements ActionListener
 		pnlProgram.add(pnlProgramLabel);
 		pnlProgram.add(scrollPane);
 		
-		JLabel lblSkill = new JLabel("Select skills: ");
+		JLabel lblSkill = new JLabel("<html>Select<br> skills: </html>");
 		lblSkill.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 		JPanel pnlSkillLabel = new JPanel();
 		pnlSkillLabel.add(lblSkill);
@@ -249,7 +249,8 @@ public class ReportingGUI extends JPanel implements ActionListener
 		{
 			for (Student student : studentList)
 			{
-				if (student.getDegree().get(0).getTransferCollege() != null)
+				if (student.getDegree().get(0).getTransferCollege() != null ||
+						!student.getDegree().get(0).getTransferCollege().isEmpty())
 				{
 					removalList.add(student);
 				}
@@ -259,7 +260,8 @@ public class ReportingGUI extends JPanel implements ActionListener
 		{
 			for (Student student : studentList)
 			{
-				if (student.getDegree().get(0).getTransferCollege() == null)
+				if (student.getDegree().get(0).getTransferCollege() == null ||
+						student.getDegree().get(0).getTransferCollege().isEmpty())
 				{
 					removalList.add(student);
 				}
@@ -271,27 +273,30 @@ public class ReportingGUI extends JPanel implements ActionListener
 			for (Student student : studentList)
 			{
 				boolean programIsSelected = false;
-				for (StudentDegree studentDegree : student.getDegree())
+				if (student.getDegree() != null)
 				{
-					for (int i = 0; i < lstPrograms.getSelectedValuesList().size(); i++)
+					for (StudentDegree studentDegree : student.getDegree())
 					{
-						Degree degree = (Degree) lstPrograms.getSelectedValuesList().get(i);
-						try
+						for (int i = 0; i < lstPrograms.getSelectedValuesList().size(); i++)
 						{
-							if (DegreeDB.getDegree(studentDegree.getDegreeId()).getProgram().equals(degree.getProgram()) &&
-									DegreeDB.getDegree(studentDegree.getDegreeId()).getLevel().equals(degree.getLevel()))
+							Degree degree = (Degree) lstPrograms.getSelectedValuesList().get(i);
+							try
 							{
-								programIsSelected = true;
+								if (DegreeDB.getDegree(studentDegree.getDegreeId()).getProgram().equals(degree.getProgram()) &&
+										DegreeDB.getDegree(studentDegree.getDegreeId()).getLevel().equals(degree.getLevel()))
+								{
+									programIsSelected = true;
+								}
+							} catch (SQLException e)
+							{
+								e.printStackTrace();
 							}
-						} catch (SQLException e)
-						{
-							e.printStackTrace();
 						}
-					}
-					
-					if (!programIsSelected)
-					{
-						removalList.add(student);
+						
+						if (!programIsSelected)
+						{
+							removalList.add(student);
+						}
 					}
 				}
 			}
@@ -302,20 +307,23 @@ public class ReportingGUI extends JPanel implements ActionListener
 			for (Student student : studentList)
 			{
 				boolean skillIsSelected = false;
-				for (StudentSkill studentSkill : student.getSkills())
+				if (student.getSkills() != null)
 				{
-					for (int i = 0; i < lstSkills.getSelectedValuesList().size(); i++)
+					for (StudentSkill studentSkill : student.getSkills())
 					{
-						Skill skill = (Skill) lstSkills.getSelectedValuesList().get(i);
-						try
+						for (int i = 0; i < lstSkills.getSelectedValuesList().size(); i++)
 						{
-							if (SkillDB.getSkillByID(studentSkill.getSkillId()).getSkillName().equals(skill.getSkillName()))
+							Skill skill = (Skill) lstSkills.getSelectedValuesList().get(i);
+							try
 							{
-								skillIsSelected = true;
+								if (SkillDB.getSkillByID(studentSkill.getSkillId()).getSkillName().equals(skill.getSkillName()))
+								{
+									skillIsSelected = true;
+								}
+							} catch (SQLException e)
+							{
+								e.printStackTrace();
 							}
-						} catch (SQLException e)
-						{
-							e.printStackTrace();
 						}
 					}
 				}
@@ -332,7 +340,7 @@ public class ReportingGUI extends JPanel implements ActionListener
 		List<Student> filterList = new ArrayList<Student>();
 		for (Student student : studentList)
 		{
-			if (!student.getEmployment().isEmpty())
+			if (student.getEmployment() != null)
 			{
 				filterList.add(student);
 			}
@@ -347,7 +355,6 @@ public class ReportingGUI extends JPanel implements ActionListener
 			percent = ((double)filterList.size() / (double)studentList.size()) * 100;
 		}
 		NumberFormat formatter = new DecimalFormat("#0.0");
-		System.out.println(formatter.format(percent));
 		String label = formatter.format(percent) + "% of students are employed.";
 		JLabel lblStats = new JLabel(label);
 		lblStats.setFont(new Font("Lucida Grande", Font.BOLD, 16));
