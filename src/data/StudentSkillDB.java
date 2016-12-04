@@ -118,9 +118,9 @@ public class StudentSkillDB {
 	
 	
 	// add skill
-	public static String addStudentSkill(StudentSkill theSkill) {
-		String sql = "insert into StudentSkill(studentSkillId, uwnetId, skillId) values "
-				+ "(?, ?, ?); ";
+	public static boolean addStudentSkill(StudentSkill theSkill) {
+		String sql = "insert into StudentSkill(uwnetId, skillId) values "
+				+ "(?, ?); ";
 
 		if (myConnection == null) {
 			try {
@@ -133,16 +133,15 @@ public class StudentSkillDB {
 		PreparedStatement preparedStatement = null;
 		try {
 			preparedStatement = myConnection.prepareStatement(sql);
-			preparedStatement.setString(1, theSkill.getId());
 			preparedStatement.setString(1, theSkill.getUwnetId());
-			preparedStatement.setString(1, theSkill.getSkillId());
+			preparedStatement.setString(2, theSkill.getSkillId());
 
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return "Error adding StudentSkill: " + e.getMessage();
+			return false;
 		}
-		return "Added StudentSkill Successfully";
+		return true;
 	}
 	
 	

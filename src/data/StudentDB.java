@@ -113,8 +113,7 @@ public class StudentDB
 				{
 					student.setEmail(email);
 				}				
-								
-				student.setEmail(email);
+
 				studentList.add(student);
 			}
 		}
@@ -192,8 +191,10 @@ public class StudentDB
 				} else {
 					student = new Student(firstName, lastName, uwNetID);
 				}
-				student.setEmail(email);
-				
+				if (email != null)
+				{
+					student.setEmail(email);
+				}	
 				return student;
 			}
 		} catch (SQLException e) {
