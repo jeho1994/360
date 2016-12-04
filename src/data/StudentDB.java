@@ -113,11 +113,7 @@ public class StudentDB
 				{
 					student.setEmail(email);
 				}				
-												
-				student.setDegree(StudentDegreeDB.getStudentDegreeOfUWNetID(uwNetID));
-				student.setEmployment(StudentEmploymentDB.getStudentEmploymentsOfUWNetID(uwNetID));
-				student.setInternship(StudentInternshipDB.getInternshipsOfUWNetID(uwNetID));
-				student.setSkills(StudentSkillDB.getStudentSKillsOfUWNetID(uwNetID));
+
 				studentList.add(student);
 			}
 		}
@@ -190,19 +186,15 @@ public class StudentDB
 				String uwNetID = rs.getString("uwNetID");
 				String email = rs.getString("email");
 				Student student = null;
-				if (middleName != null) 
-				{
+				if (middleName != null) {
 					student = new Student(firstName, middleName, lastName, uwNetID);
-				} else 
-				{
+				} else {
 					student = new Student(firstName, lastName, uwNetID);
 				}
-				
 				if (email != null)
 				{
 					student.setEmail(email);
-				}
-				
+				}	
 				return student;
 			}
 		} catch (SQLException e) {

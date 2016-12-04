@@ -77,7 +77,7 @@ public class SkillDB
 			ResultSet rs = statement.executeQuery(query);
 			while (rs.next())
 			{
-				int skillId = rs.getInt("sillId");
+				int skillId = rs.getInt("skillId");
 				String name = rs.getString("skillName");
 				
 				Skill skill = new Skill(name);
@@ -121,10 +121,49 @@ public class SkillDB
 				filterList.add(skill);
 			}
 		}
-		
 		return filterList;
 	}
 	
+	public static Skill getSkillBySkillName(String theSkillName) throws SQLException {
+		if (connection == null)
+		{
+			connection = DataConnection.getConnection();
+		}
+		
+		Statement statement = null;
+
+		String query = "SELECT * FROM Skill WHERE skillName = '" + theSkillName + "'";
+		skillList = new ArrayList<Skill>();
+		try
+		{
+			statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(query);
+			while (rs.next())
+			{
+				int skillId = rs.getInt("skillId");
+				String name = rs.getString("skillName");
+				
+				Skill skill = new Skill(name);
+				String id_str = String.valueOf(skillId);
+				skill.setId(id_str);
+				return skill;
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if (statement != null)
+			{
+				statement.close();
+			}
+		}
+		
+		
+		return null;
+	}
 	
 	/**
 	 * Returns an skill that matches the parameter.
@@ -134,18 +173,42 @@ public class SkillDB
 	 */
 	public static Skill getSkillByID(String id) throws SQLException
 	{
-		if (skillList == null)
+		if (connection == null)
 		{
-			getSkills();
+			connection = DataConnection.getConnection();
 		}
 		
-		for (Skill skill : skillList)
+		Statement statement = null;
+		int intId = Integer.valueOf(id);
+		String query = "SELECT * FROM Skill WHERE skillId = " + intId + "";
+		skillList = new ArrayList<Skill>();
+		try
 		{
-			if (skill.getId() == id)
+			statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(query);
+			while (rs.next())
 			{
+				int skillId = rs.getInt("skillId");
+				String name = rs.getString("skillName");
+				
+				Skill skill = new Skill(name);
+				String id_str = String.valueOf(skillId);
+				skill.setId(id_str);
 				return skill;
 			}
 		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if (statement != null)
+			{
+				statement.close();
+			}
+		}
+		
 		
 		return null;
 	}
@@ -162,7 +225,7 @@ public class SkillDB
 
 		String id = skill.getId();
 		String sql = "UPDATE Skill SET `" + columnName
-				+ "` = ?  WHERE sillId = ? ";
+				+ "` = ?  WHERE skillId = ? ";
 
 		PreparedStatement preparedStatement = null;
 		try {

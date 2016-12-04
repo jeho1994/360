@@ -56,4 +56,13 @@ public class Skill {
 	public String getId() {
 		return myId;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return mySkillName;
+	}
+	
 }

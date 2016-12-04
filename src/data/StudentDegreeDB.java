@@ -87,6 +87,41 @@ public class StudentDegreeDB {
 		return null;
 	}
 	
+	public static StudentDegree getStudentDegreeID(String theUwnetid, String theDegreeId) throws SQLException {
+		if (myConnection == null) {
+			myConnection = DataConnection.getConnection();
+		}
+		Statement stmt = null;
+		String query = "SELECT * " + "FROM StudentDegree WHERE uwnetId = '" + theUwnetid + "' "
+				+ "AND degreeId = '" + theDegreeId + "'";
+
+		try {
+			stmt = myConnection.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				String id = rs.getString("studentDegreeId");
+				String uwId = rs.getString("uwnetId");
+				String degreeId = rs.getString("degreeId");
+				String term = rs.getString("graduation_term");
+				String year = rs.getString("graduation_year");
+				double gpa = rs.getDouble("gpa");
+				String transfer = rs.getString("transferCollege");
+
+				StudentDegree studentDegree = new StudentDegree(uwId, degreeId, term, year, gpa, transfer);
+				studentDegree.setId(id);
+				return studentDegree;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e);
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return null;
+	}
+	
 	public static List<StudentDegree> getStudentDegreeOfUWNetID(String theUwnetId) throws SQLException {
 		if (myConnection == null) {
 			myConnection = DataConnection.getConnection();
@@ -106,10 +141,9 @@ public class StudentDegreeDB {
 				String year = rs.getString("graduation_year");
 				double gpa = rs.getDouble("gpa");
 				String transfer = rs.getString("transferCollege");
+				
 				StudentDegree studentDegree = new StudentDegree(uwId, degreeId, term, year, gpa, transfer);
 				studentDegree.setId(id);
-				
-				System.out.println("ID: " + id);
 				filteredList.add(studentDegree);
 			}
 		} catch (SQLException e) {
@@ -121,6 +155,41 @@ public class StudentDegreeDB {
 			}
 		}
 		return filteredList;
+	}
+	
+	public static StudentDegree getStudentDegreeOfDegreeID(String theDegreeId) throws SQLException {
+		if (myConnection == null) {
+			myConnection = DataConnection.getConnection();
+		}
+		Statement stmt = null;
+		String query = "SELECT * " + "FROM StudentDegree WHERE degreeId = '" + theDegreeId + "'";
+
+		try {
+			stmt = myConnection.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				String id = rs.getString("studentDegreeId");
+				String uwId = rs.getString("uwnetId");
+				String degreeId = rs.getString("degreeId");
+				String term = rs.getString("graduation_term");
+				String year = rs.getString("graduation_year");
+				double gpa = rs.getDouble("gpa");
+				String transfer = rs.getString("transferCollege");
+				
+				StudentDegree studentDegree = new StudentDegree(uwId, degreeId, term, year, gpa, transfer);
+				studentDegree.setId(id);
+				
+				return studentDegree;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e);
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return null;
 	}
 	
 	
@@ -157,7 +226,7 @@ public class StudentDegreeDB {
 	
 	
 	// edit student-degree
-	public static String updateStudentDegree(StudentDegree theDegree, String columnName, Object data) {
+	public static boolean updateStudentDegree(StudentDegree theDegree, String columnName, Object data) {
 		
 		String id = theDegree.getId();
 		String sql = "UPDATE StudentDegree SET `" + columnName
@@ -178,9 +247,9 @@ public class StudentDegreeDB {
 		} catch (SQLException e) {
 			System.out.println(e);
 			e.printStackTrace();
-			return "Error updating StudentDegree: " + e.getMessage();
+			return false;
 		}
-		return "Updated StudentDegree Successfully";
+		return true;
 	
 	}
 }
