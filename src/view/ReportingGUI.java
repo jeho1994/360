@@ -1,11 +1,25 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import data.DegreeDB;
+import model.Degree;
+import model.Student;
+import model.StudentCollection;
 
 /**
  * ReportingGUI displays the various options for running reports on student
@@ -24,8 +38,17 @@ public class ReportingGUI extends JPanel implements ActionListener
 	/**JButton fields.*/
 	private JButton btnGrad, btnSkill;
 	
+	/**JCheckBox fields.*/
+	private JCheckBox ckbIntern, ckbNoIntern, ckbTransfer, ckbNoTransfer;
+	
+	/**JList fields.*/
+	private JList<Object> lstPrograms;
+	
 	/**JPanel fields.*/
 	private JPanel pnlButtons, pnlContent, pnlSkillSearch;
+	
+	/**JScrollPane to scroll through offered programs.*/
+	private JScrollPane scrollPane;
 	
 	public ReportingGUI()
 	{
@@ -64,13 +87,93 @@ public class ReportingGUI extends JPanel implements ActionListener
 	{
 		pnlSkillSearch = new JPanel();
 		
+		JPanel pnlIntern = new JPanel();
+		pnlIntern.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		pnlIntern.setLayout(new GridLayout(3, 0));
+		ckbNoIntern = new JCheckBox("Did not complete an internship");
+		ckbNoIntern.addActionListener(this);
+		ckbIntern = new JCheckBox("Completed an internship");
+		ckbIntern.addActionListener(this);
+		JPanel pnlInternLabel = new JPanel();
+		pnlInternLabel.add(new JLabel("Internship"));
+		pnlIntern.add(pnlInternLabel);
+		pnlIntern.add(ckbNoIntern);
+		pnlIntern.add(ckbIntern);
+		
+		JPanel pnlTransfer = new JPanel();
+		pnlTransfer.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		pnlTransfer.setLayout(new GridLayout(3, 0));
+		ckbNoTransfer = new JCheckBox("Did not transfer");
+		ckbNoTransfer.addActionListener(this);
+		ckbTransfer = new JCheckBox("Transferred");
+		ckbTransfer.addActionListener(this);
+		JPanel pnlTransferLabel = new JPanel();
+		pnlTransferLabel.add(new JLabel("Transfer Student"));
+		pnlTransfer.add(pnlTransferLabel);
+		pnlTransfer.add(ckbNoTransfer);
+		pnlTransfer.add(ckbTransfer);
+		
+		Object[] degreeList = null;
+		try
+		{
+			degreeList = DegreeDB.getDegrees().toArray();
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		if (degreeList != null)
+		{
+			lstPrograms = new JList<Object>(degreeList);
+		}
+		
+		scrollPane = new JScrollPane(lstPrograms);
+		
+		pnlSkillSearch.add(pnlIntern);
+		pnlSkillSearch.add(pnlTransfer);
+		pnlSkillSearch.add(scrollPane);
+		
 		return pnlSkillSearch;
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		// TODO Auto-generated method stub
+		if (e.getSource() == btnSkill)
+		{
+			pnlContent.removeAll();
+			pnlContent.add(createSkillSearchPanel());
+			pnlContent.revalidate();
+			this.repaint();
+		}
+		else if (e.getSource() == ckbNoIntern)
+		{
+			if (ckbNoIntern.isSelected() && ckbIntern.isSelected())
+			{
+				ckbIntern.setSelected(false);
+			}
+		}
+		else if (e.getSource() == ckbIntern)
+		{
+			if (ckbIntern.isSelected() && ckbNoIntern.isSelected())
+			{
+				ckbNoIntern.setSelected(false);
+			}
+		}
+		else if (e.getSource() == ckbNoTransfer)
+		{
+			if (ckbNoTransfer.isSelected() && ckbTransfer.isSelected())
+			{
+				ckbTransfer.setSelected(false);
+			}
+		}
+		else if (e.getSource() == ckbTransfer)
+		{
+			if (ckbTransfer.isSelected() && ckbNoTransfer.isSelected())
+			{
+				ckbNoTransfer.setSelected(false);
+			}
+		}
 		
 	}
 }
