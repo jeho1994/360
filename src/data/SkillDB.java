@@ -77,7 +77,7 @@ public class SkillDB
 			ResultSet rs = statement.executeQuery(query);
 			while (rs.next())
 			{
-				int skillId = rs.getInt("sillId");
+				int skillId = rs.getInt("skillId");
 				String name = rs.getString("skillName");
 				
 				Skill skill = new Skill(name);
