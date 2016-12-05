@@ -20,6 +20,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 import data.DegreeDB;
 import data.SkillDB;
@@ -37,7 +39,7 @@ import model.StudentSkill;
  * December 2nd, 2016
  *
  */
-public class ReportingGUI extends JPanel implements ActionListener
+public class ReportingGUI extends JPanel implements ActionListener, TableModelListener
 {
 	/**
 	 * An auto generated serial version UID.
@@ -47,7 +49,7 @@ public class ReportingGUI extends JPanel implements ActionListener
 	private static final String[] STUDENT_DATA_COLUMN_NAMES = {"First", "Last", "UW NetID", "E-mail"};
 	
 	/**JButton fields.*/
-	private JButton btnGrad, btnSkill, btnSkillSubmit;
+	private JButton btnGrad, btnGetStudentData, btnSkill, btnSkillSubmit;
 	
 	/**JCheckBox fields.*/
 	private JCheckBox ckbIntern, ckbNoIntern, ckbTransfer, ckbNoTransfer;
@@ -358,14 +360,22 @@ public class ReportingGUI extends JPanel implements ActionListener
 		String label = formatter.format(percent) + "% of students are employed.";
 		JLabel lblStats = new JLabel(label);
 		lblStats.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+		lblStats.setAlignmentX(CENTER_ALIGNMENT);
 		
 		getData(filterList);
 		tblStudents = new JTable(studentData, STUDENT_DATA_COLUMN_NAMES);
+		tblStudents.getModel().addTableModelListener(this);
 		scrollPaneStudents = new JScrollPane(tblStudents);
+		
+		btnGetStudentData = new JButton("View Student");
+		btnGetStudentData.addActionListener(this);
+		btnGetStudentData.setAlignmentX(CENTER_ALIGNMENT);
 		
 		pnlResult.add(lblStats);
 		pnlResult.add(Box.createRigidArea(new Dimension(0, 10)));
 		pnlResult.add(scrollPaneStudents);
+		pnlResult.add(Box.createRigidArea(new Dimension(0, 10)));
+		pnlResult.add(btnGetStudentData);
 		
 		return pnlResult;
 	}
@@ -415,5 +425,18 @@ public class ReportingGUI extends JPanel implements ActionListener
 			pnlContent.revalidate();
 			this.repaint();
 		}
+		
+		else if (e.getSource() == btnGetStudentData)
+		{
+			String uwNetID = (String) tblStudents.getValueAt(tblStudents.getSelectedRow(), 2);
+		}
+	}
+
+	@Override
+	public void tableChanged(TableModelEvent e)
+	{
+		//Table is not editable so fresh if anyone tries
+		//to edit.
+		btnSkillSubmit.doClick();
 	}
 }
