@@ -7,10 +7,7 @@ package model;
  * @author Thomas Van Riper November 19, 2016
  */
 public class Student {
-	private StudentDegree myDegree;
-	private StudentEmployment myEmployment;
-	private StudentInternship myInternship;
-	
+
 	private String myEmail;
 	private String myFirstName;
 	private String myMiddleName;
@@ -48,60 +45,6 @@ public class Student {
 	{
 		this(theFirstName, theLastName, theUWNetID);
 		setMiddleName(theMiddleName);
-	}
-
-	/**
-	 * Returns the student's degree.
-	 * @return myDegree
-	 */
-	public StudentDegree getDegree()
-	{
-		return myDegree;
-	}
-	
-	/**
-	 * Sets the student's degree.
-	 * @param theDegree
-	 */
-	public void setDegree(StudentDegree theDegree)
-	{
-		myDegree = theDegree;
-	}
-	
-	/**
-	 * Returns the student's employment.
-	 * @return myEmployment
-	 */
-	public StudentEmployment getEmployment()
-	{
-		return myEmployment;
-	}
-	
-	/**
-	 * Sets the student's employment.
-	 * @param theEmployment
-	 */
-	public void setEmployment(StudentEmployment theEmployment)
-	{
-		myEmployment = theEmployment;
-	}
-	
-	/**
-	 * Returns the student's internship.
-	 * @return
-	 */
-	public StudentInternship getInternship()
-	{
-		return myInternship;
-	}
-	
-	/**
-	 * Sets the student's internship.
-	 * @param theInternship
-	 */
-	public void setInternship(StudentInternship theInternship)
-	{
-		myInternship = theInternship;
 	}
 	
 	/**

@@ -19,15 +19,15 @@ import model.Student;
  */
 public class StudentDB
 {
-	private Connection connection;
-	private List<Student> studentList;
+	private static Connection connection;
+	private static List<Student> studentList;
 	
 	/**
 	 * Updates the database with a new student.
 	 * @param student
 	 * @return True if the student is added, false otherwise.
 	 */
-	public boolean add(Student student)
+	public static boolean add(Student student)
 	{
 		String sql = "INSERT INTO Student(first, middle, last, uwNetID, email)" + " VALUES(?, ?, ?, ?, ?);";
 
@@ -48,7 +48,7 @@ public class StudentDB
 		PreparedStatement preparedStatement = null;
 		try
 		{
-			if (student.getMiddleName() == null) {
+			if (student.getMiddleName() != null) {
 				preparedStatement = connection.prepareStatement(sql);
 				preparedStatement.setString(1, student.getFirstName());
 				preparedStatement.setString(2, student.getMiddleName());
@@ -78,7 +78,7 @@ public class StudentDB
 	 * @return A list of students.
 	 * @throws SQLException
 	 */
-	public List<Student> getStudents() throws SQLException
+	public static List<Student> getStudents() throws SQLException
 	{
 		if (connection == null)
 		{
@@ -138,7 +138,7 @@ public class StudentDB
 	 * @return A list of students.
 	 * @throws SQLException
 	 */
-	public List<Student> getStudents(String searchString) throws SQLException
+	public static List<Student> getStudents(String searchString) throws SQLException
 	{
 		List<Student> filterList = new ArrayList<Student>();
 		if (studentList == null)
@@ -167,7 +167,7 @@ public class StudentDB
 		return filterList;
 	}
 	
-	public Student getSudentById(final String theUWNetID) throws SQLException {
+	public static Student getSudentById(final String theUWNetID) throws SQLException {
 		if (connection == null) {
 			connection = DataConnection.getConnection();
 		}
@@ -216,7 +216,7 @@ public class StudentDB
 	 * @param email
 	 * @return True or false.
 	 */
-	public boolean updateEmail(Student student, String email)
+	public static boolean updateEmail(Student student, String email)
 	{
 		String id = student.getUWNetID();
 		String sql = "UPDATE Student SET email = '" + email + "' WHERE uwNetID = '" + id + "'";
