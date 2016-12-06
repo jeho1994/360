@@ -208,6 +208,8 @@ public class StudentInternshipDB
 		return null;
 	}
 	
+	
+	
 	/**
 	 * Updates the student internship information.
 	 * 

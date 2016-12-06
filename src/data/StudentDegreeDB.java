@@ -194,8 +194,10 @@ public class StudentDegreeDB {
 	
 	
 	// add student-degree
-	public static boolean addStudentDegree(StudentDegree theDegree) {
-
+	public static boolean addStudentDegree(StudentDegree theDegree) throws SQLException {
+		if (myConnection == null) {
+			myConnection = DataConnection.getConnection();
+		}
 		String sql = "insert into StudentDegree(uwnetId, degreeId, graduation_term, graduation_year, gpa, transferCollege) values "
 				+ "(?, ?, ?, ?, ?, ?); ";
 
@@ -226,8 +228,10 @@ public class StudentDegreeDB {
 	
 	
 	// edit student-degree
-	public static boolean updateStudentDegree(StudentDegree theDegree, String columnName, Object data) {
-		
+	public static boolean updateStudentDegree(StudentDegree theDegree, String columnName, Object data) throws SQLException {
+		if (myConnection == null) {
+			myConnection = DataConnection.getConnection();
+		}
 		String id = theDegree.getId();
 		String sql = "UPDATE StudentDegree SET `" + columnName
 				+ "` = ?  WHERE studentDegreeId = ? ";
@@ -252,4 +256,111 @@ public class StudentDegreeDB {
 		return true;
 	
 	}
+	
+	public static List<StudentDegree> getStudentDegreeByYear(int annual, String quarter) throws SQLException {
+		if (myConnection == null) {
+			myConnection = DataConnection.getConnection();
+		}
+		Statement stmt = null;
+		String query;
+		if (quarter == null) {
+			query = "SELECT * " + "FROM StudentDegree WHERE graduation_year = " + annual + ";";
+		} else  {
+			query = "SELECT * " + "FROM StudentDegree WHERE graduation_year = " 
+					+ annual + " AND graduation_term = " + quarter + ";";
+		}
+		myStudentDegreeList = new ArrayList<StudentDegree>();
+		try {
+			stmt = myConnection.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				String id = rs.getString("studentDegreeId");
+				String uwId = rs.getString("uwnetId");
+				String degreeId = rs.getString("degreeId");
+				String term = rs.getString("graduation_term");
+				String year = rs.getString("graduation_year");
+				double gpa = rs.getDouble("gpa");
+				String transfer = rs.getString("transferCollege");
+
+				StudentDegree studentDegree = new StudentDegree(uwId, degreeId, term, year, gpa, transfer);
+				studentDegree.setId(id);
+				myStudentDegreeList.add(studentDegree);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e);
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return myStudentDegreeList;
+	}
+	
+	public static List<StudentDegree> getStudentDegreeByYear(int annual) throws SQLException {
+		return getStudentDegreeByYear(annual, null);
+	}
+	
+	public static boolean hasTransferred(final String theUWnetId) throws SQLException {
+		if (myConnection == null) {
+			myConnection = DataConnection.getConnection();
+		}
+		Statement stmt = null;
+		String query = "SELECT COUNT(studentDegreeId) AS transferred" 
+				+ " FROM StudentDegree WHERE uwnetId = '" + theUWnetId + "' "
+				+ "AND transferCollege IS NULL";
+
+		try {
+			stmt = myConnection.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				String result_str = rs.getString("transferred");
+				int result = Integer.parseInt(result_str);
+				if (result > 0) {
+					return true;
+				}
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e);
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isInProgram(final String theUWnetId, final String theDegreeId) throws SQLException {
+		if (myConnection == null) {
+			myConnection = DataConnection.getConnection();
+		}
+		Statement stmt = null;
+		String query = "SELECT COUNT(studentDegreeId) AS inProgram" 
+				+ " FROM StudentDegree WHERE uwnetId = '" + theUWnetId + "' "
+				+ "AND degreeId = '" + theDegreeId + "'";
+
+		try {
+			stmt = myConnection.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				String result_str = rs.getString("inProgram");
+				int result = Integer.parseInt(result_str);
+				if (result > 0) {
+					return true;
+				}
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(e);
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return false;
+	}
+
 }
