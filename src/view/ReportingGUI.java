@@ -367,15 +367,10 @@ public class ReportingGUI extends JPanel implements ActionListener, TableModelLi
 		tblStudents.getModel().addTableModelListener(this);
 		scrollPaneStudents = new JScrollPane(tblStudents);
 		
-		btnGetStudentData = new JButton("View Student");
-		btnGetStudentData.addActionListener(this);
-		btnGetStudentData.setAlignmentX(CENTER_ALIGNMENT);
-		
 		pnlResult.add(lblStats);
 		pnlResult.add(Box.createRigidArea(new Dimension(0, 10)));
 		pnlResult.add(scrollPaneStudents);
 		pnlResult.add(Box.createRigidArea(new Dimension(0, 10)));
-		pnlResult.add(btnGetStudentData);
 		
 		return pnlResult;
 	}
