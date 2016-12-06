@@ -87,20 +87,6 @@ public class StudentCollection {
 	 * @param year
 	 * @return A list of students.
 	 */
-	/*public static List<Student> getStudentsByGraduation(int year)
-	{
-		List<Student> studentList = getStudents();
-		for (Student student : studentList)
-		{
-			for (StudentDegree degree : student.getDegree())
-			{
-				if (Integer.parseInt(degree.getGraduationYear()) != year)
-				{
-					studentList.remove(student);
-				}
-			}
-		}
-	}*/
 	@SuppressWarnings("static-access")
 	public static List<StudentDegree> getStudentsByGraduation(int year) {
 
@@ -147,7 +133,7 @@ public class StudentCollection {
 	 * @return a student.
 	 */
 	@SuppressWarnings("static-access")
-	/*public static Student getStudentById(final String theUWNetID) {
+	public static Student getStudentById(final String theUWNetID) {
 		if (STUDENT_DB == null) {
 			STUDENT_DB = new StudentDB();
 		}
@@ -157,73 +143,7 @@ public class StudentCollection {
 			e.printStackTrace();
 		}
 		return null;
-	}*/
-	
-		/**
-		 * Returns a list of students that graduate(d) in the given year
-		 * and term.
-		 * @param year
-		 * @param term
-		 * @return A list of students.
-		 */
-		/*public static List<Student> getStudentsByGraduation(int year, String term)
-		{
-			List<Student> studentList = getStudents();
-			for (Student student : studentList)
-			{
-				for (StudentDegree degree: student.getDegree())
-				{
-					if (Integer.parseInt(degree.getGraduationYear()) != year &&
-							!degree.getGraduationTerm().equals(term))
-					{
-						studentList.remove(student);
-					}
-				}
-			}
-			
-			return studentList;
-		}*/
-		
-		/**
-		 * Returns a student whose UWnetid is given.
-		 * @param theUWNetID
-		 * @return a student.
-		 */
-		public static Student getStudentById(final String theUWNetID) {
-			if (STUDENT_DB == null) {
-				STUDENT_DB = new StudentDB();
-			}
-			try {
-				return STUDENT_DB.getSudentById(theUWNetID);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-		
-		
-		/**
-		 * Returns a list of students who possess the given skill.
-		 * @param skill
-		 * @return A list of students.
-		 */
-		/*public static List<Student> getStudentsBySkill(String skill)
-		{
-			List<Student> studentList = getStudents();
-			List<Student> filterList = new ArrayList<Student>();
-			for (Student student : studentList)
-			{
-				for (String studentSkill: student.getEmployment().getSkills())
-				{
-					if (studentSkill.equals(skill))
-					{
-						filterList.add(student);
-					}
-				}
-			}
-			
-			return filterList;
-		}*/
+	}
 
 	/**
 	 * Returns a list of students that match the parameter.

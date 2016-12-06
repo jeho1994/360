@@ -113,11 +113,7 @@ public class StudentDB
 				{
 					student.setEmail(email);
 				}				
-				
-				student.setDegree(StudentDegreeDB.getStudentDegreeOfUWNetID(uwNetID));
-				student.setEmployment(StudentEmploymentDB.getStudentEmploymentsOfUWNetID(uwNetID));
-				student.setInternship(StudentInternshipDB.getInternshipsOfUWNetID(uwNetID));
-				
+
 				studentList.add(student);
 			}
 		}

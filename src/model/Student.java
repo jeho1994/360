@@ -1,7 +1,5 @@
 package model;
 
-import java.util.List;
-
 /**
  * The Student class represents a unique University of Washington Tacoma
  * Institute of Technology student.
@@ -9,11 +7,7 @@ import java.util.List;
  * @author Thomas Van Riper November 19, 2016
  */
 public class Student {
-	private List<StudentDegree> myDegree;
-	private List<StudentEmployment> myEmployment;
-	private List<StudentInternship> myInternship;
-	private List<StudentSkill> mySkills;
-	
+
 	private String myEmail;
 	private String myFirstName;
 	private String myMiddleName;
@@ -51,78 +45,6 @@ public class Student {
 	{
 		this(theFirstName, theLastName, theUWNetID);
 		setMiddleName(theMiddleName);
-	}
-
-	/**
-	 * Returns the student's degree.
-	 * @return myDegree
-	 */
-	public List<StudentDegree> getDegree()
-	{
-		return myDegree;
-	}
-	
-	/**
-	 * Sets the student's degree.
-	 * @param theDegree
-	 */
-	public void setDegree(List<StudentDegree> theDegree)
-	{
-		myDegree = theDegree;
-	}
-	
-	/**
-	 * Returns the student's employment.
-	 * @return myEmployment
-	 */
-	public List<StudentEmployment> getEmployment()
-	{
-		return myEmployment;
-	}
-	
-	/**
-	 * Sets the student's employment.
-	 * @param theEmployment
-	 */
-	public void setEmployment(List<StudentEmployment> theEmployment)
-	{
-		myEmployment = theEmployment;
-	}
-	
-	/**
-	 * Returns the student's internship.
-	 * @return myInternship
-	 */
-	public List<StudentInternship> getInternship()
-	{
-		return myInternship;
-	}
-	
-	/**
-	 * Sets the student's internship.
-	 * @param theInternship
-	 */
-	public void setInternship(List<StudentInternship> theInternship)
-	{
-		myInternship = theInternship;
-	}
-	
-	/**
-	 * Returns the student's skills.
-	 * @return mySkills
-	 */
-	public List<StudentSkill> getSkills()
-	{
-		return mySkills;
-	}
-	
-	/**
-	 * Sets the student's skills.
-	 * @param theSkills
-	 */
-	public void setSkills(List<StudentSkill> theSkills)
-	{
-		mySkills = theSkills;
 	}
 	
 	/**
@@ -187,12 +109,22 @@ public class Student {
 	 */
 	public void setMiddleName(String theMiddleName)
 	{
-		if (theMiddleName == null || theMiddleName.length() < 1) 
-		{
+		
+		if (theMiddleName == null || theMiddleName.length() < 1) {
 			throw new IllegalArgumentException();
 		}
 		
 		this.myMiddleName = theMiddleName;
+//		theMiddleName = theMiddleName.trim();
+//		if (theMiddleName.isEmpty())
+//		{
+//			this.myMiddleName = theMiddleName;
+//		}
+//		else
+//		{
+//			validateParameters(theMiddleName);
+//			this.myMiddleName = theMiddleName;
+//		}
 	}
 
 	/**
