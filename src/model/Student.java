@@ -9,15 +9,11 @@ import java.util.List;
  * @author Thomas Van Riper November 19, 2016
  */
 public class Student {
-<<<<<<< HEAD
 	private List<StudentDegree> myDegree;
 	private List<StudentEmployment> myEmployment;
 	private List<StudentInternship> myInternship;
 	private List<StudentSkill> mySkills;
 	
-=======
-
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 	private String myEmail;
 	private String myFirstName;
 	private String myMiddleName;
@@ -56,7 +52,6 @@ public class Student {
 		this(theFirstName, theLastName, theUWNetID);
 		setMiddleName(theMiddleName);
 	}
-<<<<<<< HEAD
 
 	/**
 	 * Returns the student's degree.
@@ -111,8 +106,6 @@ public class Student {
 	{
 		myInternship = theInternship;
 	}
-=======
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 	
 	/**
 	 * Returns the student's skills.

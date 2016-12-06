@@ -1,16 +1,13 @@
 package view;
 
 import java.awt.BorderLayout;
-<<<<<<< HEAD
 import java.awt.Dimension;
 import java.awt.Font;
-=======
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -19,10 +16,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-<<<<<<< HEAD
-=======
 import javax.swing.BorderFactory;
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -33,31 +27,22 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-<<<<<<< HEAD
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-=======
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 
 import component.HintTextField;
 import data.DegreeDB;
 import data.SkillDB;
-<<<<<<< HEAD
-=======
 import data.StudentDB;
 import data.StudentDegreeDB;
 import data.StudentEmploymentDB;
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 import model.Degree;
 import model.Skill;
 import model.Student;
 import model.StudentCollection;
 import model.StudentDegree;
-<<<<<<< HEAD
 import model.StudentSkill;
-=======
 import model.StudentEmployment;
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 
 /**
  * ReportingGUI displays the various options for running reports on student
@@ -75,39 +60,18 @@ public class ReportingGUI extends JPanel implements ActionListener, TableModelLi
 	private static final String[] STUDENT_DATA_COLUMN_NAMES = {"First", "Last", "UW NetID", "E-mail"};
 	
 	private static final String[] STUDENT_DATA_BY_DATE = {"First", "Last", "UW NetID", "Degree", "Employer", "Job Position"};
-	
-	private static final String[] STUDENT_DATA_COLUMN_NAMES = {"First", "Last", "UW NetID", "E-mail"};
-	
+		
 	/**JButton fields.*/
-<<<<<<< HEAD
-	private JButton btnGrad, btnGetStudentData, btnSkill, btnSkillSubmit;
-=======
-	private JButton btnGrad, btnSkill, btnSkillSubmit, btnGraduationSubmit;
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
+	private JButton btnGrad, btnGetStudentData, btnSkill, btnSkillSubmit, btnGraduationSubmit;
 	
 	/**JCheckBox fields.*/
 	private JCheckBox ckbIntern, ckbNoIntern, ckbTransfer, ckbNoTransfer;
 	
 	/**JList fields.*/
-<<<<<<< HEAD
-	private JList<Object> lstPrograms, lstSkills;
-	
-	/**JPanel fields.*/
-	private JPanel pnlButtons, pnlContent, pnlSkillSearch, pnlResult;
-	
-	/**JScrollPane to scroll through offered programs and skills.*/
-	private JScrollPane scrollPane, scrollPaneSkills, scrollPaneStudents;
-	
-	/**JTable fields.*/
-	private JTable tblStudents;
-	
-	/**A 2D array to format a JTable of student data.*/
-	private Object[][] studentData;
-=======
 	private JList<Object> lstPrograms, lstSkills, lstTerms;
 	
 	/**JPanel fields.*/
-	private JPanel pnlButtons, pnlContent, pnlSkillSearch, pnlResult, pnlGraduationSearch, pnlGraduationResults;
+	private JPanel pnlButtons, pnlContent, pnlSkillSearch, pnlResult, pnlGraduationSearch, pnlGraduationResults;	
 	
 	/**JScrollPane to scroll through offered programs and skills.*/
 	private JScrollPane scrollPane, scrollPaneSkills, scrollPaneStudents, scrollPaneTerm, scrollPaneGradInfo;
@@ -120,7 +84,6 @@ public class ReportingGUI extends JPanel implements ActionListener, TableModelLi
 	
 	/**HintTextField fields.*/
 	private HintTextField txfYearName;
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 	
 	public ReportingGUI()
 	{
@@ -204,7 +167,6 @@ public class ReportingGUI extends JPanel implements ActionListener, TableModelLi
 		JPanel pnlProgram = new JPanel();
 		pnlProgram.add(pnlProgramLabel);
 		pnlProgram.add(scrollPane);
-<<<<<<< HEAD
 		
 		JLabel lblSkill = new JLabel("<html>Select<br> skills: </html>");
 		lblSkill.setFont(new Font("Lucida Grande", Font.BOLD, 16));
@@ -235,38 +197,6 @@ public class ReportingGUI extends JPanel implements ActionListener, TableModelLi
 		btnSkillSubmit.addActionListener(this);
 		pnlSubmit.add(btnSkillSubmit);
 		
-=======
-		
-		JLabel lblSkill = new JLabel("<html>Select<br> skills: </html>");
-		lblSkill.setFont(new Font("Lucida Grande", Font.BOLD, 16));
-		JPanel pnlSkillLabel = new JPanel();
-		pnlSkillLabel.add(lblSkill);
-		Object[] skillList = null;
-		try
-		{
-			skillList = SkillDB.getSkills().toArray();
-		} catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
-		
-		if (skillList != null)
-		{
-			lstSkills = new JList<Object>(skillList);
-		}
-		
-		scrollPaneSkills = new JScrollPane(lstSkills);
-		pnlSkillLabel.setPreferredSize(scrollPaneSkills.getPreferredSize());
-		JPanel pnlSkills = new JPanel();
-		pnlSkills.add(pnlSkillLabel);
-		pnlSkills.add(scrollPaneSkills);
-		
-		JPanel pnlSubmit = new JPanel();
-		btnSkillSubmit = new JButton("Submit");
-		btnSkillSubmit.addActionListener(this);
-		pnlSubmit.add(btnSkillSubmit);
-		
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 		pnlSkillSearch.add(lblIntern);
 		pnlSkillSearch.add(pnlIntern);
 		pnlSkillSearch.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -304,10 +234,7 @@ public class ReportingGUI extends JPanel implements ActionListener, TableModelLi
 			}
 		}
 	}
-<<<<<<< HEAD
-	
-=======
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
+
 	/**
 	 * Generates a report based on the selected criteria.
 	 */
@@ -315,20 +242,15 @@ public class ReportingGUI extends JPanel implements ActionListener, TableModelLi
 	{
 		List<Student> studentList = StudentCollection.getStudents();
 		List<Student> removalList = new ArrayList<Student>();
-<<<<<<< HEAD
-=======
 		// has internship
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 		if (ckbNoIntern.isSelected())
 		{
 			for (Student student : studentList)
 			{
-<<<<<<< HEAD
 				if (!student.getInternship().isEmpty())
 				{
 					removalList.add(student);
 				}
-=======
 				 // TODO Jieun made methods for reporting in stuCollection 
 				//  hasInternship()
 				
@@ -340,12 +262,10 @@ public class ReportingGUI extends JPanel implements ActionListener, TableModelLi
 //				{
 //					removalList.add(student);
 //				}
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 			}
 		}
 		else if (ckbIntern.isSelected())
 		{
-<<<<<<< HEAD
 			for (Student student : studentList)
 			{
 				if (student.getInternship().isEmpty())
@@ -454,8 +374,7 @@ public class ReportingGUI extends JPanel implements ActionListener, TableModelLi
 			{
 				filterList.add(student);
 			}
-=======
-			for (Student student : studentList) 
+			for (Student aStudent : studentList) 
 			{
 				//TODO Jieun corrected
 				if (!StudentCollection.hasInternship(student.getUWNetID())) {
@@ -598,7 +517,7 @@ public class ReportingGUI extends JPanel implements ActionListener, TableModelLi
 		studentList.removeAll(removalList);
 		
 	
-		List<Student> filterList = new ArrayList<Student>();
+		//List<Student> filterList = new ArrayList<Student>();
 		
 		// check employment
 		for (Student student : studentList)
@@ -612,7 +531,6 @@ public class ReportingGUI extends JPanel implements ActionListener, TableModelLi
 //			{
 //				filterList.add(student);
 //			}
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 		}
 		
 		pnlResult = new JPanel();
@@ -627,32 +545,24 @@ public class ReportingGUI extends JPanel implements ActionListener, TableModelLi
 		String label = formatter.format(percent) + "% of students are employed.";
 		JLabel lblStats = new JLabel(label);
 		lblStats.setFont(new Font("Lucida Grande", Font.BOLD, 16));
-<<<<<<< HEAD
 		lblStats.setAlignmentX(CENTER_ALIGNMENT);
 		
 		getData(filterList);
 		tblStudents = new JTable(studentData, STUDENT_DATA_COLUMN_NAMES);
 		tblStudents.getModel().addTableModelListener(this);
-=======
 		
 		getData(filterList);
 		tblStudents = new JTable(studentData, STUDENT_DATA_COLUMN_NAMES);
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 		scrollPaneStudents = new JScrollPane(tblStudents);
 		
 		pnlResult.add(lblStats);
 		pnlResult.add(Box.createRigidArea(new Dimension(0, 10)));
 		pnlResult.add(scrollPaneStudents);
-<<<<<<< HEAD
 		pnlResult.add(Box.createRigidArea(new Dimension(0, 10)));
-=======
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 		
 		return pnlResult;
 	}
 	
-<<<<<<< HEAD
-=======
 	
 	
 	
@@ -774,7 +684,6 @@ public class ReportingGUI extends JPanel implements ActionListener, TableModelLi
 		return totalEmployed;
 	}
 	
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
@@ -827,22 +736,11 @@ public class ReportingGUI extends JPanel implements ActionListener, TableModelLi
 			pnlContent.revalidate();
 			this.repaint();
 		}
-<<<<<<< HEAD
 		
 		else if (e.getSource() == btnGetStudentData)
 		{
 			String uwNetID = (String) tblStudents.getValueAt(tblStudents.getSelectedRow(), 2);
-		}
-	}
-
-	@Override
-	public void tableChanged(TableModelEvent e)
-	{
-		//Table is not editable so fresh if anyone tries
-		//to edit.
-		btnSkillSubmit.doClick();
-=======
-		else if (e.getSource() == btnGraduationSubmit) {
+		} else if (e.getSource() == btnGraduationSubmit) {
 			String name = txfYearName.getText().trim();
 			if (name.isEmpty() || !name.matches("[0-9]+")) {
 				JOptionPane.showMessageDialog(null, "Please Enter a Year!");
@@ -861,7 +759,14 @@ public class ReportingGUI extends JPanel implements ActionListener, TableModelLi
 				this.repaint();
 			}
 		}
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
+	}
+
+	@Override
+	public void tableChanged(TableModelEvent e)
+	{
+		//Table is not editable so fresh if anyone tries
+		//to edit.
+		btnSkillSubmit.doClick();
 	}
 	
 }

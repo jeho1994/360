@@ -65,7 +65,7 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 	
 	/* Fields */
 	private JPanel pnlContent, pnlButtons, pnlSearch, pnlAdd, pnlView;
-	private JButton btnSearch, btnAdd, btnView, btnSearchStudent, btnAddStudent, btnViewStudent, btnEditEmail, btnAddDegree, btnAddSkill, btnAddIntern, btnAddEmploy;
+	private JButton btnSearch, btnEditDegree, btnAdd, btnView, btnSearchStudent, btnAddStudent, btnViewStudent, btnEditEmail, btnAddDegree, btnAddSkill, btnAddIntern, btnAddEmploy;
 		
 	/**AddPanel text fields.*/
 	private HintTextField txfFirst, txfGPA, txfMiddle, txfLast, txfEmail, txfUWNetID, txtfViewUWID, txtfTransfer,
@@ -80,11 +80,13 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 	/** A label for Search Item panel */
 	private JLabel lblSearch;
 	
+	private JCheckBox ckbSkill;
+	
 	/** A text field for Search Item panel */
 	private JTextField txfSearch;
 	
 	/** A drop down box for the different degree options.*/
-	private JComboBox<Object> cmbDegree, cmbTerm, cmbYear, cmbEmpFromM, cmbEmpFromY, cmbIntToM, cmbIntToY, cmbIntFromM, cmbIntFromY;
+	private JComboBox<Object> cmbDegree, cmbTerm, cmbYear, cmbEmpFromM, cmbEmpFromY, cmbIntToM, cmbIntToY, cmbIntFromM, cmbIntFromY, cmbStudentDegree;
 	
 	/**A warning for different invalid inputs for the add student panel.*/
 	private JLabel lblWarning;
@@ -186,11 +188,8 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		txfUWNetID = new HintTextField("* UWNetID");
 		
 		JPanel pnlDegree = new JPanel();
-<<<<<<< HEAD
 		pnlDegree.setLayout(new GridLayout(1, 0));
 //		DegreeDB degree = new DegreeDB();
-=======
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 		List<Degree> degrees = null;
 		try {
 			degrees = DegreeDB.getDegrees();
@@ -235,7 +234,6 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		btnAddStudent.addActionListener(this);
 		pnlButton.add(btnAddStudent);
 				
-<<<<<<< HEAD
 		pnlAdd.add(pnlName);
 		pnlAdd.add(txfEmail);
 		pnlAdd.add(txfUWNetID);
@@ -244,17 +242,15 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		pnlAdd.add(pnlGraduation);
 		pnlAdd.add(pnlButton);
 		
-=======
-		panel.add(pnlName);
+		/*panel.add(pnlName);
 		panel.add(txfEmail);
 		panel.add(txfUWNetID);
 		panel.add(pnlDegree);
 		panel.add(createGPAPanel());
 		panel.add(createGraudationDatePanel());
-		panel.add(pnlButton);
+		panel.add(pnlButton);*/
 		
-		pnlAdd.add(panel, BorderLayout.CENTER);
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
+		pnlAdd.add(pnlAdd, BorderLayout.CENTER);
 		return pnlAdd;
 	}
 	
@@ -436,20 +432,16 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 				StudentEmployment se = myStudentEmployemnt.get(i);
 				employs[i][0] = se.getEmployer();
 				employs[i][1] = se.getPosition();
-<<<<<<< HEAD
-				if (se.getComment() != null) {
-=======
 				if (se.getComment() != null && se.getComment().length() > 0) {
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 					employs[i][2] = "";
 					employs[i][3] = "";
 				} else {
 					employs[i][2] = se.getSalary();
 					employs[i][3] = se.getStartDate().toString();
-				}
 				employs[i][4] = se.getComment();
+			} 
 			}
-		} catch (SQLException e) {
+		}catch (SQLException e) {
 			e.printStackTrace();
 		}
 		stuEmployTable = new JTable(employs, employColumn);
@@ -702,22 +694,17 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 			performAddStudent();
 		} else if (e.getSource() == btnViewStudent) {
 			myViewStudentUWnetId = txtfViewUWID.getText();
-<<<<<<< HEAD
-=======
 			myViewStudent = StudentCollection.getStudentById(myViewStudentUWnetId);
 			if (myViewStudent == null) {
 				JOptionPane.showMessageDialog(null, "No studennt in DB");
 				return;
 			}
 			txtfViewUWID.setText(null);
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 			performViewStudent(myViewStudentUWnetId);
 		} else if (e.getSource() == btnEditEmail) {
 			performEditStudentEmail();
 		} else if (e.getSource() == btnAddDegree) {
 			performAddDegree();
-<<<<<<< HEAD
-=======
 		} else if (e.getSource() == btnEditDegree) {
 			try {
 				performEditDegree();
@@ -726,7 +713,6 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 		} else if (e.getSource() == btnAddSkill) {
 			performAddSkill();
 		} else if (e.getSource() == btnAddIntern) {
@@ -899,11 +885,8 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		
 	}
 
-<<<<<<< HEAD
-	private void performAddSkill() {
-=======
 	@SuppressWarnings("unused")
-	private void performAddSkill() { // TODO - skill, need to test!!!
+	/*private void performAddSkill() { // TODO - skill, need to test!!!
 
 		int result = JOptionPane.showConfirmDialog(null, createAddSkillPanel(), "Select Skills",
 				JOptionPane.OK_CANCEL_OPTION);
@@ -948,7 +931,6 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 				e.printStackTrace();
 			}
 			JOptionPane.showMessageDialog(null, "Add Skills Successfully");
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 
 		JPanel panel = new JPanel();
 		
@@ -980,7 +962,7 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 
 			performViewStudent(myViewStudentUWnetId);
 		}
-	}
+	}*/
 	
 	private void performAddDegree() {
 		int result = JOptionPane.showConfirmDialog(null, createAddDegreeOptionPanel(), "Add Degree", JOptionPane.OK_CANCEL_OPTION);
@@ -1055,8 +1037,6 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 		}
 		txtfViewUWID.setText("");
 	}
-<<<<<<< HEAD
-=======
 	
 	private void performEditDegree() throws HeadlessException, SQLException { // DONE
 
@@ -1129,7 +1109,6 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 			cmbYear.setSelectedIndex(0);
 		}
 	}
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 
 	private void performEditStudentEmail() {
 		String email = JOptionPane.showInputDialog(new JFrame(), "Enter e-mail address", null);
@@ -1233,18 +1212,21 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 			student.setEmail(email);
 		}
 		
-<<<<<<< HEAD
 		List<StudentDegree> degreeList = new ArrayList<StudentDegree>();
 		degreeList.add(studentDegree);
 		student.setDegree(degreeList);
-		StudentDegreeDB.addStudentDegree(studentDegree);
-=======
+		try
+		{
+			StudentDegreeDB.addStudentDegree(studentDegree);
+		} catch (SQLException e1)
+		{
+			e1.printStackTrace();
+		}
 		try {
 			StudentDegreeDB.addStudentDegree(studentDegree);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 		StudentCollection.add(student);
 		btnSearch.doClick();
 	}
@@ -1278,8 +1260,17 @@ public class StudentGUI extends JPanel implements ActionListener, TableModelList
 					|| columnName.equalsIgnoreCase("graduation_term") 
 					|| columnName.equalsIgnoreCase("graduation_year")) {
 				
-				if (!StudentDegreeDB.updateStudentDegree(sd, columnName, data)) {
-					JOptionPane.showMessageDialog(null, "Update failed");
+				try
+				{
+					if (!StudentDegreeDB.updateStudentDegree(sd, columnName, data)) {
+						JOptionPane.showMessageDialog(null, "Update failed");
+					}
+				} catch (HeadlessException e1)
+				{
+					e1.printStackTrace();
+				} catch (SQLException e1)
+				{
+					e1.printStackTrace();
 				}
 
 			}

@@ -87,8 +87,7 @@ public class StudentCollection {
 	 * @param year
 	 * @return A list of students.
 	 */
-<<<<<<< HEAD
-	public static List<Student> getStudentsByGraduation(int year)
+	/*public static List<Student> getStudentsByGraduation(int year)
 	{
 		List<Student> studentList = getStudents();
 		for (Student student : studentList)
@@ -100,13 +99,13 @@ public class StudentCollection {
 					studentList.remove(student);
 				}
 			}
-=======
+		}
+	}*/
 	@SuppressWarnings("static-access")
 	public static List<StudentDegree> getStudentsByGraduation(int year) {
 
 		if (STUDENT_DEGREE_DB == null) {
 			STUDENT_DEGREE_DB = new StudentDegreeDB();
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 		}
 		try {
 			return STUDENT_DEGREE_DB.getStudentDegreeByYear(year);
@@ -148,7 +147,7 @@ public class StudentCollection {
 	 * @return a student.
 	 */
 	@SuppressWarnings("static-access")
-	public static Student getStudentById(final String theUWNetID) {
+	/*public static Student getStudentById(final String theUWNetID) {
 		if (STUDENT_DB == null) {
 			STUDENT_DB = new StudentDB();
 		}
@@ -158,8 +157,7 @@ public class StudentCollection {
 			e.printStackTrace();
 		}
 		return null;
-	}
-<<<<<<< HEAD
+	}*/
 	
 		/**
 		 * Returns a list of students that graduate(d) in the given year
@@ -168,7 +166,7 @@ public class StudentCollection {
 		 * @param term
 		 * @return A list of students.
 		 */
-		public static List<Student> getStudentsByGraduation(int year, String term)
+		/*public static List<Student> getStudentsByGraduation(int year, String term)
 		{
 			List<Student> studentList = getStudents();
 			for (Student student : studentList)
@@ -184,7 +182,7 @@ public class StudentCollection {
 			}
 			
 			return studentList;
-		}
+		}*/
 		
 		/**
 		 * Returns a student whose UWnetid is given.
@@ -226,8 +224,6 @@ public class StudentCollection {
 			
 			return filterList;
 		}*/
-=======
->>>>>>> fc2712548b3194b85c9155c76bbed17ad55d9b90
 
 	/**
 	 * Returns a list of students that match the parameter.
