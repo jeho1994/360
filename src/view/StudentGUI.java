@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,17 +21,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 import component.HintTextField;
 import data.DegreeDB;
@@ -41,7 +34,6 @@ import data.StudentDegreeDB;
 import data.StudentEmploymentDB;
 import data.StudentInternshipDB;
 import data.StudentSkillDB;
-import javafx.scene.control.CheckBox;
 import model.Degree;
 import model.Skill;
 import model.Student;
@@ -51,96 +43,130 @@ import model.StudentEmployment;
 import model.StudentInternship;
 import model.StudentSkill;
 
-public class StudentGUI extends JPanel implements ActionListener { //, TableModelListener  {
+/**
+ * A Panel that contains all the Student related functionality to list the
+ * students, search the students, add a new student, modify values within the
+ * student, and view all inforamtion for a student.
+ * 
+ * @author Jieun Lee: (View panel) View student by UWnetId / Add Student Degree
+ *         / Edit Student Degree / Add Student Employment / ADD Student Skill /
+ *         ADD Student Internship / Edit Email
+ * @author Thomas Van Riper (Add panel)
+ * @author Louis Yang (Search panel)
+ * @version 12-06-2016
+ *
+ */
+public class StudentGUI extends JPanel implements ActionListener {
 	
+	/** A Date format */
 	public static final SimpleDateFormat SQL_DATE_FORMAT = new SimpleDateFormat("MM-yyyy");
-	
-	/**
-	 * 
-	 */
+
+	/** A serial number for StudentGUI() */
 	private static final long serialVersionUID = 3475519788254348975L;
-	
-	/**
-	 * The various quarters a student can graduate.
-	 */
-	private static final String[] TERMS = {"Summer", "Fall", "Winter", "Spring"};
-	
-	
-	
-	/* Fields */
+
+	/**  The various quarters a student can graduate.*/
+	private static final String[] TERMS = { "Summer", "Fall", "Winter", "Spring" };
+
+	/** Panels */
 	private JPanel pnlContent, pnlButtons, pnlSearch, pnlAdd, pnlView;
-	private JButton btnSearch, btnAdd, btnView, btnSearchStudent, btnAddStudent, btnViewStudent, btnEditEmail, btnAddDegree, btnEditDegree, btnAddSkill, btnAddIntern, btnAddEmploy;
-		
-	/**AddPanel text fields.*/
-	private HintTextField txfFirst, txfGPA, txfMiddle, txfLast, txfEmail, txfUWNetID, txtfViewUWID, txtfTransfer,
-							txtfEmpEmployer, txtfEmpPosition, txtfEmpSalary, txtfEmpComment, txtfIntEmployer, txtfIntPosition;
 	
+	/** Buttons */
+	private JButton btnSearch, btnAdd, btnView, btnSearchStudent, btnAddStudent, btnViewStudent, btnEditEmail,
+			btnAddDegree, btnEditDegree, btnAddSkill, btnAddIntern, btnAddEmploy;
+
+	/** AddPanel text fields. */
+	private HintTextField txfFirst, txfGPA, txfMiddle, txfLast, txfEmail, txfUWNetID, txtfViewUWID, txtfTransfer,
+			txtfEmpEmployer, txtfEmpPosition, txtfEmpSalary, txtfEmpComment, txtfIntEmployer, txtfIntPosition, txfSearch;
+
 	/** A table for displaying Students */
 	private JTable table, stuDegreeTable, stuSkillTable, stuEmployTable, stuInternTable;
-	
+
 	/** A scroll pane */
 	private JScrollPane scrollPane, stuDegreeSPane, stuSkillSPane, stuEmploySPane, stuInternSPane;
-	
-	/** A label for Search Item panel */
-	private JLabel lblSearch;
-	
-	/** A text field for Search Item panel */
-	private JTextField txfSearch;
-	
-	/** A drop down box for the different degree options.*/
-	private JComboBox<Object> cmbDegree, cmbTerm, cmbYear, cmbEmpFromM, cmbEmpFromY, cmbIntToM, cmbIntToY, cmbIntFromM, cmbIntFromY, cmbStudentDegree;
-	
-	/**A warning for different invalid inputs for the add student panel.*/
+
+	/** A drop down box for the different degree options. */
+	private JComboBox<Object> cmbDegree, cmbTerm, cmbYear, cmbEmpFromM, cmbEmpFromY, cmbIntToM, cmbIntToY, cmbIntFromM,
+			cmbIntFromY, cmbStudentDegree;
+
+	/** A warning for different invalid inputs for the add student panel. */
 	private JLabel lblWarning;
-	
+
+	/** Check boxes for Skills */
 	private JCheckBox[] ckbSkill;
-	private String[] myStudentColumnNames = { "uwnetid", "fName", "mName", "lName", "email"};
+	
+	/** Column names for stuent search table*/
+	private String[] myStudentColumnNames = { "uwnetid", "fName", "mName", "lName", "email" };
+	
+	/** A list of Students */
 	private List<Student> myStudentList;
+	
+	/** A list of StudentDegrees*/
 	private List<StudentDegree> myStudentDegree;
-	private List<Skill> myAllSkills;
+	
+	/** A list of StudentSkills*/
 	private List<StudentSkill> myStudentSkills;
+	
+	/** A list of StudentInternships */
 	private List<StudentInternship> myStudentInters;
+	
+	/** A list of StudentEmployments */
 	private List<StudentEmployment> myStudentEmployemnt;
+	
+	/** A list of Skill ids */
 	private List<String> mySkillIds;
+	
+	/** A student data*/
 	private Object[][] myData;
-	private Object[] myStudentDegreeData, myAllSkillData;
+	
+	/** A StudentDegree data*/
+	private Object[] myStudentDegreeData;
+	
+	/** A student for view panel */
 	private Student myViewStudent;
+	
+	/** A Student's UW net id for view panel*/
 	private String myViewStudentUWnetId;
+	
+	/** Flags */
 	private boolean hasEmployment, isGpaSelected;
-	
-	
-	
-	
+
 	/* constuctor */
-	
+
+	/**
+	 * Consturcts StudentGUI
+	 */
 	public StudentGUI() {
 		setLayout(new BorderLayout());
-		myStudentList = getData(null);
+		myStudentList = getStudentData(null);
 		createComponents();
 		setVisible(true);
 		setSize(500, 700);
-		
+
 	}
-	
-	
+
 	/* Create components */
+	/**
+	 * Create components
+	 */
 	private void createComponents() {
-		
+
 		pnlContent = new JPanel();
 		pnlContent.add(createSearchPanel());
 		lblWarning = new JLabel();
 		lblWarning.setForeground(Color.RED);
 		lblWarning.setFont(new Font("Arial", Font.ITALIC, 12));
 		add(pnlContent, BorderLayout.CENTER);
-		add(createButtonPanel(), BorderLayout.NORTH);	
+		add(createButtonPanel(), BorderLayout.NORTH);
 		add(lblWarning, BorderLayout.SOUTH);
 	}
-	
+
+	/**
+	 * Create button panels on top
+	 * @return A button panel
+	 */
 	private JPanel createButtonPanel() {
-		// A button panel at the top for list, search, add
 		pnlButtons = new JPanel();
 
-		// buttons at the top
 		btnSearch = new JButton("Student Search");
 		btnSearch.addActionListener(this);
 
@@ -153,28 +179,36 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		pnlButtons.add(btnSearch);
 		pnlButtons.add(btnAdd);
 		pnlButtons.add(btnView);
-		
+
 		return pnlButtons;
 	}
-	
+
+	/**
+	 * Create a searching panel
+	 * @return A Search panel
+	 */
 	private JPanel createSearchPanel() {
 		pnlSearch = new JPanel();
-		lblSearch = new JLabel("Enter first or last name: ");
-		txfSearch = new JTextField(25);
+		txfSearch = new HintTextField("Enter First or Last Name");
+		txfSearch.setColumns(25);
 		btnSearchStudent = new JButton("Search");
 		btnSearchStudent.addActionListener(this);
-		pnlSearch.add(lblSearch);
+		
 		pnlSearch.add(txfSearch);
 		pnlSearch.add(btnSearchStudent);
 		return pnlSearch;
 	}
-	
+
+	/**
+	 * Create a Add panel
+	 * @return A Add panel
+	 */
 	private JPanel createAddPanel() {
 		pnlAdd = new JPanel(new BorderLayout());
-		JPanel panel = new JPanel(new GridLayout(7, 0));
+		JPanel panel = new JPanel(new GridLayout(8, 0));
 		JPanel pnlName = new JPanel();
 		pnlName.setLayout(new GridLayout(1, 0));
-		txfFirst = new HintTextField("First Name");	
+		txfFirst = new HintTextField("First Name");
 		txfFirst.setColumns(8);
 		txfMiddle = new HintTextField("Middle Name");
 		txfMiddle.setColumns(8);
@@ -183,10 +217,10 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		pnlName.add(txfFirst);
 		pnlName.add(txfMiddle);
 		pnlName.add(txfLast);
-		
+
 		txfEmail = new HintTextField("E-mail");
 		txfUWNetID = new HintTextField("UWNetID");
-		
+
 		JPanel pnlDegree = new JPanel();
 		List<Degree> degrees = null;
 		try {
@@ -194,7 +228,7 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		if (degrees != null) {
 			cmbDegree = new JComboBox<Object>(degrees.toArray());
 		}
@@ -203,15 +237,23 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 
 		txtfTransfer = new HintTextField("Transfer College");
 		txtfTransfer.setColumns(25);
-		
+
 		pnlDegree.add(new JLabel("Transfer College"));
 		pnlDegree.add(txtfTransfer);
-		
+
 		JPanel pnlButton = new JPanel();
 		btnAddStudent = new JButton("Add");
 		btnAddStudent.addActionListener(this);
 		pnlButton.add(btnAddStudent);
-				
+		
+		JPanel titlePane = new JPanel();
+		titlePane.setBackground(MainGUI.UW_PURPLE);
+		JLabel titleLabel = new JLabel("Add Student");
+		titleLabel.setFont(MainGUI.UW_BIG_FONT);
+		titleLabel.setForeground(Color.WHITE);
+		titlePane.add(titleLabel);
+		
+		panel.add(titlePane);
 		panel.add(pnlName);
 		panel.add(txfEmail);
 		panel.add(txfUWNetID);
@@ -219,42 +261,46 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		panel.add(createGPAPanel());
 		panel.add(createGraudationDatePanel());
 		panel.add(pnlButton);
-		
+
 		pnlAdd.add(panel, BorderLayout.CENTER);
 		return pnlAdd;
 	}
-	
-	private JPanel createViewPanel() { // VIEW - DONE
+
+	/**
+	 * Create a View Search panel
+	 * @return A View Search panel
+	 */
+	private JPanel createViewPanel() {
 		pnlView = new JPanel();
 		myViewStudentUWnetId = null;
 		txtfViewUWID = new HintTextField("UWnetID");
-		txtfViewUWID.setColumns(10);
+		txtfViewUWID.setColumns(25);
 		btnViewStudent = new JButton("View");
 		btnViewStudent.addActionListener(this);
 		pnlView.add(txtfViewUWID);
 		pnlView.add(btnViewStudent);
-		
+
 		return pnlView;
 	}
-	
-	private JPanel createStudentViewPanel(final String theId) { // VIEW STU - DONE
-		JPanel panel  = new JPanel(new BorderLayout());
 
-
-		// student personal info
-		JPanel basicPanel  = new JPanel(new GridLayout(3, 5));
-
-		basicPanel.add(new JLabel("UWnetID: "));
+	/**
+	 * Create a View Student panel
+	 * @param theId The student UW net Id
+	 * @return A View Student panel
+	 */
+	private JPanel createStudentViewPanel(final String theId) {
+		JPanel panel = new JPanel(new BorderLayout());
 		
+		JPanel basicPanel = new JPanel(new GridLayout(3, 5));
+		basicPanel.add(new JLabel("UWnetID: "));
 		basicPanel.add(new JLabel(theId));
 		basicPanel.add(new JLabel(""));
 		basicPanel.add(new JLabel(""));
 		basicPanel.add(new JLabel(""));
-		
+
 		String fname = myViewStudent.getFirstName();
 		String mname = myViewStudent.getMiddleName();
 		String lname = myViewStudent.getLastName();
-		
 		basicPanel.add(new JLabel("Name: "));
 		if (mname != null) {
 			basicPanel.add(new JLabel(lname.toUpperCase() + ", " + fname + " " + mname));
@@ -264,20 +310,19 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		basicPanel.add(new JLabel(""));
 		basicPanel.add(new JLabel(""));
 		basicPanel.add(new JLabel(""));
-		
 		basicPanel.add(new JLabel("E-mail: "));
 		basicPanel.add(new JLabel(myViewStudent.getEmail()));
-
 		btnEditEmail = new JButton("Update E-mail");
 		btnEditEmail.addActionListener(this);
 		basicPanel.add(btnEditEmail);
-		
+
 		// tables panel
 		JPanel tablePanel = new JPanel(new GridLayout(5, 0));
-		
+
 		// student degree table
 		JPanel degreePanel = new JPanel(new BorderLayout());
-		String[] degreeColumn = {"Degree Level", "Program Name", "GPA", "Graudation Term", "Graduation Year", "Transfer From"};
+		String[] degreeColumn = { "Degree Level", "Program Name", "GPA", "Graudation Term", "Graduation Year",
+				"Transfer From" };
 		int countDegrees = 0;
 		Object[][] degrees = null;
 		try {
@@ -300,44 +345,42 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		stuDegreeTable.setEnabled(false);
 		stuDegreeSPane = new JScrollPane(stuDegreeTable);
 		Dimension d = stuDegreeTable.getPreferredSize();
-		stuDegreeSPane.setPreferredSize(new Dimension(d.width * 2 , stuDegreeTable.getRowHeight() * (6)));
+		stuDegreeSPane.setPreferredSize(new Dimension(d.width * 2, stuDegreeTable.getRowHeight() * (6)));
 		btnAddDegree = new JButton("Add Degree");
 		btnAddDegree.addActionListener(this);
 		btnEditDegree = new JButton("Edit Degree");
 		btnEditDegree.addActionListener(this);
-		
-		final JPanel degreeLabelPanel = new JPanel(new GridLayout(0,8));
-		final JLabel degreeLabel = new JLabel(" DEGREES ("+ stuDegreeTable.getRowCount()+")");
+
+		final JPanel degreeLabelPanel = new JPanel(new GridLayout(0, 8));
+		final JLabel degreeLabel = new JLabel(" DEGREES (" + stuDegreeTable.getRowCount() + ")");
 		degreeLabel.setForeground(Color.WHITE);
 		degreeLabel.setFont(MainGUI.UW_TITLE_FONT);
 		degreeLabelPanel.add(degreeLabel);
-		
+
 		final JPanel degreeBtnPanel = new JPanel();
 		degreeBtnPanel.setBackground(MainGUI.UW_PURPLE);
 		degreeBtnPanel.add(btnAddDegree);
 		degreeBtnPanel.add(btnEditDegree);
-		
+
 		for (int i = 0; i < 5; i++) {
 			degreeLabelPanel.add(new JLabel());
 		}
-		
+
 		degreeLabelPanel.add(btnAddDegree);
 		degreeLabelPanel.add(btnEditDegree);
 		degreeLabelPanel.setBackground(MainGUI.UW_PURPLE);
 		degreeLabelPanel.setForeground(Color.WHITE);
-	
+
 		degreePanel.add(degreeLabelPanel, BorderLayout.NORTH);
 		degreePanel.add(stuDegreeSPane, BorderLayout.CENTER);
-		
-		
-		
+
 		// student skill table
 		JPanel skillPanel = new JPanel(new BorderLayout());
-		String[] skillColumn = {"Skill"};
+		String[] skillColumn = { "Skill" };
 		int countSkills = 0;
 		Object[][] skills = null;
-		mySkillIds =  new ArrayList<String>();
-		
+		mySkillIds = new ArrayList<String>();
+
 		try {
 			myStudentSkills = StudentSkillDB.getStudentSKillsOfUWNetID(myViewStudentUWnetId);
 			countSkills = myStudentSkills.size();
@@ -354,13 +397,13 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		stuSkillTable = new JTable(skills, skillColumn);
 		stuSkillTable.setEnabled(false);
 		stuSkillSPane = new JScrollPane(stuSkillTable);
-		stuSkillSPane.setPreferredSize(new Dimension(d.width + (d.width/2) , stuSkillTable.getRowHeight() * (6)));
-		
+		stuSkillSPane.setPreferredSize(new Dimension(d.width + (d.width / 2), stuSkillTable.getRowHeight() * (6)));
+
 		btnAddSkill = new JButton("Add Skill");
 		btnAddSkill.addActionListener(this);
-		
+
 		JPanel skillLabelPanel = new JPanel(new BorderLayout());
-		JLabel skillLabel = new JLabel(" SKILLS (" + stuSkillTable.getRowCount() + ")" );
+		JLabel skillLabel = new JLabel(" SKILLS (" + stuSkillTable.getRowCount() + ")");
 		skillLabel.setForeground(Color.WHITE);
 		skillLabel.setFont(MainGUI.UW_TITLE_FONT);
 		skillLabelPanel.add(skillLabel, BorderLayout.WEST);
@@ -368,11 +411,10 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		skillLabelPanel.setBackground(MainGUI.UW_PURPLE);
 		skillPanel.add(stuSkillSPane, BorderLayout.CENTER);
 		skillPanel.add(skillLabelPanel, BorderLayout.NORTH);
-		
-		
+
 		// student internship table
 		JPanel internPanel = new JPanel(new BorderLayout());
-		String[] internColumn = {"Employer", "Position", "Date From", "Date To"};
+		String[] internColumn = { "Employer", "Position", "Date From", "Date To" };
 		int countinterns = 0;
 		Object[][] interns = null;
 		try {
@@ -392,10 +434,10 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		stuInternTable = new JTable(interns, internColumn);
 		stuInternTable.setEnabled(false);
 		stuInternSPane = new JScrollPane(stuInternTable);
-		stuInternSPane.setPreferredSize(new Dimension(d.width + (d.width/2) , stuInternTable.getRowHeight() * (6)));
+		stuInternSPane.setPreferredSize(new Dimension(d.width + (d.width / 2), stuInternTable.getRowHeight() * (6)));
 		btnAddIntern = new JButton("Add Internship");
 		btnAddIntern.addActionListener(this);
-		
+
 		JPanel internLabelPanel = new JPanel(new BorderLayout());
 		JLabel internLabel = new JLabel(" INTERNSHIPS (" + stuInternTable.getRowCount() + ")");
 		internLabel.setForeground(Color.WHITE);
@@ -405,10 +447,10 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		internLabelPanel.setBackground(MainGUI.UW_PURPLE);
 		internPanel.add(stuInternSPane, BorderLayout.CENTER);
 		internPanel.add(internLabelPanel, BorderLayout.NORTH);
-		
+
 		// student employment table
 		JPanel employPanel = new JPanel(new BorderLayout());
-		String[] employColumn = {"Employer", "Position", "Salary", "Date From", "Comment"};
+		String[] employColumn = { "Employer", "Position", "Salary", "Date From", "Comment" };
 		int countemploys = 0;
 		Object[][] employs = null;
 		try {
@@ -434,10 +476,10 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		stuEmployTable = new JTable(employs, employColumn);
 		stuEmployTable.setEnabled(false);
 		stuEmploySPane = new JScrollPane(stuEmployTable);
-		stuEmploySPane.setPreferredSize(new Dimension(d.width + (d.width/2) , stuEmployTable.getRowHeight() * (6)));
+		stuEmploySPane.setPreferredSize(new Dimension(d.width + (d.width / 2), stuEmployTable.getRowHeight() * (6)));
 		btnAddEmploy = new JButton("Add Employment");
 		btnAddEmploy.addActionListener(this);
-		
+
 		JPanel employLabelPanel = new JPanel(new BorderLayout());
 		JLabel employLabel = new JLabel(" EMPLOYMENTS ");
 		employLabel.setForeground(Color.WHITE);
@@ -447,7 +489,6 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		employLabelPanel.setBackground(MainGUI.UW_PURPLE);
 		employPanel.add(employLabelPanel, BorderLayout.NORTH);
 		employPanel.add(stuEmploySPane, BorderLayout.CENTER);
-		
 
 		// add all tables in viewSPane
 		tablePanel.add(degreePanel);
@@ -459,9 +500,13 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		panel.add(tablePanel, BorderLayout.CENTER);
 		return panel;
 	}
-	
-	private JPanel createAddDegreeOptionPanel() { // ADD DEGREE OPTION - DONE
-		JPanel panel  = new JPanel(new BorderLayout());
+
+	/**
+	 * Create Add Degree Option panel for View Student
+	 * @return Add Degree Option panel for View Student
+	 */
+	private JPanel createAddDegreeOptionPanel() {
+		JPanel panel = new JPanel(new BorderLayout());
 		JPanel pnlDegree = new JPanel();
 		pnlDegree.setLayout(new GridLayout(1, 0));
 		List<Degree> degrees = null;
@@ -470,31 +515,31 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 		if (degrees != null) {
 			cmbDegree = new JComboBox<Object>(degrees.toArray());
 		}
 		pnlDegree.add(new JLabel("Program"));
 		pnlDegree.add(cmbDegree);
-
 		panel.add(pnlDegree, BorderLayout.NORTH);
 		panel.add(createGraudationDatePanel(), BorderLayout.CENTER);
 		panel.add(createGPAPanel(), BorderLayout.SOUTH);
-		
 		return panel;
 	}
 
+	/**
+	 * Create Add Internship Option panel for View Student
+	 * @return A Add Internship Option panel for View Student
+	 */
 	private JPanel createAddInternOptionPanel() { // ADD INTER OPTION - DONE
-		JPanel panel  = new JPanel(new GridLayout(3, 2));
-		
-		//txtfIntEmployer, txtfIntPosition, cmbIntFromM, cmbIntToM, cmbIntFromY, cmbIntToY
+		JPanel panel = new JPanel(new GridLayout(3, 2));
+
 		txtfIntEmployer = new HintTextField("Employer");
 		txtfIntEmployer.setColumns(25);
 		txtfIntPosition = new HintTextField("Job Position");
 		txtfIntPosition.setColumns(25);
 
 		JPanel datePanel = new JPanel();
-		Integer[] monthList = {1,2,3,4,5,6,7,8,9,10,11,12};
+		Integer[] monthList = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
 		cmbIntFromM = new JComboBox<Object>(monthList);
 		cmbIntToM = new JComboBox<Object>(monthList);
 		Date theDate = new Date();
@@ -504,8 +549,6 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		for (int i = 1; i < 10; i++) {
 			years[i] = years[0] + i;
 		}
-		
-		//cmbIntFromM, cmbIntFromY
 		cmbIntFromY = new JComboBox<Object>(years);
 		cmbIntToY = new JComboBox<Object>(years);
 		datePanel.add(new JLabel("From:"));
@@ -514,24 +557,25 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		datePanel.add(new JLabel("To:"));
 		datePanel.add(cmbIntToM);
 		datePanel.add(cmbIntToY);
-		
-		
+
 		panel.add(new JLabel("Employer:"));
 		panel.add(txtfIntEmployer);
 		panel.add(new JLabel("Position:"));
 		panel.add(txtfIntPosition);
 		panel.add(new JLabel("Date:"));
 		panel.add(datePanel);
-
 		return panel;
 	}
-	
+
+	/**
+	 * Create Add Employment for a Student in View Student panel
+	 * @return A Add Employment panel in View Student panel
+	 */
 	private JPanel createAddEmployOptionPanel() { // ADD EMP OPTION - DONE
 		final JPanel panel = new JPanel(new BorderLayout());
-		
+
 		final JPanel rbtnPanel = new JPanel();
 		final ButtonGroup group = new ButtonGroup();
-
 		final JRadioButton empRbut = new JRadioButton("Enter Employment");
 		empRbut.setSelected(true);
 		hasEmployment = true;
@@ -547,8 +591,6 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 				hasEmployment = true;
 			}
 		});
-		
-		
 		final JRadioButton comentRbut = new JRadioButton("Leave a comment");
 		comentRbut.addActionListener(new ActionListener() {
 			@Override
@@ -562,22 +604,21 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 				hasEmployment = false;
 			}
 		});
-		
 		group.add(empRbut);
 		group.add(comentRbut);
 		rbtnPanel.add(empRbut);
 		rbtnPanel.add(comentRbut);
-		
-		
-		
 		panel.add(rbtnPanel, BorderLayout.NORTH);
 		panel.add(createAddEmployOptionSubPanle(), BorderLayout.CENTER);
 		return panel;
 	}
-	
-	private JPanel createAddEmployOptionSubPanle() { //ADD EMP OPTION SUB - DONE
-		JPanel panel  = new JPanel(new GridLayout(5, 2));
-	
+
+	/**
+	 * Create a sub panel for Add Employment  Option panel for View Student
+	 * @return Add Employment Option panel for View Student
+	 */
+	private JPanel createAddEmployOptionSubPanle() {
+		JPanel panel = new JPanel(new GridLayout(5, 2));
 		txtfEmpEmployer = new HintTextField("Employer");
 		txtfEmpEmployer.setColumns(25);
 		txtfEmpPosition = new HintTextField("Job Position");
@@ -597,13 +638,11 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		for (int i = 1; i < 10; i++) {
 			years[i] = years[0] + i;
 		}
-		//cmbEmpFromM, cmbEmpFromY
 		cmbEmpFromY = new JComboBox<Object>(years);
 		datePanel.add(new JLabel("From:"));
 		datePanel.add(cmbEmpFromM);
 		datePanel.add(cmbEmpFromY);
-		
-		// set default
+
 		txtfEmpComment.setEnabled(false);
 		txtfEmpEmployer.setEnabled(true);
 		txtfEmpPosition.setEnabled(true);
@@ -622,13 +661,16 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		panel.add(datePanel);
 		panel.add(new JLabel("Comment"));
 		panel.add(txtfEmpComment);
-		
 		return panel;
 	}
-	
-	private JPanel createEditDegreePanel() { // EDIT STU-DEGREE DONE
+
+	/**
+	 * Create Edit Degree Option panel for View Student
+	 * @return Edit Degree Option panel for View Student
+	 */
+	private JPanel createEditDegreePanel() {
 		final JPanel panel = new JPanel(new BorderLayout());
-		
+
 		final JPanel updatePanel = new JPanel(new BorderLayout());
 		final JPanel selectPanel = new JPanel();
 
@@ -640,21 +682,18 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 				e1.printStackTrace();
 			}
 		}
-		
+
 		if (myStudentDegreeData != null) {
 			cmbStudentDegree = new JComboBox<Object>(myStudentDegreeData);
 		}
 		selectPanel.add(new JLabel("Select Degree"));
 		selectPanel.add(cmbStudentDegree);
-		
-
 		updatePanel.add(selectPanel, BorderLayout.NORTH);
 		updatePanel.add(createGraudationDatePanel(), BorderLayout.CENTER);
 		updatePanel.add(createGPAPanel(), BorderLayout.SOUTH);
-		
-		// button panel
+
 		final JPanel btnPanel = new JPanel();
-		final ButtonGroup btngroup  = new ButtonGroup();
+		final ButtonGroup btngroup = new ButtonGroup();
 		final JRadioButton gpaRbtn = new JRadioButton("Updeate GPA");
 		final JRadioButton graduationRbtn = new JRadioButton("Updeate Graduation");
 		gpaRbtn.setSelected(true);
@@ -684,20 +723,18 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		btngroup.add(graduationRbtn);
 		btnPanel.add(gpaRbtn);
 		btnPanel.add(graduationRbtn);
-		
+
 		panel.add(btnPanel, BorderLayout.NORTH);
 		panel.add(updatePanel, BorderLayout.CENTER);
 		return panel;
 	}
-	
-	private JPanel createAddSkillPanel() {
+
+	/**
+	 * Create Add Skill for a Student in View Student panel
+	 * @return A Add Skill panel in View Student panel
+	 */
+	private JPanel createAddSkillOptionPanel() {
 		final JPanel panel = new JPanel(new BorderLayout());
-		
-		try {
-			myAllSkills = SkillDB.getSkills();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 
 		List<Skill> skills = null;
 		JPanel skillPanel = null;
@@ -708,7 +745,7 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 			int numColumns = skills.size() % 5;
 			skillPanel = new JPanel(new GridLayout(numColumns, numRows));
 			if (skills != null) {
-				for (int i = 0; i <skills.size(); i++) {
+				for (int i = 0; i < skills.size(); i++) {
 					ckbSkill[i] = new JCheckBox(skills.get(i).toString());
 					skillPanel.add(ckbSkill[i]);
 				}
@@ -716,15 +753,17 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 
-		
 		panel.add(new JLabel("Select Student's Skills"), BorderLayout.NORTH);
 		panel.add(skillPanel, BorderLayout.CENTER);
 		return panel;
 	}
-	
-	private JPanel createGPAPanel() { //HELPER - DONE
+
+	/**
+	 * Create a panel for entering GPA
+	 * @return A panel for entering GPA
+	 */
+	private JPanel createGPAPanel() {
 		JPanel pnlGPA = new JPanel();
 		txfGPA = new HintTextField("GPA");
 		txfGPA.setColumns(5);
@@ -732,8 +771,12 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		pnlGPA.add(txfGPA);
 		return pnlGPA;
 	}
-	
-	private JPanel createGraudationDatePanel() { //HELPER - DONE
+
+	/**
+	 * Create a panel for selecting graduation term and year
+	 * @return A panel for selecting graduation term and year
+	 */
+	private JPanel createGraudationDatePanel() {
 		JPanel pnlGraduation = new JPanel();
 		pnlGraduation.add(new JLabel("Anticipated Graduation"));
 		cmbTerm = new JComboBox<Object>(TERMS);
@@ -749,13 +792,12 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		pnlGraduation.add(cmbYear);
 		return pnlGraduation;
 	}
-	
-	
-	
-	/*
-	 * Listen Actions---------------------------------------------------------------------------------------------------
-	 */
 
+	/**
+	 * Listen to buttons.
+	 * 
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnSearch) {
@@ -811,10 +853,14 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		}
 
 	}
-	
-	private void performAddEmploy() { //DONE
 
-		int result = JOptionPane.showConfirmDialog(null, createAddEmployOptionPanel(), "Add Employmnet", JOptionPane.OK_CANCEL_OPTION);
+	/**
+	 * Perform Add employment for a student.
+	 */
+	private void performAddEmploy() {
+
+		int result = JOptionPane.showConfirmDialog(null, createAddEmployOptionPanel(), "Add Employmnet",
+				JOptionPane.OK_CANCEL_OPTION);
 
 		if (result == JOptionPane.OK_OPTION) {
 			String employer = txtfEmpEmployer.getText();
@@ -822,41 +868,35 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 			String salary_str = txtfEmpSalary.getText();
 			double salary = 0.00;
 			String comment = txtfEmpComment.getText();
-			
-
 
 			String fromMon = cmbEmpFromM.getSelectedItem().toString();
 			String fromYr = cmbEmpFromY.getSelectedItem().toString();
-			
-			
+
 			if (hasEmployment) {
-				if (employer == null || employer.length() <2) {
+				if (employer == null || employer.length() < 2) {
 					JOptionPane.showMessageDialog(null, "Enter employer (at least 2 letters)");
 					return;
 				}
-				if (position == null || position.length() <2) {
+				if (position == null || position.length() < 2) {
 					JOptionPane.showMessageDialog(null, "Enter job position(at least 2 letters)");
 					return;
 				}
-				
 				try {
 					salary = Double.parseDouble(salary_str);
 				} catch (NumberFormatException e2) {
 					JOptionPane.showMessageDialog(null, "Salary should be non-negative number");
 					return;
 				}
-				
 				if (fromMon == null || fromYr == null) {
 					JOptionPane.showMessageDialog(null, "Select \'Date From\'");
 					return;
 				}
 			} else {
-				if (comment == null || comment.length() <1) {
+				if (comment == null || comment.length() < 1) {
 					JOptionPane.showMessageDialog(null, "Leave Comment");
 					return;
 				}
 			}
-
 			try {
 				Date fromDate = SQL_DATE_FORMAT.parse(fromMon + "-" + fromYr);
 				java.sql.Date sql_fromDate = new java.sql.Date(fromDate.getTime());
@@ -866,20 +906,19 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 				} else {
 					employment = new StudentEmployment(myViewStudentUWnetId, null, null, 0, sql_fromDate, comment);
 				}
-				
-				
+
 				if (!StudentEmploymentDB.add(employment)) {
 					JOptionPane.showMessageDialog(null, "failed to add");
 					return;
 				} else {
 					JOptionPane.showMessageDialog(null, "Add Employment successfully");
 				}
-				
+
 			} catch (ParseException e) {
 
 				e.printStackTrace();
 			}
-			
+
 			// refresh panel to show updated info
 			try {
 				myStudentEmployemnt = StudentEmploymentDB.getStudentEmploymentsOfUWNetID(myViewStudentUWnetId);
@@ -887,7 +926,7 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 				e.printStackTrace();
 			}
 			performViewStudent(myViewStudentUWnetId);
-			
+
 			// clear
 			txtfEmpComment.setText(null);
 			txtfEmpEmployer.setText(null);
@@ -897,11 +936,14 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 			cmbEmpFromY.setSelectedIndex(0);
 			hasEmployment = false;
 		}
-		
 	}
-	
-	private void performAddIntern() { //DONE
-		int result = JOptionPane.showConfirmDialog(null, createAddInternOptionPanel(), "Add Internship", JOptionPane.OK_CANCEL_OPTION);
+
+	/**
+	 * Perform Add Internship for a student.
+	 */
+	private void performAddIntern() {
+		int result = JOptionPane.showConfirmDialog(null, createAddInternOptionPanel(), "Add Internship",
+				JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
 			String employer = txtfIntEmployer.getText();
 			String position = txtfIntPosition.getText();
@@ -909,12 +951,12 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 			String fromYr = cmbIntFromY.getSelectedItem().toString();
 			String toMon = cmbIntToM.getSelectedItem().toString();
 			String toYr = cmbIntToY.getSelectedItem().toString();
-			
-			if (employer == null || employer.length() <2) {
+
+			if (employer == null || employer.length() < 2) {
 				JOptionPane.showMessageDialog(null, "Enter employer (at least 2 letters)");
 				return;
 			}
-			if (position == null || position.length() <2) {
+			if (position == null || position.length() < 2) {
 				JOptionPane.showMessageDialog(null, "Enter job position(at least 2 letters)");
 				return;
 			}
@@ -936,9 +978,10 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 				java.sql.Date sql_fromDate = new java.sql.Date(fromDate.getTime());
 				Date toDate = SQL_DATE_FORMAT.parse(toMon + "-" + toYr);
 				java.sql.Date sql_toDate = new java.sql.Date(toDate.getTime());
-				
-				StudentInternship internship = new StudentInternship(sql_fromDate, sql_toDate, position, myViewStudentUWnetId, employer);
-				
+
+				StudentInternship internship = new StudentInternship(sql_fromDate, sql_toDate, position,
+						myViewStudentUWnetId, employer);
+
 				if (!StudentInternshipDB.add(internship)) {
 					JOptionPane.showMessageDialog(null, "failed to add");
 					return;
@@ -949,16 +992,15 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 
 				e.printStackTrace();
 			}
-			
+
 			// refresh panel to show updated info
 			try {
 				myStudentInters = StudentInternshipDB.getInternshipsOfUWNetID(myViewStudentUWnetId);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-
 			performViewStudent(myViewStudentUWnetId);
-			
+
 			// clear
 			txtfIntEmployer.setText(null);
 			txtfIntPosition.setText(null);
@@ -967,13 +1009,15 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 			cmbIntToM.setSelectedIndex(0);
 			cmbIntToY.setSelectedIndex(0);
 		}
-		
 	}
 
+	/**
+	 * Perform Add Skill for a student.
+	 */
 	@SuppressWarnings("unused")
-	private void performAddSkill() { // TODO - skill, need to test!!!
+	private void performAddSkill() {
 
-		int result = JOptionPane.showConfirmDialog(null, createAddSkillPanel(), "Select Skills",
+		int result = JOptionPane.showConfirmDialog(null, createAddSkillOptionPanel(), "Select Skills",
 				JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
 
@@ -989,7 +1033,7 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 					if (myStudentSkills.size() > 0) {
 						for (int j = 0; j < myStudentSkills.size(); j++) {
 							Skill skill = SkillDB.getSkillByID(myStudentSkills.get(j).getSkillId());
-							if (skill.getSkillName().equalsIgnoreCase(selected.get(i).toString())) { //TODO test
+							if (skill.getSkillName().equalsIgnoreCase(selected.get(i).toString())) {
 								break;
 							} else {
 								Skill addSkill = SkillDB.getSkillBySkillName(selected.get(i).toString());
@@ -1001,7 +1045,6 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 								break;
 							}
 						}
-						
 					} else {
 						Skill addSkill = SkillDB.getSkillBySkillName(selected.get(i).toString());
 						StudentSkill stuSkill = new StudentSkill(myViewStudentUWnetId, addSkill.getId());
@@ -1010,13 +1053,11 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 							return;
 						}
 					}
-
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 			JOptionPane.showMessageDialog(null, "Add Skills Successfully");
-
 
 			// refresh panel to show updated info
 			try {
@@ -1025,50 +1066,51 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 				e.printStackTrace();
 			}
 			performViewStudent(myViewStudentUWnetId);
-			
 		}
 	}
-	
-	private void performAddDegree() { //DONE
-		int result = JOptionPane.showConfirmDialog(null, createAddDegreeOptionPanel(), "Add Degree", JOptionPane.OK_CANCEL_OPTION);
+
+	/**
+	 * Perform Add Degree for a student.
+	 */
+	private void performAddDegree() {
+		int result = JOptionPane.showConfirmDialog(null, createAddDegreeOptionPanel(), "Add Degree",
+				JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
 			String gpa = txfGPA.getText().trim();
 			double dblGPA = 0.0;
-			
+
 			try {
 				dblGPA = Double.parseDouble(gpa);
 			} catch (NumberFormatException e2) {
 				JOptionPane.showMessageDialog(null, "GPA should be non-negative number");
 				return;
 			}
-			
+
 			if (dblGPA < 0 || dblGPA > 4.0) {
 				JOptionPane.showMessageDialog(null, "GPA should be between 0.0 and 4.0");
 				return;
 			}
-			
+
 			Degree degree = (Degree) cmbDegree.getSelectedItem();
 			String term = cmbTerm.getSelectedItem().toString();
 			String year = cmbYear.getSelectedItem().toString();
-			
 
-			StudentDegree studentDegree = new StudentDegree(myViewStudentUWnetId, degree.getId(), term, year,
-					dblGPA, null);
-			
+			StudentDegree studentDegree = new StudentDegree(myViewStudentUWnetId, degree.getId(), term, year, dblGPA,
+					null);
 			try {
 				if (!StudentDegreeDB.addStudentDegree(studentDegree)) {
 					JOptionPane.showMessageDialog(null, "failed to Add");
 					return;
 				} else {
 					JOptionPane.showMessageDialog(null, "Add Degree Successfully");
-					
+
 				}
 			} catch (HeadlessException e1) {
 				e1.printStackTrace();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-			
+
 			// refresh panel to show updated info
 			try {
 				myStudentDegree = StudentDegreeDB.getStudentDegreeOfUWNetID(myViewStudentUWnetId);
@@ -1077,7 +1119,7 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 			}
 
 			performViewStudent(myViewStudentUWnetId);
-			
+
 			// clear
 			txfGPA.setText(null);
 			cmbDegree.setSelectedIndex(0);
@@ -1086,11 +1128,13 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		}
 	}
 
-	private void performViewStudent(final String theId) { //DONE
-
-		// get textfield
-		if (theId.length() > 0) { 
-			myStudentList = getData(theId);
+	/**
+	 * Perform View a student with given UW net id.
+	 * @param theId The uwnetid
+	 */
+	private void performViewStudent(final String theId) { 
+		if (theId.length() > 0) {
+			myStudentList = getStudentData(theId);
 			pnlContent.removeAll();
 			pnlContent.add(createStudentViewPanel(theId));
 			pnlContent.revalidate();
@@ -1098,14 +1142,20 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		}
 		txtfViewUWID.setText("");
 	}
-	
-	private void performEditDegree() throws HeadlessException, SQLException { // DONE
+
+	/**
+	 * Perform Edit Degree for a student.
+	 * 
+	 * @throws HeadlessException
+	 * @throws SQLException
+	 */
+	private void performEditDegree() throws HeadlessException, SQLException {
 
 		// option pane
-		int result = JOptionPane.showConfirmDialog(null, createEditDegreePanel(), "Update Degree", JOptionPane.OK_CANCEL_OPTION);
+		int result = JOptionPane.showConfirmDialog(null, createEditDegreePanel(), "Update Degree",
+				JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
-			
-			
+
 			Degree degree = (Degree) cmbStudentDegree.getSelectedItem();
 			StudentDegree stuDegree = null;
 			try {
@@ -1114,44 +1164,38 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-			
 			if (isGpaSelected) {
 				String gpa = txfGPA.getText().trim();
 				double dblGPA = 0.0;
-				
 				try {
 					dblGPA = Double.parseDouble(gpa);
 				} catch (NumberFormatException e2) {
 					JOptionPane.showMessageDialog(null, "GPA should be non-negative number");
 					return;
 				}
-
 				if (dblGPA < 0 || dblGPA > 4.0) {
 					JOptionPane.showMessageDialog(null, "GPA should be between 0.0 and 4.0");
 					return;
 				}
-				
 				if (!StudentDegreeDB.updateStudentDegree(stuDegree, "gpa", dblGPA)) {
 					JOptionPane.showMessageDialog(null, "failed to Update");
 					return;
 				} else {
 					JOptionPane.showMessageDialog(null, "Update GPA Successfully");
 				}
-				
 			} else {
 				String term = cmbTerm.getSelectedItem().toString();
 				String year = cmbYear.getSelectedItem().toString();
 				if (!StudentDegreeDB.updateStudentDegree(stuDegree, "graduation_term", term)) {
 					JOptionPane.showMessageDialog(null, "failed to update");
 					return;
-				} 
+				}
 				if (!StudentDegreeDB.updateStudentDegree(stuDegree, "graduation_year", year)) {
 					JOptionPane.showMessageDialog(null, "failed to update");
 					return;
 				} else {
 					JOptionPane.showMessageDialog(null, "Update sudent's degree successfully");
 				}
-				
 			}
 
 			// refresh panel to show updated info
@@ -1160,9 +1204,8 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
 			performViewStudent(myViewStudentUWnetId);
-			
+
 			// clear
 			txfGPA.setText(null);
 			cmbStudentDegree.setSelectedIndex(0);
@@ -1171,15 +1214,36 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		}
 	}
 
+	/**
+	 * Perform Edit Email for a student.
+	 */
 	private void performEditStudentEmail() { // DONE
-		String email = JOptionPane.showInputDialog(new JFrame(), "Enter e-mail address", null);
-		if (StudentCollection.updateEmail(myViewStudent, email)) {
-			JOptionPane.showMessageDialog(null, "E-mail is updated successfully!");
-			myStudentList = getData(null);
-			performViewStudent(myViewStudentUWnetId);
+		final JPanel emailPanel = new JPanel();
+
+		HintTextField email  = new HintTextField("Format: xxxxxx@email.com");
+		email.setColumns(20);
+		
+		emailPanel.add(email);
+		
+		int result = JOptionPane.showConfirmDialog(null, emailPanel, "Edit Email",JOptionPane.OK_CANCEL_OPTION);
+		if (result == JOptionPane.OK_OPTION) {
+			String emailinput = email.getText();
+			if (emailinput == null || emailinput.length() < 3 || (!emailinput.contains("@") && !emailinput.contains("."))) {
+				JOptionPane.showMessageDialog(null, "Failed to update e-mail!");
+				return;
+			}
+			
+			if (StudentCollection.updateEmail(myViewStudent, emailinput)) {
+				JOptionPane.showMessageDialog(null, "E-mail is updated successfully!");
+				myViewStudent = StudentCollection.getStudentById(myViewStudentUWnetId);
+				performViewStudent(myViewStudentUWnetId);
+			}
 		}
 	}
-	
+
+	/**
+	 * Perform Add a student with degree information.
+	 */
 	private void performAddStudent() {
 		String first = txfFirst.getText().trim();
 		String middle = txfMiddle.getText().trim();
@@ -1188,88 +1252,74 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		String uwNetID = txfUWNetID.getText().trim();
 		String gpa = txfGPA.getText().trim();
 		String transfer = txtfTransfer.getText();
-		
 		double dblGPA = 0.0;
-		
 		boolean validFirst = first.matches("^[\\p{L} .'-]+$");
 		boolean validLast = last.matches("^[\\p{L} .'-]+$");
-		
+
 		if (first.length() < 2 || last.length() < 2 || !validFirst || !validLast) {
-			lblWarning.setText("Please enter a valid student first and last name. " +
-					"First and last name cannot be blank, must be at least two characters, " +
-					"and can only contain letters.");
+			lblWarning.setText("Please enter a valid student first and last name. "
+					+ "First and last name cannot be blank, must be at least two characters, "
+					+ "and can only contain letters.");
 			return;
 		}
-		
 		if (!middle.isEmpty() && (!middle.matches("^[\\p{L} .'-]+$") || middle.length() < 2)) {
 			lblWarning.setText("Please enter a valid student middle name. Middle name "
 					+ "can only contain letters and must be at least two characters.");
 			return;
 		}
-		
 		if (!email.isEmpty() && (!email.contains("@") || !email.contains("."))) {
 			lblWarning.setText("Please enter a valid e-mail address.");
 			return;
 		}
-		
 		if (uwNetID.isEmpty()) {
 			lblWarning.setText("Please enter a valid UWNetID.");
 			return;
 		}
-		
 		boolean uwNetIDIsTaken = false;
 		List<Student> studentList = StudentCollection.getStudents();
-		for (Student student : studentList)
-		{
-			if (uwNetID.equals(student.getUWNetID()))
-			{
+		for (Student student : studentList) {
+			if (uwNetID.equals(student.getUWNetID())) {
 				uwNetIDIsTaken = true;
 				break;
 			}
 		}
-		
-		if (uwNetIDIsTaken)
-		{
+		if (uwNetIDIsTaken) {
 			lblWarning.setText("That UW NetID is taken. Please enter a valid UW NetID.");
 			return;
 		}
-		
 		try {
 			dblGPA = Double.parseDouble(gpa);
 		} catch (NumberFormatException e) {
-			lblWarning.setText("Please enter a valid GPA. GPA should be entered as a non "
-					+ "negative decimal.");
+			lblWarning.setText("Please enter a valid GPA. GPA should be entered as a non " + "negative decimal.");
 			return;
 		}
-		
 		if (dblGPA < 0 || dblGPA > 4.0) {
 			lblWarning.setText("Please enter a valid GPA. GPA should be entered as a non "
 					+ "negative decimal and cannot exceed 4.0.");
 			return;
 		}
-		
 		Degree degree = (Degree) cmbDegree.getSelectedItem();
 		String term = (String) cmbTerm.getSelectedItem();
-		String year = Integer.toString((int)cmbYear.getSelectedItem());
-		StudentDegree studentDegree = new StudentDegree(uwNetID, degree.getId(), term, year,
-				dblGPA, transfer);
-		
-		lblWarning.setText("");
-		Student student = null;
-		if (middle.isEmpty())
+		String year = Integer.toString((int) cmbYear.getSelectedItem());
+		StudentDegree studentDegree;
+		if (transfer == null || transfer.length() < 1)
 		{
-			student = new Student(first, last, uwNetID);
+			studentDegree = new StudentDegree(uwNetID, degree.getId(), term, year, dblGPA);
 		}
 		else
 		{
+			studentDegree = new StudentDegree(uwNetID, degree.getId(), term, year, dblGPA, transfer);
+		}
+		lblWarning.setText("");
+		Student student = null;
+		if (middle.isEmpty()) {
+			student = new Student(first, last, uwNetID);
+		} else {
 			student = new Student(first, middle, last, uwNetID);
 		}
-		
-		if (!email.isEmpty())
-		{
+		if (!email.isEmpty()) {
 			student.setEmail(email);
 		}
-		
 		try {
 			StudentDegreeDB.addStudentDegree(studentDegree);
 		} catch (SQLException e) {
@@ -1277,7 +1327,7 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		}
 		StudentCollection.add(student);
 		btnSearch.doClick();
-		
+
 		// clear
 		txfGPA.setText(null);
 		cmbDegree.setSelectedIndex(0);
@@ -1285,10 +1335,13 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 		cmbYear.setSelectedIndex(0);
 	}
 
+	/**
+	 * Perform Search students by first or last name.
+	 */
 	private void performSearchStudent() {
 		String searchKey = txfSearch.getText();
 		if (searchKey.length() > 0) {
-			myStudentList = getData(searchKey);
+			myStudentList = getStudentData(searchKey);
 			pnlContent.removeAll();
 			table = new JTable(myData, myStudentColumnNames);
 			scrollPane = new JScrollPane(table);
@@ -1298,13 +1351,19 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 			txfSearch.setText("");
 		}
 	}
-
 	
+
 	/*
 	 * Get student data
 	 */
-	
-	private List<Student> getData(final String theSearchKey) {
+
+	/**
+	 * Get Student data
+	 * 
+	 * @param theSearchKey The search keyword (first name or last name)
+	 * @return A list of Students
+	 */
+	private List<Student> getStudentData(final String theSearchKey) {
 		if (theSearchKey != null)
 			myStudentList = StudentCollection.search(theSearchKey);
 		else
@@ -1318,15 +1377,9 @@ public class StudentGUI extends JPanel implements ActionListener { //, TableMode
 				myData[i][2] = myStudentList.get(i).getMiddleName();
 				myData[i][3] = myStudentList.get(i).getLastName();
 				myData[i][4] = myStudentList.get(i).getEmail();
-//				if (myStudentList.get(i).getEmail() != null) {
-//					myData[i][4] = myStudentList.get(i).getEmail();
-//				} else {
-//					myData[i][4] = "";
-//				}
 			}
 		}
 		return myStudentList;
 	}
-	
-	
+
 }

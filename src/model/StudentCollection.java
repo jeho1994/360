@@ -1,7 +1,6 @@
 package model;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import data.StudentDB;
@@ -153,7 +152,6 @@ public class StudentCollection {
 	 */
 	@SuppressWarnings("static-access")
 	public static List<Student> search(String name) {
-		List<Student> studentList = new ArrayList<Student>();
 		if (STUDENT_DB == null) {
 			STUDENT_DB = new StudentDB();
 		}
@@ -164,7 +162,7 @@ public class StudentCollection {
 			e.printStackTrace();
 		}
 
-		return studentList;
+		return null;
 	}
 
 	/**
@@ -224,11 +222,11 @@ public class StudentCollection {
 
 		try {
 			List<StudentEmployment> emp = STUDENT_EMPLOYMENT_DB.getStudentEmploymentsOfUWNetID(theUWnetId);
-
+			
 			if (emp != null && emp.size() > 0) {
 				boolean hasEmp = false;
 				for (int i = 0; i < emp.size(); i++) {
-					if (emp.get(i).getComment() == null || emp.get(i).getComment().length() > 0) {
+					if (emp.get(i).getComment() != null && emp.get(i).getComment().length() > 0) {
 						hasEmp = false;
 					} else {
 						hasEmp = true;

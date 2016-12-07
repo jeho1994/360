@@ -140,14 +140,11 @@ public class StudentDB
 	 */
 	public static List<Student> getStudents(String searchString) throws SQLException
 	{
+		List<Student> students = getStudents();
 		List<Student> filterList = new ArrayList<Student>();
-		if (studentList == null)
-		{
-			getStudents();
-		}
 		
 		searchString = searchString.toLowerCase();
-		for (Student student : studentList)
+		for (Student student : students)
 		{
 			if (searchString.contains(student.getFirstName().toLowerCase()) ||
 					searchString.contains(student.getLastName().toLowerCase()))

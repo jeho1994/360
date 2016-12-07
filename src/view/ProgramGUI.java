@@ -28,8 +28,6 @@ public class ProgramGUI extends JPanel implements ActionListener, TableModelList
 	
 	private static final String[] DEGREES = {"BA", "BS", "MA", "MS", "PhD"}; 
 
-	private String[] myProgramColumnNames = {"Skill ID", "Skill Name"};
-	
 	/**HintTextField fields.*/
 	private HintTextField txfProgramName;
 	

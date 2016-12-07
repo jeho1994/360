@@ -267,7 +267,7 @@ public class StudentDegreeDB {
 			query = "SELECT * " + "FROM StudentDegree WHERE graduation_year = " + annual + ";";
 		} else  {
 			query = "SELECT * " + "FROM StudentDegree WHERE graduation_year = " 
-					+ annual + " AND graduation_term = " + quarter + ";";
+					+ annual + " AND graduation_term = '" + quarter + "';";
 		}
 		myStudentDegreeList = new ArrayList<StudentDegree>();
 		try {
@@ -308,7 +308,7 @@ public class StudentDegreeDB {
 		Statement stmt = null;
 		String query = "SELECT COUNT(studentDegreeId) AS transferred" 
 				+ " FROM StudentDegree WHERE uwnetId = '" + theUWnetId + "' "
-				+ "AND transferCollege IS NULL";
+				+ "AND transferCollege IS NOT NULL";
 
 		try {
 			stmt = myConnection.createStatement();
